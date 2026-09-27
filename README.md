@@ -104,6 +104,15 @@ browser against the real backend (seeded data, real MongoDB, real JWT sessions):
 - **Security & compliance groundwork** — helmet, rate limiting, Mongo sanitization,
   Zod validation on every route, audit-log middleware on sensitive
   reads (prescriptions, health records), password hashing (bcrypt).
+- **Notifications** — real email (Nodemailer/SMTP, stub-logs without credentials) and
+  installable Web Push (self-generated VAPID keys, no Firebase account needed) for
+  booking/cancellation/prescription/KYC events, plus an in-app notification center.
+- **Engagement & wellness** — Duolingo-style streaks/XP/levels/badges; daily rotating
+  health tips; a water-intake tracker, sleep tracker, step/activity tracker, and
+  weight/BMI tracker (all feed the same streak); gym-aware calorie & protein targets
+  with a curated high-protein food list; medication reminders with scheduled push/email
+  notifications (checked every minute by an in-process scheduler — see
+  `backend/src/services/medicationReminderService.js`).
 
 **Mobile app** ships a real, working scaffold — splash animation, onboarding
 carousel, auth screens, doctor search/profile — wired to the *same* backend and
@@ -112,7 +121,24 @@ flow (the web app is the reference implementation for that).
 
 **Known gaps to close next**: pharmacy/medicine ordering, lab test booking,
 family-member-aware booking UI, i18n beyond the scaffolded structure, ABDM/ABHA
-integration, subscription plans, and mobile parity for booking/video/prescriptions.
+integration, subscription plans, mobile parity for booking/video/prescriptions and
+the wellness widgets, and the heavier AI-powered ideas (symptom checker, food-photo
+calorie recognition, AI health coach) — those need real ML/vision model integration
+and are a separate project, not a drop-in addition.
+
+## Live deployment
+
+- Web: deployed on Vercel (Root Directory `web`, `VITE_API_BASE_URL` env var pointing
+  at the Render backend).
+- Backend: deployed on Render via `render.yaml` (Blueprint), MongoDB Atlas for the
+  database. Free tier spins down when idle — first request after a quiet period takes
+  ~30-50s to wake up.
+- Mobile: `mobile/eas.json` has a `preview` build profile (plain installable APK, not
+  a Play Store bundle). Build it with `npx eas-cli login` then `npm run build:apk` —
+  Expo's cloud build gives a hosted download link/QR code. A local build (no Expo
+  account needed) is also possible via `expo prebuild` + Gradle, but needs the
+  Android SDK/NDK installed and can hit native-module compile issues Reanimated
+  introduces; the cloud build is the reliable path.
 
 ## API docs
 

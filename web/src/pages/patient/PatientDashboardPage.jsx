@@ -12,6 +12,10 @@ import { HealthTipCard } from '../../components/wellness/HealthTipCard.jsx';
 import { WaterTracker } from '../../components/wellness/WaterTracker.jsx';
 import { ProgressWidget } from '../../components/wellness/ProgressWidget.jsx';
 import { NutritionCard } from '../../components/wellness/NutritionCard.jsx';
+import { SleepTracker } from '../../components/wellness/SleepTracker.jsx';
+import { ActivityTracker } from '../../components/wellness/ActivityTracker.jsx';
+import { WeightBmiCard } from '../../components/wellness/WeightBmiCard.jsx';
+import { MedicationList } from '../../components/wellness/MedicationList.jsx';
 
 const STATUS_VARIANT = {
   confirmed: 'teal',
@@ -54,7 +58,17 @@ export function PatientDashboardPage() {
 
         <div className="grid md:grid-cols-2 gap-4">
           <WaterTracker onXpAwarded={() => setProgressRefreshKey((k) => k + 1)} />
+          <SleepTracker onXpAwarded={() => setProgressRefreshKey((k) => k + 1)} />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <ActivityTracker onXpAwarded={() => setProgressRefreshKey((k) => k + 1)} />
           <HealthTipCard />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <WeightBmiCard onXpAwarded={() => setProgressRefreshKey((k) => k + 1)} />
+          <MedicationList />
         </div>
 
         <NutritionCard />

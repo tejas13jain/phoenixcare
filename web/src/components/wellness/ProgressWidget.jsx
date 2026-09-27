@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Flame, Trophy, Footprints, Droplet, Stethoscope, Star, Lock } from 'lucide-react';
+import { Flame, Trophy, Footprints, Droplet, Stethoscope, Star, Lock, Moon, Pill } from 'lucide-react';
 import { Card, Skeleton } from '../ui/index.js';
 import { wellnessApi } from '../../api/pushApi.js';
 
-const BADGE_ICONS = { flame: Flame, trophy: Trophy, footprints: Footprints, droplet: Droplet, stethoscope: Stethoscope };
+const BADGE_ICONS = {
+  flame: Flame,
+  trophy: Trophy,
+  footprints: Footprints,
+  droplet: Droplet,
+  stethoscope: Stethoscope,
+  moon: Moon,
+  pill: Pill,
+};
 
 export function ProgressWidget({ refreshKey }) {
   const [progress, setProgress] = useState(undefined);

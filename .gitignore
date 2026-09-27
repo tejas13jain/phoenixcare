@@ -18,6 +18,8 @@ web/.vite/
 mobile/.expo/
 mobile/dist/
 mobile/web-build/
+mobile/android-env.sh
+mobile/android/
 
 # OS / editor
 .DS_Store

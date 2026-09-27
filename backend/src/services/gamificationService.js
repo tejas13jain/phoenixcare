@@ -1,5 +1,8 @@
 import { Patient } from '../models/Patient.js';
 import { Appointment } from '../models/Appointment.js';
+import { SleepLog } from '../models/SleepLog.js';
+import { ActivityLog } from '../models/ActivityLog.js';
+import { Medication } from '../models/Medication.js';
 
 const LEVEL_XP_STEP = 100; // 100 XP per level
 
@@ -58,6 +61,9 @@ const BADGE_DEFS = [
   { code: 'level_5', label: 'Level 5 Reached', icon: 'trophy', check: (ctx) => ctx.level >= 5 },
   { code: 'first_appointment', label: 'First Consultation', icon: 'stethoscope', check: (ctx) => ctx.appointmentCount >= 1 },
   { code: 'hydration_hero', label: 'Hydration Hero', icon: 'droplet', check: (ctx) => ctx.totalXp >= 200 },
+  { code: 'sleep_tracker', label: 'Sleep Tracker', icon: 'moon', check: (ctx) => ctx.sleepLogCount >= 1 },
+  { code: 'on_the_move', label: 'On the Move', icon: 'footprints', check: (ctx) => ctx.activityLogCount >= 3 },
+  { code: 'med_organizer', label: 'Med Organizer', icon: 'pill', check: (ctx) => ctx.medicationCount >= 1 },
 ];
 
 export async function getProgress(patientId) {
@@ -65,10 +71,15 @@ export async function getProgress(patientId) {
   if (!patient) return null;
 
   const g = patient.gamification || { totalXp: 0, currentStreak: 0, longestStreak: 0 };
-  const appointmentCount = await Appointment.countDocuments({ patient: patientId, status: { $ne: 'cancelled' } });
+  const [appointmentCount, sleepLogCount, activityLogCount, medicationCount] = await Promise.all([
+    Appointment.countDocuments({ patient: patientId, status: { $ne: 'cancelled' } }),
+    SleepLog.countDocuments({ patient: patientId }),
+    ActivityLog.countDocuments({ patient: patientId }),
+    Medication.countDocuments({ patient: patientId, isActive: true }),
+  ]);
   const level = levelFromXp(g.totalXp);
 
-  const ctx = { totalXp: g.totalXp, longestStreak: g.longestStreak, level, appointmentCount };
+  const ctx = { totalXp: g.totalXp, longestStreak: g.longestStreak, level, appointmentCount, sleepLogCount, activityLogCount, medicationCount };
   const badges = BADGE_DEFS.map((b) => ({ code: b.code, label: b.label, icon: b.icon, unlocked: b.check(ctx) }));
 
   return {
