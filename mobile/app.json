@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "PhoenixCare",
+    "slug": "phoenixcare",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#0F6E6A"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.phoenixcare.app"
+    },
+    "android": {
+      "package": "com.phoenixcare.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0F6E6A"
+      }
+    },
+    "extra": {
+      "apiBaseUrl": "http://localhost:5000/api/v1"
+    }
+  }
+}

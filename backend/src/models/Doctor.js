@@ -1,0 +1,58 @@
+import mongoose from 'mongoose';
+
+const { Schema } = mongoose;
+
+const doctorSchema = new Schema(
+  {
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
+    specialties: [{ type: String, required: true, index: true }],
+    registrationNumber: { type: String, required: true, unique: true, trim: true },
+    registrationCouncil: { type: String, trim: true },
+    qualifications: [{ type: String }],
+    experienceYears: { type: Number, default: 0, min: 0 },
+    bio: { type: String, default: '' },
+    languages: [{ type: String }],
+    consultationModes: [
+      { type: String, enum: ['video', 'audio', 'chat', 'in_clinic'], default: ['video'] },
+    ],
+    fee: {
+      video: { type: Number, default: 0 },
+      audio: { type: Number, default: 0 },
+      chat: { type: Number, default: 0 },
+      in_clinic: { type: Number, default: 0 },
+    },
+    clinicAddress: { type: String, default: '' },
+    city: { type: String, index: true },
+    rating: { type: Number, default: 0 },
+    ratingCount: { type: Number, default: 0 },
+    totalConsultations: { type: Number, default: 0 },
+    kycStatus: {
+      type: String,
+      enum: ['pending', 'under_review', 'verified', 'rejected'],
+      default: 'pending',
+      index: true,
+    },
+    kycDocuments: [
+      {
+        label: String,
+        url: String,
+        uploadedAt: { type: Date, default: Date.now },
+      },
+    ],
+    kycRejectionReason: { type: String },
+    isAcceptingNewPatients: { type: Boolean, default: true },
+    isFeatured: { type: Boolean, default: false },
+    payoutDetails: {
+      accountHolderName: String,
+      accountNumber: String,
+      ifsc: String,
+      upiId: String,
+    },
+  },
+  { timestamps: true }
+);
+
+doctorSchema.index({ specialties: 1, city: 1, rating: -1 });
+doctorSchema.index({ bio: 'text', qualifications: 'text' });
+
+export const Doctor = mongoose.model('Doctor', doctorSchema);
