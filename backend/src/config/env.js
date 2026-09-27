@@ -49,6 +49,20 @@ export const env = {
     privateKey: required('FCM_PRIVATE_KEY', '').replace(/\\n/g, '\n'),
   },
 
+  smtp: {
+    host: required('SMTP_HOST'),
+    port: Number(required('SMTP_PORT', 587)),
+    user: required('SMTP_USER'),
+    pass: required('SMTP_PASS'),
+    from: required('EMAIL_FROM', 'PhoenixCare <no-reply@phoenixcare.demo>'),
+  },
+
+  webPush: {
+    publicKey: required('VAPID_PUBLIC_KEY'),
+    privateKey: required('VAPID_PRIVATE_KEY'),
+    contactEmail: required('VAPID_CONTACT_EMAIL', 'mailto:support@phoenixcare.demo'),
+  },
+
   agora: {
     appId: required('AGORA_APP_ID'),
     appCertificate: required('AGORA_APP_CERTIFICATE'),

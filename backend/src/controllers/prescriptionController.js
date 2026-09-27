@@ -73,9 +73,12 @@ export const createPrescription = catchAsync(async (req, res) => {
 
   await notifyUser(appointment.patient.user._id, {
     title: 'Your prescription is ready',
-    body: `Dr. ${appointment.doctor.user.name} has shared your digital prescription`,
+    body: `Dr. ${appointment.doctor.user.name} has shared your digital prescription. You can view and download it anytime from your appointments.`,
     type: 'prescription',
     data: { prescriptionId: prescription._id },
+    channels: ['in_app', 'email', 'push'],
+    email: appointment.patient.user.email,
+    recipientName: appointment.patient.user.name,
   });
 
   res.status(201).json({ success: true, message: 'Prescription created', data: { prescription } });

@@ -9,6 +9,8 @@ import reviewRoutes from './reviewRoutes.js';
 import notificationRoutes from './notificationRoutes.js';
 import consultationRoutes from './consultationRoutes.js';
 import adminRoutes from './adminRoutes.js';
+import pushRoutes from './pushRoutes.js';
+import wellnessRoutes from './wellnessRoutes.js';
 
 const router = Router();
 
@@ -24,5 +26,7 @@ router.use('/reviews', reviewRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/consultations', consultationRoutes);
 router.use('/admin', adminRoutes);
+router.use('/push', pushRoutes);
+router.use('/wellness', wellnessRoutes);
 
 export default router;

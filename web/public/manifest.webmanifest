@@ -1,0 +1,17 @@
+{
+  "name": "PhoenixCare — Rise stronger, every day.",
+  "short_name": "PhoenixCare",
+  "description": "Multi-doctor telehealth consultations, prescriptions, and health records in one place.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7FAFA",
+  "theme_color": "#0F6E6A",
+  "icons": [
+    {
+      "src": "/logo-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

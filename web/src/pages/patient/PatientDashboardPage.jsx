@@ -7,6 +7,9 @@ import { Card, Button, Badge, Skeleton } from '../../components/ui/index.js';
 import { appointmentApi } from '../../api/appointmentApi.js';
 import { useAuthStore } from '../../store/slices/authStore.js';
 import { extractErrorMessage } from '../../api/client.js';
+import { getFirstName } from '../../utils/formatName.js';
+import { HealthTipCard } from '../../components/wellness/HealthTipCard.jsx';
+import { WaterTracker } from '../../components/wellness/WaterTracker.jsx';
 
 const STATUS_VARIANT = {
   confirmed: 'teal',
@@ -34,7 +37,7 @@ export function PatientDashboardPage() {
     <PageTransition>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
         <div>
-          <h1 className="font-heading font-bold text-2xl text-charcoal">Hi {user?.name?.split(' ')[0]},</h1>
+          <h1 className="font-heading font-bold text-2xl text-charcoal">Hi {getFirstName(user?.name)},</h1>
           <p className="text-slate-600">Here's what's happening with your care.</p>
         </div>
 
@@ -42,6 +45,11 @@ export function PatientDashboardPage() {
           <QuickLink to="/doctors" icon={Search} label="Find a doctor" />
           <QuickLink to="/patient/appointments" icon={CalendarClock} label="My appointments" />
           <QuickLink to="/patient/health-vault" icon={FolderHeart} label="Health vault" />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <WaterTracker />
+          <HealthTipCard />
         </div>
 
         <Card>

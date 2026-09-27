@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { Navbar } from './components/layout/Navbar.jsx';
 import { SplashScreen } from './components/layout/SplashScreen.jsx';
 import { ProtectedRoute } from './components/layout/ProtectedRoute.jsx';
+import { EngagementBanner } from './components/layout/EngagementBanner.jsx';
 
 import { HomePage } from './pages/HomePage.jsx';
 import { DoctorListingPage } from './pages/DoctorListingPage.jsx';
@@ -39,6 +40,7 @@ export default function App() {
       <SplashScreen />
       <Toaster position="top-right" toastOptions={{ style: { fontFamily: 'Inter, sans-serif', fontSize: '14px' } }} />
       <Navbar />
+      <EngagementBanner />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<HomePage />} />

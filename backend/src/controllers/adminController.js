@@ -23,14 +23,14 @@ export const reviewDoctorKyc = catchAsync(async (req, res) => {
     throw ApiError.badRequest('Invalid KYC status');
   }
 
-  const doctor = await Doctor.findById(req.params.id);
+  const doctor = await Doctor.findById(req.params.id).populate('user', 'name email');
   if (!doctor) throw ApiError.notFound('Doctor not found');
 
   doctor.kycStatus = status;
   doctor.kycRejectionReason = status === 'rejected' ? reason || '' : '';
   await doctor.save();
 
-  await notifyUser(doctor.user, {
+  await notifyUser(doctor.user._id, {
     title: `KYC ${status}`,
     body:
       status === 'verified'
@@ -39,6 +39,9 @@ export const reviewDoctorKyc = catchAsync(async (req, res) => {
         ? `Your KYC was rejected: ${reason || 'please resubmit documents'}`
         : 'Your KYC is under review.',
     type: 'system',
+    channels: ['in_app', 'email', 'push'],
+    email: doctor.user.email,
+    recipientName: doctor.user.name,
   });
 
   res.json({ success: true, message: 'KYC status updated', data: { doctor } });

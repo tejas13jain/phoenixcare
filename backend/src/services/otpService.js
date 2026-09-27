@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { OtpCode } from '../models/OtpCode.js';
 import { env } from '../config/env.js';
 import { sendSms, sendWhatsapp } from './notificationService.js';
-import { logger } from '../config/logger.js';
+import { sendOtpEmail } from './emailService.js';
 
 function generateSixDigitCode() {
   return String(Math.floor(100000 + Math.random() * 900000));
@@ -19,7 +19,7 @@ export async function issueOtp({ identifier, channel, purpose }) {
 
   if (channel === 'sms') await sendSms(identifier, message);
   else if (channel === 'whatsapp') await sendWhatsapp(identifier, message);
-  else logger.info(`[email OTP stub] Would email ${identifier}: ${message}`);
+  else await sendOtpEmail(identifier, code, env.otpExpiresMinutes);
 
   // Never return the raw code from this function in production flows.
   return { expiresAt };

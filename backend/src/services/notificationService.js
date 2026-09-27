@@ -2,6 +2,9 @@ import twilio from 'twilio';
 import { env } from '../config/env.js';
 import { logger } from '../config/logger.js';
 import { Notification } from '../models/Notification.js';
+import { sendEmail } from './emailService.js';
+import { sendPushToUser } from './pushService.js';
+import { getFirstName } from '../utils/formatName.js';
 
 let twilioClient = null;
 function getTwilioClient() {
@@ -34,18 +37,29 @@ export async function sendWhatsapp(toNumber, body) {
   return { sent: true, sid: message.sid };
 }
 
-// Firebase Cloud Messaging push — wire up firebase-admin once FCM_* creds are set.
-export async function sendPush(userId, { title, body, data }) {
-  logger.info(`[FCM stub — set FCM_* in .env to send for real] To user ${userId}: ${title} — ${body}`);
-  return { sent: false, stub: true };
-}
-
-// Always persists an in-app notification; pushes SMS/WhatsApp/FCM best-effort alongside it.
-export async function notifyUser(userId, { title, body, type = 'system', data = {}, channels = ['in_app'] }) {
+// Central fan-out: always persists an in-app notification, and best-effort delivers to
+// whichever other channels are requested. Each channel degrades to a stub/log when its
+// provider isn't configured (see emailService/pushService), so this never throws — a missing
+// integration should never block the request that triggered the notification.
+export async function notifyUser(
+  userId,
+  { title, body, type = 'system', data = {}, channels = ['in_app'], email, recipientName, url }
+) {
   const notification = await Notification.create({ user: userId, title, body, type, data });
 
+  if (channels.includes('email') && email) {
+    await sendEmail({
+      to: email,
+      subject: title,
+      title,
+      body: `${recipientName ? `Hi ${getFirstName(recipientName)},<br/><br/>` : ''}${body}`,
+      ctaUrl: env.clientUrl,
+      ctaLabel: 'Open PhoenixCare',
+    }).catch((err) => logger.error(`Notification email failed: ${err.message}`));
+  }
+
   if (channels.includes('push')) {
-    await sendPush(userId, { title, body, data }).catch((err) => logger.error(`Push failed: ${err.message}`));
+    await sendPushToUser(userId, { title, body, url }).catch((err) => logger.error(`Push failed: ${err.message}`));
   }
 
   return notification;

@@ -57,14 +57,28 @@ export const verifyPayment = catchAsync(async (req, res) => {
   payment.status = 'paid';
   await payment.save();
 
-  const appointment = await Appointment.findById(appointmentId).populate('doctor');
+  const appointment = await Appointment.findById(appointmentId)
+    .populate({ path: 'doctor', populate: { path: 'user', select: 'name email' } })
+    .populate({ path: 'patient', populate: { path: 'user', select: 'name email' } });
   appointment.status = 'confirmed';
   await appointment.save();
 
-  await notifyUser(appointment.doctor.user, {
+  await notifyUser(appointment.doctor.user._id, {
     title: 'Appointment confirmed',
-    body: `Payment received for the ${appointment.mode} consultation on ${appointment.date}`,
+    body: `Payment received for the ${appointment.mode} consultation on ${appointment.date} at ${appointment.startTime}`,
     type: 'payment',
+    channels: ['in_app', 'email', 'push'],
+    email: appointment.doctor.user.email,
+    recipientName: appointment.doctor.user.name,
+  });
+
+  await notifyUser(appointment.patient.user._id, {
+    title: 'Payment successful',
+    body: `Your payment of ₹${payment.amount} is confirmed. Your ${appointment.mode} consultation is booked for ${appointment.date} at ${appointment.startTime}.`,
+    type: 'payment',
+    channels: ['in_app', 'email', 'push'],
+    email: appointment.patient.user.email,
+    recipientName: appointment.patient.user.name,
   });
 
   res.json({ success: true, message: 'Payment verified, appointment confirmed', data: { appointment, payment } });

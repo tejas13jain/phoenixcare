@@ -47,6 +47,18 @@ export function DoctorDashboardPage() {
     }
   };
 
+  const handleCancel = async (appt) => {
+    const reason = window.prompt('Reason for cancelling this appointment? (shown to the patient)') ?? null;
+    if (reason === null) return;
+    try {
+      await appointmentApi.cancel(appt._id, reason);
+      toast.success('Appointment cancelled and the patient has been notified');
+      setAppointments((prev) => prev.map((a) => (a._id === appt._id ? { ...a, status: 'cancelled' } : a)));
+    } catch (err) {
+      toast.error(extractErrorMessage(err));
+    }
+  };
+
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -102,6 +114,11 @@ export function DoctorDashboardPage() {
                         Start
                       </Button>
                     )}
+                    {['pending_payment', 'confirmed', 'waiting_room'].includes(appt.status) && (
+                      <Button size="sm" variant="danger" onClick={() => handleCancel(appt)}>
+                        Cancel
+                      </Button>
+                    )}
                   </div>
                 </div>
               ))}
@@ -120,7 +137,14 @@ export function DoctorDashboardPage() {
                     {appt.date} · {appt.startTime} · {appt.mode}
                   </p>
                 </div>
-                <Badge variant={STATUS_VARIANT[appt.status] || 'neutral'}>{appt.status.replace('_', ' ')}</Badge>
+                <div className="flex items-center gap-2">
+                  <Badge variant={STATUS_VARIANT[appt.status] || 'neutral'}>{appt.status.replace('_', ' ')}</Badge>
+                  {['pending_payment', 'confirmed', 'waiting_room'].includes(appt.status) && (
+                    <Button size="sm" variant="danger" onClick={() => handleCancel(appt)}>
+                      Cancel
+                    </Button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
