@@ -61,6 +61,7 @@ export const adminApi = {
     apiClient.get('/admin/reports/appointments/export', { params, responseType: 'blob' }).then((r) => r.data),
   exportPayments: (params) =>
     apiClient.get('/admin/reports/payments/export', { params, responseType: 'blob' }).then((r) => r.data),
+  exportDoctors: () => apiClient.get('/admin/reports/doctors/export', { responseType: 'blob' }).then((r) => r.data),
 };
 
 export const doctorReportApi = {

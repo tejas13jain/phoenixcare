@@ -9,6 +9,7 @@ const COLORS = {
   muted: '#8a97a0',
   offwhite: '#F7FAFA',
   border: '#E2E8E8',
+  headerBg: '#0F6E6A',
 };
 
 const PAGE_MARGIN = 50;
@@ -41,14 +42,14 @@ function drawInfoBox(doc, { doctor, patient, appointment }) {
   const boxTop = doc.y;
   const boxWidth = doc.page.width - PAGE_MARGIN * 2;
   const colWidth = boxWidth / 2;
+  const boxHeight = 98;
 
-  doc.roundedRect(PAGE_MARGIN, boxTop, boxWidth, 84, 8).fillAndStroke(COLORS.offwhite, COLORS.border);
+  doc.roundedRect(PAGE_MARGIN, boxTop, boxWidth, boxHeight, 8).fillAndStroke(COLORS.offwhite, COLORS.border);
 
-  doc
-    .font('Helvetica-Bold')
-    .fontSize(9)
-    .fillColor(COLORS.teal)
-    .text('CONSULTING DOCTOR', PAGE_MARGIN + 16, boxTop + 14);
+  const doctorQualifications = doctor.qualifications?.length ? doctor.qualifications.join(', ') : '';
+  const doctorSpecialty = doctor.specialties?.length ? doctor.specialties.join(', ') : '';
+
+  doc.font('Helvetica-Bold').fontSize(9).fillColor(COLORS.teal).text('CONSULTING DOCTOR', PAGE_MARGIN + 16, boxTop + 14);
   doc
     .font('Helvetica-Bold')
     .fontSize(12)
@@ -56,30 +57,63 @@ function drawInfoBox(doc, { doctor, patient, appointment }) {
     .text(`Dr. ${doctor.name.replace(/^Dr\.?\s*/i, '')}`, PAGE_MARGIN + 16, boxTop + 28);
   doc
     .font('Helvetica')
-    .fontSize(9)
+    .fontSize(8.5)
     .fillColor(COLORS.slate)
-    .text(`Reg. No: ${doctor.registrationNumber}`, PAGE_MARGIN + 16, boxTop + 46)
-    .text(`${appointment.date}  •  ${appointment.startTime}  •  ${appointment.mode}`, PAGE_MARGIN + 16, boxTop + 60);
-
+    .text(
+      [doctorQualifications, doctorSpecialty].filter(Boolean).join('  •  ') || ' ',
+      PAGE_MARGIN + 16,
+      boxTop + 44,
+      { width: colWidth - 24 }
+    );
   doc
-    .font('Helvetica-Bold')
-    .fontSize(9)
-    .fillColor(COLORS.teal)
-    .text('PATIENT', PAGE_MARGIN + colWidth + 16, boxTop + 14);
+    .fontSize(8.5)
+    .fillColor(COLORS.slate)
+    .text(`Reg. No: ${doctor.registrationNumber}`, PAGE_MARGIN + 16, boxTop + 60)
+    .text(`${appointment.date}  •  ${appointment.startTime}  •  ${appointment.mode}`, PAGE_MARGIN + 16, boxTop + 74);
+
+  const patientMeta = [patient.age ? `${patient.age} yrs` : null, patient.gender ? patient.gender : null]
+    .filter(Boolean)
+    .join(', ');
+
+  doc.font('Helvetica-Bold').fontSize(9).fillColor(COLORS.teal).text('PATIENT', PAGE_MARGIN + colWidth + 16, boxTop + 14);
   doc
     .font('Helvetica-Bold')
     .fontSize(12)
     .fillColor(COLORS.charcoal)
     .text(patient.name, PAGE_MARGIN + colWidth + 16, boxTop + 28);
+  if (patientMeta) {
+    doc.font('Helvetica').fontSize(8.5).fillColor(COLORS.slate).text(patientMeta, PAGE_MARGIN + colWidth + 16, boxTop + 44);
+  }
   if (patient.phone) {
+    doc.fontSize(8.5).fillColor(COLORS.slate).text(patient.phone, PAGE_MARGIN + colWidth + 16, boxTop + 60);
+  }
+  if (patient.allergies?.length) {
     doc
-      .font('Helvetica')
-      .fontSize(9)
-      .fillColor(COLORS.slate)
-      .text(patient.phone, PAGE_MARGIN + colWidth + 16, boxTop + 46);
+      .font('Helvetica-Bold')
+      .fontSize(8.5)
+      .fillColor('#E63946')
+      .text(`⚠ Allergies: ${patient.allergies.join(', ')}`, PAGE_MARGIN + colWidth + 16, boxTop + 74, {
+        width: colWidth - 24,
+      });
   }
 
-  doc.y = boxTop + 84 + 20;
+  doc.y = boxTop + boxHeight + 20;
+}
+
+function drawVitals(doc, vitals) {
+  const hasVitals = vitals && (vitals.temperature || vitals.bloodPressure || vitals.pulse || vitals.spo2);
+  if (!hasVitals) return;
+
+  sectionHeading(doc, 'Vitals recorded at consultation');
+  const entries = [
+    vitals.bloodPressure ? `BP: ${vitals.bloodPressure}` : null,
+    vitals.pulse ? `Pulse: ${vitals.pulse} bpm` : null,
+    vitals.spo2 ? `SpO2: ${vitals.spo2}%` : null,
+    vitals.temperature ? `Temp: ${vitals.temperature}°C` : null,
+  ].filter(Boolean);
+
+  doc.font('Helvetica').fontSize(10).fillColor(COLORS.charcoal).text(entries.join('   •   '));
+  doc.moveDown(0.8);
 }
 
 function sectionHeading(doc, title) {
@@ -93,6 +127,76 @@ function sectionHeading(doc, title) {
     .lineWidth(1)
     .stroke();
   doc.moveDown(0.6);
+}
+
+const MED_COLS = [
+  { key: 'name', label: 'Medicine', width: 0.28 },
+  { key: 'dosage', label: 'Dosage', width: 0.16 },
+  { key: 'frequency', label: 'Frequency', width: 0.16 },
+  { key: 'duration', label: 'Duration', width: 0.14 },
+  { key: 'instructions', label: 'Instructions', width: 0.26 },
+];
+
+function drawMedicinesTable(doc, medicines) {
+  const tableWidth = doc.page.width - PAGE_MARGIN * 2;
+  const cols = MED_COLS.map((c) => ({ ...c, px: c.width * tableWidth }));
+  let x = PAGE_MARGIN;
+  const colX = cols.map((c) => {
+    const thisX = x;
+    x += c.px;
+    return thisX;
+  });
+
+  // Header row
+  const headerY = doc.y;
+  doc.rect(PAGE_MARGIN, headerY, tableWidth, 20).fill(COLORS.teal);
+  cols.forEach((c, i) => {
+    doc
+      .font('Helvetica-Bold')
+      .fontSize(8.5)
+      .fillColor('#FFFFFF')
+      .text(c.label.toUpperCase(), colX[i] + 6, headerY + 6, { width: c.px - 10 });
+  });
+  doc.y = headerY + 20;
+
+  medicines.forEach((med, i) => {
+    const rowValues = {
+      name: med.name,
+      dosage: med.dosage,
+      frequency: med.frequency,
+      duration: `${med.durationDays} day(s)`,
+      instructions: med.instructions || '—',
+    };
+
+    // Measure the tallest cell to size the row consistently.
+    const heights = cols.map((c) =>
+      doc.heightOfString(rowValues[c.key], { width: c.px - 10, fontSize: 9 })
+    );
+    const rowHeight = Math.max(...heights, 16) + 10;
+    const rowY = doc.y;
+
+    if (i % 2 === 1) {
+      doc.rect(PAGE_MARGIN, rowY, tableWidth, rowHeight).fill(COLORS.offwhite);
+    }
+
+    cols.forEach((c, ci) => {
+      doc
+        .font(c.key === 'name' ? 'Helvetica-Bold' : 'Helvetica')
+        .fontSize(9)
+        .fillColor(COLORS.charcoal)
+        .text(rowValues[c.key], colX[ci] + 6, rowY + 6, { width: c.px - 10 });
+    });
+
+    doc.y = rowY + rowHeight;
+  });
+
+  doc
+    .moveTo(PAGE_MARGIN, doc.y)
+    .lineTo(doc.page.width - PAGE_MARGIN, doc.y)
+    .strokeColor(COLORS.border)
+    .lineWidth(1)
+    .stroke();
+  doc.moveDown(0.8);
 }
 
 function drawFooter(doc) {
@@ -124,7 +228,7 @@ function drawFooter(doc) {
   doc.page.margins.bottom = originalBottomMargin;
 }
 
-export function generatePrescriptionPdfBuffer({ doctor, patient, prescription, appointment, prescriptionId }) {
+export function generatePrescriptionPdfBuffer({ doctor, patient, prescription, appointment, vitals, prescriptionId }) {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: PAGE_MARGIN, size: 'A4', bufferPages: true });
     const chunks = [];
@@ -136,6 +240,7 @@ export function generatePrescriptionPdfBuffer({ doctor, patient, prescription, a
 
     drawHeader(doc, { prescriptionId, generatedAt });
     drawInfoBox(doc, { doctor, patient, appointment });
+    drawVitals(doc, vitals);
 
     if (prescription.diagnosis?.length) {
       sectionHeading(doc, 'Diagnosis');
@@ -144,22 +249,18 @@ export function generatePrescriptionPdfBuffer({ doctor, patient, prescription, a
     }
 
     if (prescription.medicines?.length) {
-      sectionHeading(doc, 'Medicines');
-      prescription.medicines.forEach((med, i) => {
-        doc
-          .font('Helvetica-Bold')
-          .fontSize(10)
-          .fillColor(COLORS.charcoal)
-          .text(`${i + 1}. ${med.name}`, { continued: true })
-          .font('Helvetica')
-          .fillColor(COLORS.slate)
-          .text(`  —  ${med.dosage}, ${med.frequency}, for ${med.durationDays} day(s)`);
-        if (med.instructions) {
-          doc.font('Helvetica-Oblique').fontSize(9).fillColor(COLORS.muted).text(`    ${med.instructions}`);
-        }
-        doc.moveDown(0.35);
-      });
-      doc.moveDown(0.5);
+      doc.moveDown(0.2);
+      const y = doc.y;
+      doc.font('Helvetica-Bold').fontSize(13).fillColor(COLORS.sunrise).text('Rx', PAGE_MARGIN, y, { continued: true });
+      doc.font('Helvetica-Bold').fontSize(11).fillColor(COLORS.teal).text('   MEDICINES', { baseline: 'top' });
+      doc
+        .moveTo(PAGE_MARGIN, doc.y + 2)
+        .lineTo(doc.page.width - PAGE_MARGIN, doc.y + 2)
+        .strokeColor(COLORS.border)
+        .lineWidth(1)
+        .stroke();
+      doc.moveDown(0.6);
+      drawMedicinesTable(doc, prescription.medicines);
     }
 
     if (prescription.labTestsAdvised?.length) {

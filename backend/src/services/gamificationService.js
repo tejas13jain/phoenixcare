@@ -3,6 +3,8 @@ import { Appointment } from '../models/Appointment.js';
 import { SleepLog } from '../models/SleepLog.js';
 import { ActivityLog } from '../models/ActivityLog.js';
 import { Medication } from '../models/Medication.js';
+import { VitalsLog } from '../models/VitalsLog.js';
+import { MoodLog } from '../models/MoodLog.js';
 
 const LEVEL_XP_STEP = 100; // 100 XP per level
 
@@ -64,6 +66,8 @@ const BADGE_DEFS = [
   { code: 'sleep_tracker', label: 'Sleep Tracker', icon: 'moon', check: (ctx) => ctx.sleepLogCount >= 1 },
   { code: 'on_the_move', label: 'On the Move', icon: 'footprints', check: (ctx) => ctx.activityLogCount >= 3 },
   { code: 'med_organizer', label: 'Med Organizer', icon: 'pill', check: (ctx) => ctx.medicationCount >= 1 },
+  { code: 'vitals_watcher', label: 'Vitals Watcher', icon: 'heart', check: (ctx) => ctx.vitalsLogCount >= 1 },
+  { code: 'mindful_mind', label: 'Mindful Mind', icon: 'brain', check: (ctx) => ctx.moodLogCount >= 3 },
 ];
 
 export async function getProgress(patientId) {
@@ -71,15 +75,27 @@ export async function getProgress(patientId) {
   if (!patient) return null;
 
   const g = patient.gamification || { totalXp: 0, currentStreak: 0, longestStreak: 0 };
-  const [appointmentCount, sleepLogCount, activityLogCount, medicationCount] = await Promise.all([
+  const [appointmentCount, sleepLogCount, activityLogCount, medicationCount, vitalsLogCount, moodLogCount] = await Promise.all([
     Appointment.countDocuments({ patient: patientId, status: { $ne: 'cancelled' } }),
     SleepLog.countDocuments({ patient: patientId }),
     ActivityLog.countDocuments({ patient: patientId }),
     Medication.countDocuments({ patient: patientId, isActive: true }),
+    VitalsLog.countDocuments({ patient: patientId }),
+    MoodLog.countDocuments({ patient: patientId }),
   ]);
   const level = levelFromXp(g.totalXp);
 
-  const ctx = { totalXp: g.totalXp, longestStreak: g.longestStreak, level, appointmentCount, sleepLogCount, activityLogCount, medicationCount };
+  const ctx = {
+    totalXp: g.totalXp,
+    longestStreak: g.longestStreak,
+    level,
+    appointmentCount,
+    sleepLogCount,
+    activityLogCount,
+    medicationCount,
+    vitalsLogCount,
+    moodLogCount,
+  };
   const badges = BADGE_DEFS.map((b) => ({ code: b.code, label: b.label, icon: b.icon, unlocked: b.check(ctx) }));
 
   return {

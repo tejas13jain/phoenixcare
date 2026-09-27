@@ -20,6 +20,7 @@ router.patch('/payments/:id/payout', adminController.updatePayoutStatus);
 router.get('/appointments', adminController.listAllAppointments);
 router.get('/reports/appointments/export', adminController.exportAppointmentsReport);
 router.get('/reports/payments/export', adminController.exportPaymentsReport);
+router.get('/reports/doctors/export', adminController.exportDoctorsReport);
 
 router.get('/reviews/flagged', adminController.listFlaggedReviews);
 router.patch('/reviews/:id/moderate', adminController.moderateReview);

@@ -4,6 +4,7 @@ import { Droplet, Minus, Plus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Card, Skeleton } from '../ui/index.js';
 import { wellnessApi } from '../../api/pushApi.js';
+import { GoalEditButton } from './GoalEditButton.jsx';
 
 export function WaterTracker({ onXpAwarded }) {
   const [log, setLog] = useState(undefined);
@@ -49,8 +50,9 @@ export function WaterTracker({ onXpAwarded }) {
         <h3 className="font-heading font-semibold text-charcoal flex items-center gap-2">
           <Droplet size={18} className="text-sky-500" /> Water intake
         </h3>
-        <span className="text-sm font-medium text-slate-600">
+        <span className="text-sm font-medium text-slate-600 flex items-center gap-1.5">
           {log.glasses} / {goal} glasses
+          <GoalEditButton type="water" currentGoal={goal} onSaved={(v) => setLog((l) => ({ ...l, goal: v }))} />
         </span>
       </div>
 

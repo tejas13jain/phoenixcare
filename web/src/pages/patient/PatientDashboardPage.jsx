@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { CalendarClock, FolderHeart, Bell, Search } from 'lucide-react';
+import { CalendarClock, FolderHeart, Search, LineChart } from 'lucide-react';
 import { PageTransition } from '../../components/layout/PageTransition.jsx';
 import { Card, Button, Badge, Skeleton } from '../../components/ui/index.js';
 import { appointmentApi } from '../../api/appointmentApi.js';
@@ -16,6 +16,9 @@ import { SleepTracker } from '../../components/wellness/SleepTracker.jsx';
 import { ActivityTracker } from '../../components/wellness/ActivityTracker.jsx';
 import { WeightBmiCard } from '../../components/wellness/WeightBmiCard.jsx';
 import { MedicationList } from '../../components/wellness/MedicationList.jsx';
+import { VitalsCard } from '../../components/wellness/VitalsCard.jsx';
+import { MoodTracker } from '../../components/wellness/MoodTracker.jsx';
+import { WorkoutSuggestions } from '../../components/wellness/WorkoutSuggestions.jsx';
 
 const STATUS_VARIANT = {
   confirmed: 'teal',
@@ -48,10 +51,11 @@ export function PatientDashboardPage() {
           <p className="text-slate-600">Here's what's happening with your care.</p>
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <QuickLink to="/doctors" icon={Search} label="Find a doctor" />
           <QuickLink to="/patient/appointments" icon={CalendarClock} label="My appointments" />
           <QuickLink to="/patient/health-vault" icon={FolderHeart} label="Health vault" />
+          <QuickLink to="/patient/health-report" icon={LineChart} label="Health report" />
         </div>
 
         <ProgressWidget refreshKey={progressRefreshKey} />
@@ -68,10 +72,16 @@ export function PatientDashboardPage() {
 
         <div className="grid md:grid-cols-2 gap-4">
           <WeightBmiCard onXpAwarded={() => setProgressRefreshKey((k) => k + 1)} />
+          <VitalsCard onXpAwarded={() => setProgressRefreshKey((k) => k + 1)} />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <MoodTracker onXpAwarded={() => setProgressRefreshKey((k) => k + 1)} />
           <MedicationList />
         </div>
 
         <NutritionCard />
+        <WorkoutSuggestions />
 
         <Card>
           <div className="flex items-center justify-between mb-4">

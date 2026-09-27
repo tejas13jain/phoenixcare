@@ -21,6 +21,19 @@ export const wellnessApi = {
 
   getWeightHistory: () => apiClient.get('/wellness/weight').then((r) => r.data),
   logWeight: (weight) => apiClient.post('/wellness/weight/log', { weight }).then((r) => r.data),
+
+  getWorkouts: () => apiClient.get('/wellness/workouts').then((r) => r.data),
+
+  getGoals: () => apiClient.get('/wellness/goals').then((r) => r.data),
+  setGoal: (type, targetValue) => apiClient.put(`/wellness/goals/${type}`, { targetValue }).then((r) => r.data),
+
+  getVitalsHistory: () => apiClient.get('/wellness/vitals').then((r) => r.data),
+  logVitals: (payload) => apiClient.post('/wellness/vitals/log', payload).then((r) => r.data),
+
+  getMoodHistory: () => apiClient.get('/wellness/mood').then((r) => r.data),
+  logMood: (payload) => apiClient.post('/wellness/mood/log', payload).then((r) => r.data),
+
+  getHealthReport: (days) => apiClient.get('/wellness/report', { params: { days } }).then((r) => r.data),
 };
 
 export const patientApi = {

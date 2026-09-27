@@ -4,18 +4,22 @@ import { Footprints } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Card, Skeleton } from '../ui/index.js';
 import { wellnessApi } from '../../api/pushApi.js';
+import { GoalEditButton } from './GoalEditButton.jsx';
 
-const STEP_GOAL = 8000;
 const QUICK_ADD = [500, 1000, 2000];
 
 export function ActivityTracker({ onXpAwarded }) {
   const [log, setLog] = useState(undefined);
+  const [goal, setGoal] = useState(8000);
   const [busy, setBusy] = useState(false);
 
   const load = () => {
     wellnessApi
       .getTodayActivity()
-      .then((res) => setLog(res.data.log))
+      .then((res) => {
+        setLog(res.data.log);
+        setGoal(res.data.goal || 8000);
+      })
       .catch(() => setLog({ steps: 0 }));
   };
 
@@ -30,8 +34,8 @@ export function ActivityTracker({ onXpAwarded }) {
         toast.success(`+${res.data.xpAwarded} XP — first activity logged today! 🚶`);
         onXpAwarded?.();
       }
-      if (res.data.log.steps >= STEP_GOAL && log?.steps < STEP_GOAL) {
-        toast.success("Step goal reached! Great job 🎉");
+      if (res.data.log.steps >= goal && log?.steps < goal) {
+        toast.success('Step goal reached! Great job 🎉');
       }
     } catch {
       toast.error('Could not log activity');
@@ -42,7 +46,7 @@ export function ActivityTracker({ onXpAwarded }) {
 
   if (log === undefined) return <Skeleton className="h-40 w-full" />;
 
-  const pct = Math.min(100, Math.round((log.steps / STEP_GOAL) * 100));
+  const pct = Math.min(100, Math.round((log.steps / goal) * 100));
 
   return (
     <Card>
@@ -50,8 +54,9 @@ export function ActivityTracker({ onXpAwarded }) {
         <h3 className="font-heading font-semibold text-charcoal flex items-center gap-2">
           <Footprints size={18} className="text-sunrise-500" /> Activity
         </h3>
-        <span className="text-sm font-medium text-slate-600">
-          {log.steps.toLocaleString()} / {STEP_GOAL.toLocaleString()} steps
+        <span className="text-sm font-medium text-slate-600 flex items-center gap-1.5">
+          {log.steps.toLocaleString()} / {goal.toLocaleString()} steps
+          <GoalEditButton type="steps" currentGoal={goal} onSaved={setGoal} />
         </span>
       </div>
 

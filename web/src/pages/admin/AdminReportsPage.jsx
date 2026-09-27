@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Download, FileSpreadsheet } from 'lucide-react';
+import { Download, FileSpreadsheet, CalendarDays, Wallet, Stethoscope } from 'lucide-react';
 import { Card, Button, Badge, Skeleton, Input } from '../../components/ui/index.js';
 import { adminApi } from '../../api/appointmentApi.js';
 import { extractErrorMessage } from '../../api/client.js';
@@ -23,6 +23,7 @@ export function AdminReportsPage() {
   const [filters, setFilters] = useState({ status: '', mode: '', from: '', to: '' });
   const [exportingAppointments, setExportingAppointments] = useState(false);
   const [exportingPayments, setExportingPayments] = useState(false);
+  const [exportingDoctors, setExportingDoctors] = useState(false);
 
   const load = () => {
     setAppointments(undefined);
@@ -62,12 +63,53 @@ export function AdminReportsPage() {
     }
   };
 
+  const exportDoctors = async () => {
+    setExportingDoctors(true);
+    try {
+      const blob = await adminApi.exportDoctors();
+      downloadBlob(blob, `phoenixcare-doctor-performance-${new Date().toISOString().slice(0, 10)}.xlsx`);
+      toast.success('Doctor performance report downloaded');
+    } catch (err) {
+      toast.error(extractErrorMessage(err));
+    } finally {
+      setExportingDoctors(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-heading font-semibold text-lg">Appointments report</h2>
+      <div>
+        <h2 className="font-heading font-semibold text-lg mb-1">All reports</h2>
+        <p className="text-sm text-slate-600 mb-4">Every report available for download, updated in real time.</p>
+        <div className="grid sm:grid-cols-3 gap-4">
+          <ReportTypeCard
+            icon={CalendarDays}
+            title="Appointments"
+            description="Every booking with patient, doctor, mode, fee, and status."
+            loading={exportingAppointments}
+            onDownload={exportAppointments}
+          />
+          <ReportTypeCard
+            icon={Wallet}
+            title="Payments & commission"
+            description="Full transaction history with commission/payout breakdown."
+            loading={exportingPayments}
+            onDownload={exportPayments}
+          />
+          <ReportTypeCard
+            icon={Stethoscope}
+            title="Doctor performance"
+            description="Consultations, rating, revenue, and commission per doctor."
+            loading={exportingDoctors}
+            onDownload={exportDoctors}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-600/10">
+        <h2 className="font-heading font-semibold text-lg">Appointments — filter & preview</h2>
         <Button size="sm" loading={exportingAppointments} onClick={exportAppointments}>
-          <FileSpreadsheet size={16} className="mr-1.5" /> Download Excel
+          <FileSpreadsheet size={16} className="mr-1.5" /> Download filtered as Excel
         </Button>
       </div>
 
@@ -156,16 +198,21 @@ export function AdminReportsPage() {
           <p className="text-xs text-slate-600 mt-2">Showing the most recent 20 — download the Excel report for the full dataset.</p>
         </div>
       )}
-
-      <div className="flex items-center justify-between gap-3 pt-4 border-t border-slate-600/10">
-        <div>
-          <h2 className="font-heading font-semibold text-lg">Payments & commission report</h2>
-          <p className="text-sm text-slate-600">Full transaction history with commission/payout breakdown.</p>
-        </div>
-        <Button size="sm" variant="outline" loading={exportingPayments} onClick={exportPayments}>
-          <Download size={16} className="mr-1.5" /> Download Excel
-        </Button>
-      </div>
     </div>
+  );
+}
+
+function ReportTypeCard({ icon: Icon, title, description, loading, onDownload }) {
+  return (
+    <Card className="flex flex-col">
+      <span className="rounded-full bg-teal-50 p-2.5 text-teal-600 w-fit mb-3">
+        <Icon size={18} />
+      </span>
+      <h3 className="font-heading font-semibold text-sm text-charcoal mb-1">{title}</h3>
+      <p className="text-xs text-slate-600 mb-4 flex-1">{description}</p>
+      <Button size="sm" variant="outline" loading={loading} onClick={onDownload}>
+        <Download size={14} className="mr-1.5" /> Download Excel
+      </Button>
+    </Card>
   );
 }

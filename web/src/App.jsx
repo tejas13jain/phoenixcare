@@ -21,6 +21,7 @@ import { PatientDashboardPage } from './pages/patient/PatientDashboardPage.jsx';
 import { PatientAppointmentsPage } from './pages/patient/PatientAppointmentsPage.jsx';
 import { HealthVaultPage } from './pages/patient/HealthVaultPage.jsx';
 import { PrescriptionViewerPage } from './pages/patient/PrescriptionViewerPage.jsx';
+import { HealthReportPage } from './pages/patient/HealthReportPage.jsx';
 
 import { DoctorDashboardPage } from './pages/doctor/DoctorDashboardPage.jsx';
 import { DoctorAvailabilityPage } from './pages/doctor/DoctorAvailabilityPage.jsx';
@@ -99,6 +100,14 @@ export default function App() {
             element={
               <ProtectedRoute roles={['patient']}>
                 <HealthVaultPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/patient/health-report"
+            element={
+              <ProtectedRoute roles={['patient']}>
+                <HealthReportPage />
               </ProtectedRoute>
             }
           />

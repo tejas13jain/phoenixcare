@@ -49,11 +49,28 @@ export const createPrescription = catchAsync(async (req, res) => {
 
   const prescriptionId = new mongoose.Types.ObjectId();
   const prescriptionData = { diagnosis, medicines, labTestsAdvised, advice, followUpDate };
+
+  const patientAge = appointment.patient.dob
+    ? Math.floor((Date.now() - new Date(appointment.patient.dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000))
+    : null;
+
   const pdfBuffer = await generatePrescriptionPdfBuffer({
-    doctor: { name: appointment.doctor.user.name, registrationNumber: appointment.doctor.registrationNumber },
-    patient: appointment.patient.user,
+    doctor: {
+      name: appointment.doctor.user.name,
+      registrationNumber: appointment.doctor.registrationNumber,
+      qualifications: appointment.doctor.qualifications,
+      specialties: appointment.doctor.specialties,
+    },
+    patient: {
+      name: appointment.patient.user.name,
+      phone: appointment.patient.user.phone,
+      age: patientAge,
+      gender: appointment.patient.gender,
+      allergies: appointment.patient.allergies,
+    },
     prescription: prescriptionData,
     appointment,
+    vitals: appointment.intakeForm?.vitals,
     prescriptionId: prescriptionId.toString(),
   });
   const pdfUrl = await persistPdf(pdfBuffer, `rx_${appointment._id}`);

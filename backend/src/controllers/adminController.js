@@ -248,6 +248,57 @@ export const exportPaymentsReport = catchAsync(async (req, res) => {
   await sendWorkbook(res, workbook, `phoenixcare-payments-${new Date().toISOString().slice(0, 10)}.xlsx`);
 });
 
+const DOCTOR_PERFORMANCE_COLUMNS = [
+  { header: 'Doctor', key: 'name', width: 24 },
+  { header: 'Specialties', key: 'specialties', width: 24 },
+  { header: 'City', key: 'city', width: 16 },
+  { header: 'KYC Status', key: 'kycStatus', width: 14 },
+  { header: 'Rating', key: 'rating', width: 10 },
+  { header: 'Reviews', key: 'ratingCount', width: 10 },
+  { header: 'Total Consultations', key: 'totalConsultations', width: 18 },
+  { header: 'Revenue Generated (INR)', key: 'revenue', width: 20 },
+  { header: 'Commission Earned (INR)', key: 'commission', width: 20 },
+];
+
+export const exportDoctorsReport = catchAsync(async (req, res) => {
+  const doctors = await Doctor.find({}).populate('user', 'name').sort({ totalConsultations: -1 });
+
+  const revenueByDoctor = await Payment.aggregate([
+    { $match: { status: 'paid' } },
+    { $lookup: { from: 'appointments', localField: 'appointment', foreignField: '_id', as: 'appt' } },
+    { $unwind: '$appt' },
+    { $group: { _id: '$appt.doctor', revenue: { $sum: '$amount' }, commission: { $sum: '$commissionAmount' } } },
+  ]);
+  const revenueMap = new Map(revenueByDoctor.map((r) => [r._id.toString(), r]));
+
+  const rows = doctors.map((d) => {
+    const rev = revenueMap.get(d._id.toString());
+    return {
+      name: d.user?.name || '—',
+      specialties: d.specialties?.join(', ') || '',
+      city: d.city || '',
+      kycStatus: d.kycStatus,
+      rating: d.rating ? d.rating.toFixed(1) : '—',
+      ratingCount: d.ratingCount,
+      totalConsultations: d.totalConsultations,
+      revenue: rev?.revenue || 0,
+      commission: rev?.commission || 0,
+    };
+  });
+
+  const workbook = buildWorkbook([
+    {
+      name: 'Doctor Performance',
+      title: 'Doctor Performance Report',
+      subtitle: 'All time',
+      columns: DOCTOR_PERFORMANCE_COLUMNS,
+      rows,
+    },
+  ]);
+
+  await sendWorkbook(res, workbook, `phoenixcare-doctor-performance-${new Date().toISOString().slice(0, 10)}.xlsx`);
+});
+
 // ---- Commission & payouts ----
 
 export const listPayments = catchAsync(async (req, res) => {
