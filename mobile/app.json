@@ -14,12 +14,16 @@
     },
     "android": {
       "package": "com.phoenixcare.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#0F6E6A"
       }
     },
     "extra": {
-      "apiBaseUrl": "http://localhost:5000/api/v1"
+      "apiBaseUrl": "https://phoenixcare-api.onrender.com/api/v1",
+      "eas": {
+        "projectId": ""
+      }
     }
   }
 }
