@@ -56,4 +56,14 @@ export const adminApi = {
   flaggedReviews: () => apiClient.get('/admin/reviews/flagged').then((r) => r.data),
   moderateReview: (id, isHidden) => apiClient.patch(`/admin/reviews/${id}/moderate`, { isHidden }).then((r) => r.data),
   sendCampaign: (payload) => apiClient.post('/admin/campaigns', payload).then((r) => r.data),
+  listAppointments: (params) => apiClient.get('/admin/appointments', { params }).then((r) => r.data),
+  exportAppointments: (params) =>
+    apiClient.get('/admin/reports/appointments/export', { params, responseType: 'blob' }).then((r) => r.data),
+  exportPayments: (params) =>
+    apiClient.get('/admin/reports/payments/export', { params, responseType: 'blob' }).then((r) => r.data),
+};
+
+export const doctorReportApi = {
+  getMyAnalytics: () => apiClient.get('/doctors/me/analytics').then((r) => r.data),
+  exportMyReport: () => apiClient.get('/doctors/me/reports/export', { responseType: 'blob' }).then((r) => r.data),
 };

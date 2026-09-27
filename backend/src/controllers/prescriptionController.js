@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import mongoose from 'mongoose';
 import { fileURLToPath } from 'url';
 import { Appointment } from '../models/Appointment.js';
 import { Prescription } from '../models/Prescription.js';
@@ -46,16 +47,19 @@ export const createPrescription = catchAsync(async (req, res) => {
   }
   if (appointment.prescription) throw ApiError.conflict('A prescription already exists for this appointment');
 
+  const prescriptionId = new mongoose.Types.ObjectId();
   const prescriptionData = { diagnosis, medicines, labTestsAdvised, advice, followUpDate };
   const pdfBuffer = await generatePrescriptionPdfBuffer({
-    doctor: appointment.doctor.user,
+    doctor: { name: appointment.doctor.user.name, registrationNumber: appointment.doctor.registrationNumber },
     patient: appointment.patient.user,
     prescription: prescriptionData,
     appointment,
+    prescriptionId: prescriptionId.toString(),
   });
   const pdfUrl = await persistPdf(pdfBuffer, `rx_${appointment._id}`);
 
   const prescription = await Prescription.create({
+    _id: prescriptionId,
     appointment: appointment._id,
     doctor: doctor._id,
     patient: appointment.patient._id,

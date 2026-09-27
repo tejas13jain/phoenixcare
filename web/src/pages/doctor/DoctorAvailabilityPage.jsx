@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { CalendarPlus } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { CalendarPlus, Lock, Unlock, Trash2 } from 'lucide-react';
 import { PageTransition } from '../../components/layout/PageTransition.jsx';
-import { Card, Button, Input, Badge } from '../../components/ui/index.js';
+import { Card, Button, Input } from '../../components/ui/index.js';
 import { doctorApi } from '../../api/doctorApi.js';
 import { extractErrorMessage } from '../../api/client.js';
 
@@ -19,8 +20,6 @@ function nextNDates(n) {
   return dates;
 }
 
-const STATUS_VARIANT = { available: 'success', booked: 'teal', blocked: 'error' };
-
 export function DoctorAvailabilityPage() {
   const [form, setForm] = useState({
     startTime: '09:00',
@@ -32,6 +31,7 @@ export function DoctorAvailabilityPage() {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
+  const [busySlotId, setBusySlotId] = useState(null);
 
   const loadSlots = () => {
     setLoading(true);
@@ -59,6 +59,34 @@ export function DoctorAvailabilityPage() {
       ...f,
       modes: f.modes.includes(mode) ? f.modes.filter((m) => m !== mode) : [...f.modes, mode],
     }));
+  };
+
+  const toggleSlot = async (slot) => {
+    if (slot.status === 'booked') return; // booked slots belong to a confirmed appointment — not editable here
+    setBusySlotId(slot._id);
+    const nextStatus = slot.status === 'available' ? 'blocked' : 'available';
+    try {
+      await doctorApi.updateSlotStatus(slot._id, nextStatus);
+      setSlots((prev) => prev.map((s) => (s._id === slot._id ? { ...s, status: nextStatus } : s)));
+    } catch (err) {
+      toast.error(extractErrorMessage(err));
+    } finally {
+      setBusySlotId(null);
+    }
+  };
+
+  const removeSlot = async (slot) => {
+    if (slot.status === 'booked') return;
+    setBusySlotId(slot._id);
+    try {
+      await doctorApi.deleteSlot(slot._id);
+      setSlots((prev) => prev.filter((s) => s._id !== slot._id));
+      toast.success('Slot removed');
+    } catch (err) {
+      toast.error(extractErrorMessage(err));
+    } finally {
+      setBusySlotId(null);
+    }
   };
 
   const handleGenerate = async (e) => {
@@ -145,21 +173,28 @@ export function DoctorAvailabilityPage() {
         </Card>
 
         <Card>
-          <h2 className="font-heading font-semibold mb-4">Upcoming schedule</h2>
+          <div className="flex items-center justify-between mb-1">
+            <h2 className="font-heading font-semibold">Upcoming schedule</h2>
+            <p className="text-xs text-slate-600">Click a slot to block/unblock it · booked slots can't be edited here</p>
+          </div>
           {loading ? (
-            <p className="text-sm text-slate-600">Loading…</p>
+            <p className="text-sm text-slate-600 mt-3">Loading…</p>
           ) : Object.keys(slotsByDate).length === 0 ? (
-            <p className="text-sm text-slate-600">No slots generated yet.</p>
+            <p className="text-sm text-slate-600 mt-3">No slots generated yet.</p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 mt-3">
               {Object.entries(slotsByDate).map(([date, dateSlots]) => (
                 <div key={date}>
                   <p className="text-sm font-medium mb-2">{date}</p>
                   <div className="flex flex-wrap gap-2">
                     {dateSlots.map((slot) => (
-                      <Badge key={slot._id} variant={STATUS_VARIANT[slot.status]}>
-                        {slot.startTime} · {slot.status}
-                      </Badge>
+                      <SlotPill
+                        key={slot._id}
+                        slot={slot}
+                        busy={busySlotId === slot._id}
+                        onToggle={() => toggleSlot(slot)}
+                        onDelete={() => removeSlot(slot)}
+                      />
                     ))}
                   </div>
                 </div>
@@ -169,5 +204,39 @@ export function DoctorAvailabilityPage() {
         </Card>
       </div>
     </PageTransition>
+  );
+}
+
+const SLOT_STYLES = {
+  available: 'bg-success/10 text-success hover:bg-success/20',
+  blocked: 'bg-error/10 text-error hover:bg-error/20',
+  booked: 'bg-teal-50 text-teal-700 cursor-not-allowed opacity-80',
+};
+
+function SlotPill({ slot, busy, onToggle, onDelete }) {
+  const isBooked = slot.status === 'booked';
+
+  return (
+    <motion.div
+      whileHover={isBooked ? undefined : { scale: 1.04 }}
+      className={`group relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+        SLOT_STYLES[slot.status]
+      } ${busy ? 'opacity-50 pointer-events-none' : ''}`}
+    >
+      <button type="button" onClick={onToggle} disabled={isBooked} className="flex items-center gap-1.5">
+        {slot.status === 'blocked' ? <Lock size={11} /> : slot.status === 'available' ? <Unlock size={11} /> : null}
+        {slot.startTime} · {slot.status}
+      </button>
+      {!isBooked && (
+        <button
+          type="button"
+          onClick={onDelete}
+          aria-label="Delete slot"
+          className="opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          <Trash2 size={11} />
+        </button>
+      )}
+    </motion.div>
   );
 }

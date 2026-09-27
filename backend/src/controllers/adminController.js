@@ -7,6 +7,7 @@ import { Notification } from '../models/Notification.js';
 import { ApiError } from '../utils/ApiError.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import { notifyUser } from '../services/notificationService.js';
+import { buildWorkbook, sendWorkbook } from '../services/excelService.js';
 
 // ---- Doctor KYC onboarding ----
 
@@ -119,6 +120,132 @@ export const getAnalyticsOverview = catchAsync(async (req, res) => {
       totals: { totalPatients, totalDoctorAccounts, verifiedDoctors },
     },
   });
+});
+
+// ---- Reports (full appointment/payment visibility + Excel export) ----
+
+function dateRangeFilter(from, to, field = 'createdAt') {
+  if (!from && !to) return {};
+  const range = {};
+  if (from) range.$gte = new Date(from);
+  if (to) range.$lte = new Date(`${to}T23:59:59.999Z`);
+  return { [field]: range };
+}
+
+export const listAllAppointments = catchAsync(async (req, res) => {
+  const { status, mode, from, to, page = 1, limit = 20 } = req.query;
+  const filter = { ...dateRangeFilter(from, to) };
+  if (status) filter.status = status;
+  if (mode) filter.mode = mode;
+
+  const skip = (Number(page) - 1) * Number(limit);
+  const [appointments, total] = await Promise.all([
+    Appointment.find(filter)
+      .populate({ path: 'doctor', populate: { path: 'user', select: 'name' } })
+      .populate({ path: 'patient', populate: { path: 'user', select: 'name' } })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit)),
+    Appointment.countDocuments(filter),
+  ]);
+
+  res.json({ success: true, data: { appointments, pagination: { page: Number(page), limit: Number(limit), total } } });
+});
+
+const APPOINTMENT_COLUMNS = [
+  { header: 'Date', key: 'date', width: 12 },
+  { header: 'Time', key: 'time', width: 10 },
+  { header: 'Patient', key: 'patient', width: 22 },
+  { header: 'Doctor', key: 'doctor', width: 22 },
+  { header: 'Mode', key: 'mode', width: 12 },
+  { header: 'Status', key: 'status', width: 16 },
+  { header: 'Fee (INR)', key: 'fee', width: 12 },
+  { header: 'Cancelled By', key: 'cancelledBy', width: 14 },
+  { header: 'Booked On', key: 'bookedOn', width: 18 },
+];
+
+export const exportAppointmentsReport = catchAsync(async (req, res) => {
+  const { status, mode, from, to } = req.query;
+  const filter = { ...dateRangeFilter(from, to) };
+  if (status) filter.status = status;
+  if (mode) filter.mode = mode;
+
+  const appointments = await Appointment.find(filter)
+    .populate({ path: 'doctor', populate: { path: 'user', select: 'name' } })
+    .populate({ path: 'patient', populate: { path: 'user', select: 'name' } })
+    .sort({ date: -1, startTime: -1 });
+
+  const rows = appointments.map((a) => ({
+    date: a.date,
+    time: a.startTime,
+    patient: a.patient?.user?.name || '—',
+    doctor: a.doctor?.user?.name || '—',
+    mode: a.mode,
+    status: a.status.replace('_', ' '),
+    fee: a.fee,
+    cancelledBy: a.cancelledBy || '',
+    bookedOn: a.createdAt.toLocaleDateString('en-IN'),
+  }));
+
+  const workbook = buildWorkbook([
+    {
+      name: 'Appointments',
+      title: 'Appointments Report',
+      subtitle: from || to ? `${from || 'start'} to ${to || 'now'}` : 'All time',
+      columns: APPOINTMENT_COLUMNS,
+      rows,
+    },
+  ]);
+
+  await sendWorkbook(res, workbook, `phoenixcare-appointments-${new Date().toISOString().slice(0, 10)}.xlsx`);
+});
+
+const PAYMENT_COLUMNS = [
+  { header: 'Date', key: 'date', width: 14 },
+  { header: 'Patient', key: 'patient', width: 22 },
+  { header: 'Doctor', key: 'doctor', width: 22 },
+  { header: 'Amount (INR)', key: 'amount', width: 14 },
+  { header: 'Commission (INR)', key: 'commission', width: 16 },
+  { header: 'Doctor Payout (INR)', key: 'payout', width: 18 },
+  { header: 'Payment Status', key: 'status', width: 16 },
+  { header: 'Payout Status', key: 'payoutStatus', width: 16 },
+  { header: 'Razorpay Order ID', key: 'orderId', width: 24 },
+];
+
+export const exportPaymentsReport = catchAsync(async (req, res) => {
+  const { status, payoutStatus, from, to } = req.query;
+  const filter = { ...dateRangeFilter(from, to) };
+  if (status) filter.status = status;
+  if (payoutStatus) filter.payoutStatus = payoutStatus;
+
+  const payments = await Payment.find(filter)
+    .populate({ path: 'patient', populate: { path: 'user', select: 'name' } })
+    .populate({ path: 'appointment', populate: { path: 'doctor', populate: { path: 'user', select: 'name' } } })
+    .sort({ createdAt: -1 });
+
+  const rows = payments.map((p) => ({
+    date: p.createdAt.toLocaleDateString('en-IN'),
+    patient: p.patient?.user?.name || '—',
+    doctor: p.appointment?.doctor?.user?.name || '—',
+    amount: p.amount,
+    commission: p.commissionAmount,
+    payout: p.doctorPayoutAmount,
+    status: p.status,
+    payoutStatus: p.payoutStatus,
+    orderId: p.razorpayOrderId || '',
+  }));
+
+  const workbook = buildWorkbook([
+    {
+      name: 'Payments',
+      title: 'Payments & Commission Report',
+      subtitle: from || to ? `${from || 'start'} to ${to || 'now'}` : 'All time',
+      columns: PAYMENT_COLUMNS,
+      rows,
+    },
+  ]);
+
+  await sendWorkbook(res, workbook, `phoenixcare-payments-${new Date().toISOString().slice(0, 10)}.xlsx`);
 });
 
 // ---- Commission & payouts ----

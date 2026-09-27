@@ -6,6 +6,7 @@ const TABS = [
   { to: '/admin/doctors', label: 'Doctors & KYC' },
   { to: '/admin/users', label: 'Users' },
   { to: '/admin/payments', label: 'Payments & Payouts' },
+  { to: '/admin/reports', label: 'Reports' },
   { to: '/admin/moderation', label: 'Moderation & Campaigns' },
 ];
 

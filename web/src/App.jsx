@@ -24,12 +24,14 @@ import { PrescriptionViewerPage } from './pages/patient/PrescriptionViewerPage.j
 
 import { DoctorDashboardPage } from './pages/doctor/DoctorDashboardPage.jsx';
 import { DoctorAvailabilityPage } from './pages/doctor/DoctorAvailabilityPage.jsx';
+import { DoctorAnalyticsPage } from './pages/doctor/DoctorAnalyticsPage.jsx';
 
 import { AdminLayout } from './pages/admin/AdminLayout.jsx';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage.jsx';
 import { AdminDoctorsPage } from './pages/admin/AdminDoctorsPage.jsx';
 import { AdminUsersPage } from './pages/admin/AdminUsersPage.jsx';
 import { AdminPaymentsPage } from './pages/admin/AdminPaymentsPage.jsx';
+import { AdminReportsPage } from './pages/admin/AdminReportsPage.jsx';
 import { AdminModerationPage } from './pages/admin/AdminModerationPage.jsx';
 
 export default function App() {
@@ -117,6 +119,14 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/doctor/analytics"
+            element={
+              <ProtectedRoute roles={['doctor']}>
+                <DoctorAnalyticsPage />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/admin"
@@ -130,6 +140,7 @@ export default function App() {
             <Route path="doctors" element={<AdminDoctorsPage />} />
             <Route path="users" element={<AdminUsersPage />} />
             <Route path="payments" element={<AdminPaymentsPage />} />
+            <Route path="reports" element={<AdminReportsPage />} />
             <Route path="moderation" element={<AdminModerationPage />} />
           </Route>
 

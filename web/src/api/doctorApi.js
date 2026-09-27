@@ -9,4 +9,7 @@ export const doctorApi = {
   getMyProfile: () => apiClient.get('/doctors/me/profile').then((r) => r.data),
   updateMyProfile: (payload) => apiClient.patch('/doctors/me/profile', payload).then((r) => r.data),
   generateSlots: (payload) => apiClient.post('/doctors/me/slots/generate', payload).then((r) => r.data),
+  updateSlotStatus: (slotId, status) =>
+    apiClient.patch(`/doctors/me/slots/${slotId}`, { status }).then((r) => r.data),
+  deleteSlot: (slotId) => apiClient.delete(`/doctors/me/slots/${slotId}`).then((r) => r.data),
 };

@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Card, Badge, Skeleton } from '../../components/ui/index.js';
+import { FileSpreadsheet } from 'lucide-react';
+import { Card, Badge, Skeleton, Button } from '../../components/ui/index.js';
 import { adminApi } from '../../api/appointmentApi.js';
 import { extractErrorMessage } from '../../api/client.js';
+import { downloadBlob } from '../../utils/downloadFile.js';
 
 const STATUS_VARIANT = { paid: 'success', created: 'warning', failed: 'error', refunded: 'neutral' };
 const PAYOUT_VARIANT = { pending: 'warning', processing: 'teal', paid: 'success' };
@@ -10,6 +12,7 @@ const PAYOUT_VARIANT = { pending: 'warning', processing: 'teal', paid: 'success'
 export function AdminPaymentsPage() {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     adminApi
@@ -30,6 +33,19 @@ export function AdminPaymentsPage() {
     }
   };
 
+  const exportPayments = async () => {
+    setExporting(true);
+    try {
+      const blob = await adminApi.exportPayments({});
+      downloadBlob(blob, `phoenixcare-payments-${new Date().toISOString().slice(0, 10)}.xlsx`);
+      toast.success('Payments report downloaded');
+    } catch (err) {
+      toast.error(extractErrorMessage(err));
+    } finally {
+      setExporting(false);
+    }
+  };
+
   if (loading) return <Skeleton className="h-64 w-full" />;
 
   const totalRevenue = payments.filter((p) => p.status === 'paid').reduce((s, p) => s + p.amount, 0);
@@ -37,6 +53,12 @@ export function AdminPaymentsPage() {
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button size="sm" variant="outline" loading={exporting} onClick={exportPayments}>
+          <FileSpreadsheet size={16} className="mr-1.5" /> Download Excel
+        </Button>
+      </div>
+
       <div className="grid sm:grid-cols-2 gap-4">
         <Card>
           <p className="text-xs text-slate-600">Total collected</p>

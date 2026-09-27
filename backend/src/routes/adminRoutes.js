@@ -17,6 +17,10 @@ router.get('/analytics/overview', adminController.getAnalyticsOverview);
 router.get('/payments', adminController.listPayments);
 router.patch('/payments/:id/payout', adminController.updatePayoutStatus);
 
+router.get('/appointments', adminController.listAllAppointments);
+router.get('/reports/appointments/export', adminController.exportAppointmentsReport);
+router.get('/reports/payments/export', adminController.exportPaymentsReport);
+
 router.get('/reviews/flagged', adminController.listFlaggedReviews);
 router.patch('/reviews/:id/moderate', adminController.moderateReview);
 

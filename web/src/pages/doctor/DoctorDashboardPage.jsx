@@ -81,9 +81,14 @@ export function DoctorDashboardPage() {
               )}
             </p>
           </div>
-          <Link to="/doctor/availability">
-            <Button variant="outline">Manage availability</Button>
-          </Link>
+          <div className="flex gap-2">
+            <Link to="/doctor/analytics">
+              <Button variant="outline">Analytics & reports</Button>
+            </Link>
+            <Link to="/doctor/availability">
+              <Button variant="outline">Manage availability</Button>
+            </Link>
+          </div>
         </div>
 
         <div className="grid sm:grid-cols-4 gap-4">

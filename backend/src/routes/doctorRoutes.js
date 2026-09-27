@@ -27,6 +27,9 @@ router.patch(
   doctorController.updateMyDoctorProfile
 );
 
+router.get('/me/analytics', requireAuth, requireRole('doctor'), doctorController.getMyAnalytics);
+router.get('/me/reports/export', requireAuth, requireRole('doctor'), doctorController.exportMyReport);
+
 router.get('/:id', validate(doctorIdSchema), doctorController.getDoctorById);
 
 // /doctors/:doctorId/slots, etc.
