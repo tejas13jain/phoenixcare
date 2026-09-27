@@ -1,8 +1,13 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/slices/authStore.js';
 
+// In dev, '/api/v1' is proxied to the backend by vite.config.js. In production there is no
+// dev-server proxy, so a deployed build needs VITE_API_BASE_URL pointing at the real backend
+// origin (e.g. https://phoenixcare-api.onrender.com/api/v1), set as a build-time env var.
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+
 export const apiClient = axios.create({
-  baseURL: '/api/v1',
+  baseURL: API_BASE_URL,
   timeout: 15000,
 });
 
@@ -32,7 +37,7 @@ apiClient.interceptors.response.use(
       try {
         if (!refreshPromise) {
           refreshPromise = axios
-            .post('/api/v1/auth/refresh', { refreshToken })
+            .post(`${API_BASE_URL}/auth/refresh`, { refreshToken })
             .then((res) => res.data.data)
             .finally(() => {
               refreshPromise = null;

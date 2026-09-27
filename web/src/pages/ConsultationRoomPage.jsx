@@ -7,7 +7,12 @@ import { Mic, MicOff, Video, VideoOff, PhoneOff, Send, FileText } from 'lucide-r
 import { PageTransition } from '../components/layout/PageTransition.jsx';
 import { Card, Button, Badge } from '../components/ui/index.js';
 import { consultationApi } from '../api/appointmentApi.js';
-import { extractErrorMessage } from '../api/client.js';
+import { extractErrorMessage, API_BASE_URL } from '../api/client.js';
+
+// In dev this is proxied to the backend by vite.config.js (same-origin '/'). In production
+// there's no proxy, so Socket.io needs the backend's real origin — derive it from
+// VITE_API_BASE_URL (strip the trailing /api/v1) rather than adding a second env var.
+const SOCKET_URL = API_BASE_URL.startsWith('http') ? API_BASE_URL.replace(/\/api\/v1\/?$/, '') : '/';
 import { useAuthStore } from '../store/slices/authStore.js';
 import { PrescriptionWriter } from '../components/PrescriptionWriter.jsx';
 
@@ -55,7 +60,7 @@ export function ConsultationRoomPage() {
         const historyRes = await consultationApi.getChatHistory(appointmentId);
         setMessages(historyRes.data.messages);
 
-        const socket = io('/', { auth: { token: accessToken } });
+        const socket = io(SOCKET_URL, { auth: { token: accessToken } });
         socketRef.current = socket;
 
         socket.on('connect', () => {

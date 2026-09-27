@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: phoenixcare-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Set in the Render dashboard after creating your MongoDB Atlas cluster.
+      - key: MONGODB_URI
+        sync: false
+      # Set to your deployed Vercel URL(s) so CORS allows the real frontend.
+      - key: CLIENT_URL
+        sync: false
+      - key: ADMIN_URL
+        sync: false
+      # Render generates and stores these itself — never shown in this file or exposed to Claude.
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      # Optional integrations — leave unset to keep running in stub mode.
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_FROM_NUMBER
+        sync: false
+      - key: TWILIO_WHATSAPP_FROM
+        sync: false
