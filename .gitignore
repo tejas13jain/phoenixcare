@@ -10,6 +10,9 @@ node_modules/
 backend/uploads/
 backend/logs/
 
+# Sample files generated for review (not part of the app)
+samples/
+
 # Web build
 web/dist/
 web/.vite/

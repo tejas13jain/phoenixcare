@@ -14,85 +14,106 @@ const COLORS = {
 
 const PAGE_MARGIN = 50;
 
+// Same mark used on web/mobile (a rising wing/flame whose lower edge doubles as a pulse
+// line) — drawn here as vector paths rather than text, so the PDF carries the real logo.
+const PHOENIX_WING_PATH =
+  'M100,172 C58,172 28,140 28,100 C28,58 54,32 70,12 C67,44 84,56 90,40 C95,62 111,56 116,29 C132,54 152,70 152,106 C152,146 136,172 100,172 Z';
+const PHOENIX_PULSE_PATH = 'M8,100 L58,100 L74,68 L90,134 L106,56 L122,100 L192,100';
+
+function drawLogoMark(doc, centerX, centerY, size) {
+  // White badge behind the mark so it reads clearly against the gradient banner at small size.
+  doc.circle(centerX, centerY, size / 2 + 7).fill('#FFFFFF');
+
+  const scale = size / 200; // source paths are drawn on a 200x200 viewBox
+  doc.save();
+  doc.translate(centerX - size / 2, centerY - size / 2).scale(scale);
+  doc.path(PHOENIX_WING_PATH).fill(COLORS.teal);
+  doc.path(PHOENIX_PULSE_PATH).lineWidth(9).lineJoin('round').lineCap('round').stroke('#FFFFFF');
+  doc.restore();
+}
+
 function drawHeader(doc, { prescriptionId, generatedAt }) {
   const pageWidth = doc.page.width;
+  const bandHeight = 92;
 
-  // Gradient-style banner (PDFKit has no native gradient fill, so approximate with a
-  // three-stripe blend teal -> sky -> sunrise across the header band).
-  const bandHeight = 78;
-  const stripeWidth = pageWidth / 3;
-  doc.rect(0, 0, stripeWidth, bandHeight).fill(COLORS.teal);
-  doc.rect(stripeWidth, 0, stripeWidth, bandHeight).fill(COLORS.sky);
-  doc.rect(stripeWidth * 2, 0, stripeWidth, bandHeight).fill(COLORS.sunrise);
+  // Real diagonal gradient (PDFKit supports this natively) instead of hard color blocks.
+  const gradient = doc.linearGradient(0, 0, pageWidth, bandHeight);
+  gradient.stop(0, COLORS.teal).stop(0.55, COLORS.sky).stop(1, COLORS.sunrise);
+  doc.rect(0, 0, pageWidth, bandHeight).fill(gradient);
 
-  doc.fillColor('#FFFFFF').font('Helvetica-Bold').fontSize(22).text('PhoenixCare', PAGE_MARGIN, 22);
-  doc.font('Helvetica').fontSize(10).fillColor('#FFFFFF').text('Rise stronger, every day.', PAGE_MARGIN, 48);
+  const badgeCenterX = PAGE_MARGIN + 22;
+  const badgeCenterY = bandHeight / 2;
+  drawLogoMark(doc, badgeCenterX, badgeCenterY, 42);
+
+  const textX = badgeCenterX + 22 + 14;
+  doc.fillColor('#FFFFFF').font('Helvetica-Bold').fontSize(23).text('PhoenixCare', textX, badgeCenterY - 22);
+  doc.font('Helvetica').fontSize(10.5).fillColor('#FFFFFF').text('Rise stronger, every day.', textX, badgeCenterY + 4);
 
   doc
     .font('Helvetica')
     .fontSize(9)
     .fillColor('#FFFFFF')
-    .text(`Prescription ID: ${prescriptionId}`, 0, 24, { align: 'right', width: pageWidth - PAGE_MARGIN })
-    .text(`Issued: ${generatedAt}`, 0, 38, { align: 'right', width: pageWidth - PAGE_MARGIN });
+    .text(`Prescription ID: ${prescriptionId}`, 0, badgeCenterY - 16, { align: 'right', width: pageWidth - PAGE_MARGIN })
+    .text(`Issued: ${generatedAt}`, 0, badgeCenterY, { align: 'right', width: pageWidth - PAGE_MARGIN });
 
-  doc.y = bandHeight + 24;
+  doc.y = bandHeight + 26;
 }
 
 function drawInfoBox(doc, { doctor, patient, appointment }) {
   const boxTop = doc.y;
   const boxWidth = doc.page.width - PAGE_MARGIN * 2;
   const colWidth = boxWidth / 2;
-  const boxHeight = 98;
+  const boxHeight = 108;
 
   doc.roundedRect(PAGE_MARGIN, boxTop, boxWidth, boxHeight, 8).fillAndStroke(COLORS.offwhite, COLORS.border);
 
   const doctorQualifications = doctor.qualifications?.length ? doctor.qualifications.join(', ') : '';
   const doctorSpecialty = doctor.specialties?.length ? doctor.specialties.join(', ') : '';
 
-  doc.font('Helvetica-Bold').fontSize(9).fillColor(COLORS.teal).text('CONSULTING DOCTOR', PAGE_MARGIN + 16, boxTop + 14);
+  doc.font('Helvetica-Bold').fontSize(9.5).fillColor(COLORS.teal).text('CONSULTING DOCTOR', PAGE_MARGIN + 18, boxTop + 16);
   doc
     .font('Helvetica-Bold')
-    .fontSize(12)
+    .fontSize(13.5)
     .fillColor(COLORS.charcoal)
-    .text(`Dr. ${doctor.name.replace(/^Dr\.?\s*/i, '')}`, PAGE_MARGIN + 16, boxTop + 28);
+    .text(`Dr. ${doctor.name.replace(/^Dr\.?\s*/i, '')}`, PAGE_MARGIN + 18, boxTop + 31);
   doc
     .font('Helvetica')
-    .fontSize(8.5)
+    .fontSize(9.5)
     .fillColor(COLORS.slate)
     .text(
       [doctorQualifications, doctorSpecialty].filter(Boolean).join('  •  ') || ' ',
-      PAGE_MARGIN + 16,
-      boxTop + 44,
-      { width: colWidth - 24 }
+      PAGE_MARGIN + 18,
+      boxTop + 49,
+      { width: colWidth - 26 }
     );
   doc
-    .fontSize(8.5)
+    .fontSize(9.5)
     .fillColor(COLORS.slate)
-    .text(`Reg. No: ${doctor.registrationNumber}`, PAGE_MARGIN + 16, boxTop + 60)
-    .text(`${appointment.date}  •  ${appointment.startTime}  •  ${appointment.mode}`, PAGE_MARGIN + 16, boxTop + 74);
+    .text(`Reg. No: ${doctor.registrationNumber}`, PAGE_MARGIN + 18, boxTop + 66)
+    .text(`${appointment.date}  •  ${appointment.startTime}  •  ${appointment.mode}`, PAGE_MARGIN + 18, boxTop + 82);
 
   const patientMeta = [patient.age ? `${patient.age} yrs` : null, patient.gender ? patient.gender : null]
     .filter(Boolean)
     .join(', ');
 
-  doc.font('Helvetica-Bold').fontSize(9).fillColor(COLORS.teal).text('PATIENT', PAGE_MARGIN + colWidth + 16, boxTop + 14);
+  doc.font('Helvetica-Bold').fontSize(9.5).fillColor(COLORS.teal).text('PATIENT', PAGE_MARGIN + colWidth + 18, boxTop + 16);
   doc
     .font('Helvetica-Bold')
-    .fontSize(12)
+    .fontSize(13.5)
     .fillColor(COLORS.charcoal)
-    .text(patient.name, PAGE_MARGIN + colWidth + 16, boxTop + 28);
+    .text(patient.name, PAGE_MARGIN + colWidth + 18, boxTop + 31);
   if (patientMeta) {
-    doc.font('Helvetica').fontSize(8.5).fillColor(COLORS.slate).text(patientMeta, PAGE_MARGIN + colWidth + 16, boxTop + 44);
+    doc.font('Helvetica').fontSize(9.5).fillColor(COLORS.slate).text(patientMeta, PAGE_MARGIN + colWidth + 18, boxTop + 49);
   }
   if (patient.phone) {
-    doc.fontSize(8.5).fillColor(COLORS.slate).text(patient.phone, PAGE_MARGIN + colWidth + 16, boxTop + 60);
+    doc.fontSize(9.5).fillColor(COLORS.slate).text(patient.phone, PAGE_MARGIN + colWidth + 18, boxTop + 66);
   }
   if (patient.allergies?.length) {
     doc
       .font('Helvetica-Bold')
-      .fontSize(8.5)
+      .fontSize(9.5)
       .fillColor('#E63946')
-      .text(`⚠ Allergies: ${patient.allergies.join(', ')}`, PAGE_MARGIN + colWidth + 16, boxTop + 74, {
+      .text(`⚠ Allergies: ${patient.allergies.join(', ')}`, PAGE_MARGIN + colWidth + 18, boxTop + 82, {
         width: colWidth - 24,
       });
   }
