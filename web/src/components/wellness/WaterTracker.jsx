@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { Card, Skeleton } from '../ui/index.js';
 import { wellnessApi } from '../../api/pushApi.js';
 
-export function WaterTracker() {
+export function WaterTracker({ onXpAwarded }) {
   const [log, setLog] = useState(undefined);
   const [busy, setBusy] = useState(false);
 
@@ -24,6 +24,10 @@ export function WaterTracker() {
     try {
       const res = await wellnessApi.logWater(delta);
       setLog(res.data.log);
+      if (res.data.xpAwarded > 0) {
+        toast.success(`+${res.data.xpAwarded} XP — day streak extended! 🔥`);
+        onXpAwarded?.();
+      }
       if (delta > 0 && res.data.log.glasses === res.data.log.goal) {
         toast.success("Goal reached! You've had all your water for today 💧");
       }

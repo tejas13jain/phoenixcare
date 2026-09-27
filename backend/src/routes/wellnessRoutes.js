@@ -10,4 +10,7 @@ router.get('/tips', wellnessController.listTips);
 router.get('/water/today', requireAuth, requireRole('patient'), wellnessController.getTodayWater);
 router.post('/water/log', requireAuth, requireRole('patient'), wellnessController.logWater);
 
+router.get('/progress', requireAuth, requireRole('patient'), wellnessController.getMyProgress);
+router.get('/nutrition', requireAuth, requireRole('patient'), wellnessController.getMyNutrition);
+
 export default router;

@@ -10,6 +10,8 @@ import { extractErrorMessage } from '../../api/client.js';
 import { getFirstName } from '../../utils/formatName.js';
 import { HealthTipCard } from '../../components/wellness/HealthTipCard.jsx';
 import { WaterTracker } from '../../components/wellness/WaterTracker.jsx';
+import { ProgressWidget } from '../../components/wellness/ProgressWidget.jsx';
+import { NutritionCard } from '../../components/wellness/NutritionCard.jsx';
 
 const STATUS_VARIANT = {
   confirmed: 'teal',
@@ -24,6 +26,7 @@ export function PatientDashboardPage() {
   const { user } = useAuthStore();
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [progressRefreshKey, setProgressRefreshKey] = useState(0);
 
   useEffect(() => {
     appointmentApi
@@ -47,10 +50,14 @@ export function PatientDashboardPage() {
           <QuickLink to="/patient/health-vault" icon={FolderHeart} label="Health vault" />
         </div>
 
+        <ProgressWidget refreshKey={progressRefreshKey} />
+
         <div className="grid md:grid-cols-2 gap-4">
-          <WaterTracker />
+          <WaterTracker onXpAwarded={() => setProgressRefreshKey((k) => k + 1)} />
           <HealthTipCard />
         </div>
+
+        <NutritionCard />
 
         <Card>
           <div className="flex items-center justify-between mb-4">

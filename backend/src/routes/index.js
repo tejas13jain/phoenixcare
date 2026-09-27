@@ -11,6 +11,7 @@ import consultationRoutes from './consultationRoutes.js';
 import adminRoutes from './adminRoutes.js';
 import pushRoutes from './pushRoutes.js';
 import wellnessRoutes from './wellnessRoutes.js';
+import patientRoutes from './patientRoutes.js';
 
 const router = Router();
 
@@ -28,5 +29,6 @@ router.use('/consultations', consultationRoutes);
 router.use('/admin', adminRoutes);
 router.use('/push', pushRoutes);
 router.use('/wellness', wellnessRoutes);
+router.use('/patients', patientRoutes);
 
 export default router;

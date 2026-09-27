@@ -7,6 +7,9 @@ import { Payment } from '../models/Payment.js';
 import { ApiError } from '../utils/ApiError.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import { notifyUser } from '../services/notificationService.js';
+import { awardXp } from '../services/gamificationService.js';
+
+const BOOKING_XP = 20;
 
 export const createAppointment = catchAsync(async (req, res) => {
   const { doctorId, slotId, mode, familyMemberId, intakeForm } = req.validated.body;
@@ -74,6 +77,8 @@ export const createAppointment = catchAsync(async (req, res) => {
       recipientName: patient.user.name,
     });
   }
+
+  await awardXp(patient._id, BOOKING_XP);
 
   res.status(201).json({ success: true, message: 'Appointment created', data: { appointment } });
 });

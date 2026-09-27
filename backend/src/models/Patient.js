@@ -19,13 +19,23 @@ const patientSchema = new Schema(
     dob: { type: Date },
     gender: { type: String, enum: ['male', 'female', 'other'] },
     bloodGroup: { type: String },
-    height: { type: Number },
-    weight: { type: Number },
+    height: { type: Number }, // cm
+    weight: { type: Number }, // kg
     allergies: [{ type: String }],
     chronicConditions: [{ type: String }],
     address: { type: String, default: '' },
     city: { type: String },
     familyMembers: [familyMemberSchema],
+
+    fitnessGoal: { type: String, enum: ['weight_loss', 'muscle_gain', 'maintenance'], default: 'maintenance' },
+    goesToGym: { type: Boolean, default: false },
+
+    gamification: {
+      totalXp: { type: Number, default: 0 },
+      currentStreak: { type: Number, default: 0 },
+      longestStreak: { type: Number, default: 0 },
+      lastActivityDate: { type: String, default: null }, // YYYY-MM-DD
+    },
   },
   { timestamps: true }
 );

@@ -3,6 +3,10 @@ import { WaterLog } from '../models/WaterLog.js';
 import { Patient } from '../models/Patient.js';
 import { ApiError } from '../utils/ApiError.js';
 import { catchAsync } from '../utils/catchAsync.js';
+import { awardXp, getProgress } from '../services/gamificationService.js';
+import { getNutritionSuggestions } from '../services/nutritionService.js';
+
+const WATER_LOG_XP = 10;
 
 function todayString() {
   return new Date().toISOString().slice(0, 10);
@@ -47,8 +51,32 @@ export const logWater = catchAsync(async (req, res) => {
   let log = await WaterLog.findOne({ patient: patient._id, date });
   if (!log) log = new WaterLog({ patient: patient._id, date, glasses: 0 });
 
+  const wasFirstLogToday = log.glasses === 0;
   log.glasses = Math.max(0, Math.min(20, log.glasses + delta));
   await log.save();
 
-  res.json({ success: true, data: { log } });
+  // Award streak/XP once per day, on the first glass logged — not per tap, so the streak
+  // reflects "did you engage today" rather than how many times you clicked.
+  let progress = null;
+  if (wasFirstLogToday && log.glasses > 0) {
+    progress = await awardXp(patient._id, WATER_LOG_XP);
+  }
+
+  res.json({ success: true, data: { log, xpAwarded: progress ? WATER_LOG_XP : 0 } });
+});
+
+export const getMyProgress = catchAsync(async (req, res) => {
+  const patient = await getPatientOrThrow(req);
+  const progress = await getProgress(patient._id);
+  res.json({ success: true, data: { progress } });
+});
+
+export const getMyNutrition = catchAsync(async (req, res) => {
+  const patient = await getPatientOrThrow(req);
+  const suggestions = getNutritionSuggestions({
+    weight: patient.weight,
+    fitnessGoal: patient.fitnessGoal,
+    goesToGym: patient.goesToGym,
+  });
+  res.json({ success: true, data: { nutrition: suggestions, profile: { weight: patient.weight, fitnessGoal: patient.fitnessGoal, goesToGym: patient.goesToGym } } });
 });
