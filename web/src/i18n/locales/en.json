@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "findDoctors": "Find Doctors",
+    "healthBlog": "Health Blog",
+    "dashboard": "Dashboard",
+    "logout": "Logout",
+    "login": "Log in",
+    "signup": "Sign up",
+    "language": "Language"
+  },
+  "home": {
+    "heroTitle": "Talk to trusted doctors, anytime, anywhere.",
+    "heroSubtitle": "Video, audio, or chat consultations with verified specialists. Rise stronger, every day.",
+    "searchPlaceholder": "Describe your symptom — e.g. \"chest pain\" or \"skin rash\"",
+    "searchButton": "Search",
+    "trustDoctors": "Verified doctors",
+    "trustConsultations": "Consultations completed",
+    "trustRating": "Average rating",
+    "trustSecure": "Secure & confidential",
+    "browseSpecialty": "Browse by what's bothering you",
+    "browseSpecialtySubtitle": "Not sure which doctor you need? Pick what you're feeling.",
+    "topRated": "Top-rated doctors",
+    "viewAll": "View all",
+    "fromBlog": "From the Health Blog",
+    "readMore": "Read more",
+    "ctaTitle": "New here? Book your first consultation today.",
+    "ctaSubtitle": "Verified doctors. Transparent fees. Digital prescriptions.",
+    "ctaButton": "Get started"
+  },
+  "doctorCard": {
+    "yearsExp": "yrs experience",
+    "bookNow": "Book now",
+    "verified": "Verified"
+  },
+  "footer": {
+    "tagline": "Rise stronger, every day.",
+    "description": "PhoenixCare connects you with verified doctors for video, audio, and chat consultations — with transparent fees and digital prescriptions.",
+    "company": "Company",
+    "aboutUs": "About us",
+    "healthBlog": "Health Blog",
+    "careers": "Careers",
+    "forPatients": "For patients",
+    "findDoctors": "Find doctors",
+    "bookAppointment": "Book an appointment",
+    "healthReport": "My health report",
+    "forDoctors": "For doctors",
+    "joinAsDoctor": "Join as a doctor",
+    "doctorDashboard": "Doctor dashboard",
+    "support": "Support",
+    "helpCenter": "Help center",
+    "contactUs": "Contact us",
+    "privacyPolicy": "Privacy policy",
+    "termsOfService": "Terms of service",
+    "verifiedBadge": "Verified doctors",
+    "secureBadge": "Secure payments",
+    "supportBadge": "24/7 support",
+    "copyright": "PhoenixCare. All rights reserved."
+  },
+  "specialty": {
+    "general_physician": { "label": "General Physician", "tagline": "Fever, cold & general checkups" },
+    "pediatrician": { "label": "Pediatrician", "tagline": "Child & infant health" },
+    "cardiologist": { "label": "Cardiologist", "tagline": "Heart & blood pressure specialist" },
+    "psychiatrist": { "label": "Psychiatrist", "tagline": "Stress, anxiety & mental health" },
+    "dentist": { "label": "Dentist", "tagline": "Teeth, gums & oral health" },
+    "nutritionist": { "label": "Nutritionist", "tagline": "Diet, weight & nutrition" },
+    "dermatologist": { "label": "Dermatologist", "tagline": "Skin, hair & acne specialist" },
+    "gynecologist": { "label": "Gynecologist", "tagline": "Women's health & pregnancy care" }
+  }
+}

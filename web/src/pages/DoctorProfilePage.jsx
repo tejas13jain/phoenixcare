@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Star, MapPin, Languages, GraduationCap, Video, Phone, MessageCircle, Building2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Star, MapPin, Languages, GraduationCap, Video, Phone, MessageCircle, Building2, BadgeCheck } from 'lucide-react';
 import { PageTransition } from '../components/layout/PageTransition.jsx';
 import { Card, Badge, Button, Skeleton } from '../components/ui/index.js';
 import { doctorApi } from '../api/doctorApi.js';
 import { extractErrorMessage } from '../api/client.js';
+import { getSpecialtyInfo } from '../constants/specialties.js';
 
 const MODE_META = {
   video: { icon: Video, label: 'Video call' },
@@ -16,6 +18,7 @@ const MODE_META = {
 };
 
 export function DoctorProfilePage() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [doctor, setDoctor] = useState(null);
   const [reviews, setReviews] = useState([]);
@@ -56,8 +59,23 @@ export function DoctorProfilePage() {
               .join('')}
           </div>
           <div className="flex-1">
-            <h1 className="font-heading font-bold text-2xl text-charcoal">{doctor.user?.name}</h1>
-            <p className="text-slate-600">{doctor.specialties?.join(', ')}</p>
+            <h1 className="font-heading font-bold text-2xl text-charcoal flex items-center gap-1.5">
+              {doctor.user?.name}
+              <BadgeCheck size={18} className="text-teal-600" aria-label={t('doctorCard.verified')} />
+            </h1>
+            <p className="text-slate-700 font-medium">
+              {doctor.specialties
+                ?.map((s) => {
+                  const info = getSpecialtyInfo(s);
+                  return info ? t(`specialty.${info.i18nKey}.label`) : s;
+                })
+                .join(', ')}
+            </p>
+            {doctor.specialties?.[0] && getSpecialtyInfo(doctor.specialties[0]) && (
+              <p className="text-sm text-slate-500">
+                {t(`specialty.${getSpecialtyInfo(doctor.specialties[0]).i18nKey}.tagline`)}
+              </p>
+            )}
             <div className="flex flex-wrap items-center gap-4 mt-2 text-sm text-slate-600">
               <span className="flex items-center gap-1">
                 <Star size={14} className="text-warning fill-warning" /> {doctor.rating?.toFixed(1)} (

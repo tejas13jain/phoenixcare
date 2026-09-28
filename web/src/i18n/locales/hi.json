@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "findDoctors": "डॉक्टर खोजें",
+    "healthBlog": "हेल्थ ब्लॉग",
+    "dashboard": "डैशबोर्ड",
+    "logout": "लॉग आउट",
+    "login": "लॉग इन",
+    "signup": "साइन अप",
+    "language": "भाषा"
+  },
+  "home": {
+    "heroTitle": "भरोसेमंद डॉक्टरों से कभी भी, कहीं भी बात करें।",
+    "heroSubtitle": "वेरिफाइड विशेषज्ञों से वीडियो, ऑडियो या चैट पर सलाह लें। हर दिन और मजबूत बनें।",
+    "searchPlaceholder": "अपनी परेशानी बताएं — जैसे \"सीने में दर्द\" या \"त्वचा पर रैश\"",
+    "searchButton": "खोजें",
+    "trustDoctors": "वेरिफाइड डॉक्टर",
+    "trustConsultations": "पूरी हुई सलाह",
+    "trustRating": "औसत रेटिंग",
+    "trustSecure": "सुरक्षित व गोपनीय",
+    "browseSpecialty": "अपनी परेशानी के अनुसार खोजें",
+    "browseSpecialtySubtitle": "समझ नहीं आ रहा किस डॉक्टर की जरूरत है? यहां से चुनें।",
+    "topRated": "सबसे बेहतर रेटिंग वाले डॉक्टर",
+    "viewAll": "सभी देखें",
+    "fromBlog": "हेल्थ ब्लॉग से",
+    "readMore": "और पढ़ें",
+    "ctaTitle": "पहली बार आए हैं? आज ही अपनी पहली सलाह बुक करें।",
+    "ctaSubtitle": "वेरिफाइड डॉक्टर। पारदर्शी फीस। डिजिटल पर्चा।",
+    "ctaButton": "शुरू करें"
+  },
+  "doctorCard": {
+    "yearsExp": "साल अनुभव",
+    "bookNow": "अभी बुक करें",
+    "verified": "वेरिफाइड"
+  },
+  "footer": {
+    "tagline": "हर दिन और मजबूत बनें।",
+    "description": "PhoenixCare आपको वेरिफाइड डॉक्टरों से वीडियो, ऑडियो और चैट पर जोड़ता है — पारदर्शी फीस और डिजिटल पर्चे के साथ।",
+    "company": "कंपनी",
+    "aboutUs": "हमारे बारे में",
+    "healthBlog": "हेल्थ ब्लॉग",
+    "careers": "करियर",
+    "forPatients": "मरीजों के लिए",
+    "findDoctors": "डॉक्टर खोजें",
+    "bookAppointment": "अपॉइंटमेंट बुक करें",
+    "healthReport": "मेरी हेल्थ रिपोर्ट",
+    "forDoctors": "डॉक्टरों के लिए",
+    "joinAsDoctor": "डॉक्टर के रूप में जुड़ें",
+    "doctorDashboard": "डॉक्टर डैशबोर्ड",
+    "support": "सहायता",
+    "helpCenter": "हेल्प सेंटर",
+    "contactUs": "संपर्क करें",
+    "privacyPolicy": "प्राइवेसी पॉलिसी",
+    "termsOfService": "सेवा की शर्तें",
+    "verifiedBadge": "वेरिफाइड डॉक्टर",
+    "secureBadge": "सुरक्षित भुगतान",
+    "supportBadge": "24/7 सहायता",
+    "copyright": "PhoenixCare. सर्वाधिकार सुरक्षित।"
+  },
+  "specialty": {
+    "general_physician": { "label": "जनरल फिजिशियन", "tagline": "बुखार, सर्दी व सामान्य जांच" },
+    "pediatrician": { "label": "बाल रोग विशेषज्ञ", "tagline": "बच्चों व शिशुओं का स्वास्थ्य" },
+    "cardiologist": { "label": "हृदय रोग विशेषज्ञ", "tagline": "दिल व रक्तचाप के विशेषज्ञ" },
+    "psychiatrist": { "label": "मनोचिकित्सक", "tagline": "तनाव, चिंता व मानसिक स्वास्थ्य" },
+    "dentist": { "label": "दंत चिकित्सक", "tagline": "दांत, मसूड़े व मुख स्वास्थ्य" },
+    "nutritionist": { "label": "आहार विशेषज्ञ", "tagline": "डाइट, वज़न व पोषण" },
+    "dermatologist": { "label": "त्वचा रोग विशेषज्ञ", "tagline": "त्वचा, बाल व मुहांसों के विशेषज्ञ" },
+    "gynecologist": { "label": "स्त्री रोग विशेषज्ञ", "tagline": "महिला स्वास्थ्य व गर्भावस्था देखभाल" }
+  }
+}

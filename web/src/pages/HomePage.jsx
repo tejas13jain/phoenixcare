@@ -1,27 +1,28 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Stethoscope, Baby, HeartPulse, Brain, Smile, Salad, ChevronRight, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Search, ChevronRight, Clock, ShieldCheck, Users, Star, Lock } from 'lucide-react';
 import { PageTransition } from '../components/layout/PageTransition.jsx';
 import { Button, Card, DoctorCardSkeleton, Badge, Skeleton } from '../components/ui/index.js';
 import { DoctorCard } from '../components/DoctorCard.jsx';
 import { doctorApi } from '../api/doctorApi.js';
 import { blogApi } from '../api/blogApi.js';
 import { extractErrorMessage } from '../api/client.js';
+import { SPECIALTIES } from '../constants/specialties.js';
 import toast from 'react-hot-toast';
 
-const SPECIALTY_ICONS = {
-  'General Physician': Stethoscope,
-  Pediatrician: Baby,
-  Cardiologist: HeartPulse,
-  Psychiatrist: Brain,
-  Dentist: Smile,
-  Nutritionist: Salad,
-};
+const TRUST_STATS = [
+  { icon: ShieldCheck, key: 'trustDoctors', value: '500+' },
+  { icon: Users, key: 'trustConsultations', value: '50,000+' },
+  { icon: Star, key: 'trustRating', value: '4.8★' },
+  { icon: Lock, key: 'trustSecure', value: '' },
+];
 
 export function HomePage() {
+  const { t } = useTranslation();
   const [featured, setFeatured] = useState([]);
-  const [specialties, setSpecialties] = useState([]);
+  const [availableSpecialties, setAvailableSpecialties] = useState([]);
   const [blogPosts, setBlogPosts] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
@@ -31,7 +32,7 @@ export function HomePage() {
     Promise.all([doctorApi.featured(), doctorApi.specialties()])
       .then(([featuredRes, specialtiesRes]) => {
         setFeatured(featuredRes.data.doctors);
-        setSpecialties(specialtiesRes.data.specialties);
+        setAvailableSpecialties(specialtiesRes.data.specialties);
       })
       .catch((err) => toast.error(extractErrorMessage(err)))
       .finally(() => setLoading(false));
@@ -47,6 +48,8 @@ export function HomePage() {
     navigate(query ? `/doctors?q=${encodeURIComponent(query)}` : '/doctors');
   };
 
+  const specialtyCards = SPECIALTIES.filter((s) => availableSpecialties.includes(s.name));
+
   return (
     <PageTransition>
       <section className="bg-phoenix-gradient text-white">
@@ -58,7 +61,7 @@ export function HomePage() {
               transition={{ duration: 0.5 }}
               className="font-heading font-extrabold text-3xl sm:text-5xl leading-tight"
             >
-              Talk to trusted doctors, anytime, anywhere.
+              {t('home.heroTitle')}
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 16 }}
@@ -66,7 +69,7 @@ export function HomePage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="mt-4 text-white/90 text-lg"
             >
-              Video, audio, or chat consultations with verified specialists. Rise stronger, every day.
+              {t('home.heroSubtitle')}
             </motion.p>
 
             <motion.form
@@ -77,15 +80,15 @@ export function HomePage() {
               className="mt-8 flex bg-white rounded-2xl p-2 shadow-soft-lg max-w-md"
             >
               <div className="flex items-center flex-1 px-3">
-                <Search size={18} className="text-slate-600" />
+                <Search size={18} className="text-slate-600 shrink-0" />
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search by symptom, specialty, or doctor"
+                  placeholder={t('home.searchPlaceholder')}
                   className="w-full px-2 py-2 text-charcoal text-sm outline-none"
                 />
               </div>
-              <Button type="submit">Search</Button>
+              <Button type="submit">{t('home.searchButton')}</Button>
             </motion.form>
           </div>
 
@@ -102,39 +105,56 @@ export function HomePage() {
             />
           </motion.div>
         </div>
+
+        <div className="border-t border-white/15">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {TRUST_STATS.map((stat) => (
+              <div key={stat.key} className="flex items-center gap-2.5">
+                <stat.icon size={18} className="text-white/85 shrink-0" />
+                <div className="leading-tight">
+                  {stat.value && <p className="font-heading font-bold text-sm">{stat.value}</p>}
+                  <p className="text-white/75 text-xs">{t(`home.${stat.key}`)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="font-heading font-semibold text-2xl text-charcoal mb-6">Browse by specialty</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-          {specialties.map((s) => {
-            const Icon = SPECIALTY_ICONS[s] || Stethoscope;
-            return (
-              <motion.button
-                key={s}
-                whileHover={{ y: -4 }}
-                whileTap={{ scale: 0.96 }}
-                onClick={() => navigate(`/doctors?specialty=${encodeURIComponent(s)}`)}
-                className="flex flex-col items-center gap-2 bg-white rounded-2xl shadow-soft p-4 text-center"
-              >
-                <span className="rounded-full bg-teal-50 p-3 text-teal-600">
-                  <Icon size={22} />
+        <h2 className="font-heading font-semibold text-2xl text-charcoal">{t('home.browseSpecialty')}</h2>
+        <p className="text-sm text-slate-600 mt-1 mb-6">{t('home.browseSpecialtySubtitle')}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {specialtyCards.map((s) => (
+            <motion.button
+              key={s.name}
+              whileHover={{ y: -4 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => navigate(`/doctors?specialty=${encodeURIComponent(s.name)}`)}
+              className="flex items-start gap-3 bg-white rounded-2xl shadow-soft p-4 text-left"
+            >
+              <span className="rounded-full bg-teal-50 p-3 text-teal-600 shrink-0">
+                <s.icon size={20} />
+              </span>
+              <span>
+                <span className="block text-sm font-semibold text-charcoal">
+                  {t(`specialty.${s.i18nKey}.label`)}
                 </span>
-                <span className="text-xs font-medium text-charcoal">{s}</span>
-              </motion.button>
-            );
-          })}
+                <span className="block text-xs text-slate-600 mt-0.5">{t(`specialty.${s.i18nKey}.tagline`)}</span>
+              </span>
+            </motion.button>
+          ))}
         </div>
       </section>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-heading font-semibold text-2xl text-charcoal">Top-rated doctors</h2>
+          <h2 className="font-heading font-semibold text-2xl text-charcoal">{t('home.topRated')}</h2>
           <button
             onClick={() => navigate('/doctors')}
             className="flex items-center gap-1 text-teal-600 font-medium text-sm hover:underline"
           >
-            View all <ChevronRight size={16} />
+            {t('home.viewAll')} <ChevronRight size={16} />
           </button>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -147,12 +167,12 @@ export function HomePage() {
       {blogPosts === undefined || blogPosts.length > 0 ? (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-heading font-semibold text-2xl text-charcoal">From the Health Blog</h2>
+            <h2 className="font-heading font-semibold text-2xl text-charcoal">{t('home.fromBlog')}</h2>
             <button
               onClick={() => navigate('/blog')}
               className="flex items-center gap-1 text-teal-600 font-medium text-sm hover:underline"
             >
-              Read more <ChevronRight size={16} />
+              {t('home.readMore')} <ChevronRight size={16} />
             </button>
           </div>
           <div className="grid sm:grid-cols-3 gap-5">
@@ -181,10 +201,10 @@ export function HomePage() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
         <Card className="bg-phoenix-gradient text-white text-center py-10 px-6">
-          <h3 className="font-heading font-bold text-2xl mb-2">New here? Book your first consultation today.</h3>
-          <p className="text-white/85 mb-6">Verified doctors. Transparent fees. Digital prescriptions.</p>
+          <h3 className="font-heading font-bold text-2xl mb-2">{t('home.ctaTitle')}</h3>
+          <p className="text-white/85 mb-6">{t('home.ctaSubtitle')}</p>
           <Button variant="secondary" className="!bg-white !text-teal-600" onClick={() => navigate('/signup')}>
-            Get started
+            {t('home.ctaButton')}
           </Button>
         </Card>
       </section>

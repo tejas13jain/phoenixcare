@@ -3,6 +3,7 @@ import { Review } from '../models/Review.js';
 import { Appointment } from '../models/Appointment.js';
 import { Payment } from '../models/Payment.js';
 import { Patient } from '../models/Patient.js';
+import { matchSpecialtiesFromKeywords } from '../constants/specialtyKeywords.js';
 import { ApiError } from '../utils/ApiError.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import { buildWorkbook, sendWorkbook } from '../services/excelService.js';
@@ -31,10 +32,14 @@ export const listDoctors = catchAsync(async (req, res) => {
     if (maxFee !== undefined) filter['fee.video'].$lte = maxFee;
   }
   if (q) {
+    // A patient searching "chest pain" or "skin rash" doesn't know that's a Cardiologist or
+    // Dermatologist — expand the free-text query with any specialty their symptom maps to.
+    const keywordSpecialties = matchSpecialtiesFromKeywords(q);
     filter.$or = [
       { specialties: { $regex: q, $options: 'i' } },
       { bio: { $regex: q, $options: 'i' } },
       { qualifications: { $regex: q, $options: 'i' } },
+      ...(keywordSpecialties.length ? [{ specialties: { $in: keywordSpecialties } }] : []),
     ];
   }
 

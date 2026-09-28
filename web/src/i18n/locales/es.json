@@ -1,0 +1,69 @@
+{
+  "nav": {
+    "findDoctors": "Buscar médicos",
+    "healthBlog": "Blog de salud",
+    "dashboard": "Panel",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "signup": "Registrarse",
+    "language": "Idioma"
+  },
+  "home": {
+    "heroTitle": "Habla con médicos de confianza, en cualquier momento y lugar.",
+    "heroSubtitle": "Consultas por video, audio o chat con especialistas verificados. Levántate más fuerte, cada día.",
+    "searchPlaceholder": "Describe tu síntoma — p. ej. \"dolor de pecho\" o \"sarpullido\"",
+    "searchButton": "Buscar",
+    "trustDoctors": "Médicos verificados",
+    "trustConsultations": "Consultas realizadas",
+    "trustRating": "Calificación promedio",
+    "trustSecure": "Seguro y confidencial",
+    "browseSpecialty": "Busca por lo que sientes",
+    "browseSpecialtySubtitle": "¿No sabes qué médico necesitas? Elige tu síntoma.",
+    "topRated": "Médicos mejor calificados",
+    "viewAll": "Ver todos",
+    "fromBlog": "Del blog de salud",
+    "readMore": "Leer más",
+    "ctaTitle": "¿Nuevo aquí? Reserva tu primera consulta hoy.",
+    "ctaSubtitle": "Médicos verificados. Tarifas transparentes. Recetas digitales.",
+    "ctaButton": "Comenzar"
+  },
+  "doctorCard": {
+    "yearsExp": "años de experiencia",
+    "bookNow": "Reservar ahora",
+    "verified": "Verificado"
+  },
+  "footer": {
+    "tagline": "Levántate más fuerte, cada día.",
+    "description": "PhoenixCare te conecta con médicos verificados para consultas por video, audio y chat — con tarifas transparentes y recetas digitales.",
+    "company": "Compañía",
+    "aboutUs": "Sobre nosotros",
+    "healthBlog": "Blog de salud",
+    "careers": "Empleo",
+    "forPatients": "Para pacientes",
+    "findDoctors": "Buscar médicos",
+    "bookAppointment": "Reservar cita",
+    "healthReport": "Mi informe de salud",
+    "forDoctors": "Para médicos",
+    "joinAsDoctor": "Únete como médico",
+    "doctorDashboard": "Panel del médico",
+    "support": "Soporte",
+    "helpCenter": "Centro de ayuda",
+    "contactUs": "Contáctanos",
+    "privacyPolicy": "Política de privacidad",
+    "termsOfService": "Términos de servicio",
+    "verifiedBadge": "Médicos verificados",
+    "secureBadge": "Pagos seguros",
+    "supportBadge": "Soporte 24/7",
+    "copyright": "PhoenixCare. Todos los derechos reservados."
+  },
+  "specialty": {
+    "general_physician": { "label": "Médico general", "tagline": "Fiebre, resfriado y chequeos generales" },
+    "pediatrician": { "label": "Pediatra", "tagline": "Salud infantil y del bebé" },
+    "cardiologist": { "label": "Cardiólogo", "tagline": "Especialista en corazón y presión arterial" },
+    "psychiatrist": { "label": "Psiquiatra", "tagline": "Estrés, ansiedad y salud mental" },
+    "dentist": { "label": "Dentista", "tagline": "Dientes, encías y salud bucal" },
+    "nutritionist": { "label": "Nutricionista", "tagline": "Dieta, peso y nutrición" },
+    "dermatologist": { "label": "Dermatólogo", "tagline": "Especialista en piel, cabello y acné" },
+    "gynecologist": { "label": "Ginecólogo", "tagline": "Salud femenina y cuidado del embarazo" }
+  }
+}

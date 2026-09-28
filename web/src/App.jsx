@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 import { Navbar } from './components/layout/Navbar.jsx';
+import { Footer } from './components/layout/Footer.jsx';
 import { SplashScreen } from './components/layout/SplashScreen.jsx';
 import { ProtectedRoute } from './components/layout/ProtectedRoute.jsx';
 import { EngagementBanner } from './components/layout/EngagementBanner.jsx';
@@ -42,13 +43,15 @@ import { AdminModerationPage } from './pages/admin/AdminModerationPage.jsx';
 
 export default function App() {
   const location = useLocation();
+  const hideFooter = location.pathname.startsWith('/admin') || location.pathname.startsWith('/consultation/');
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <SplashScreen />
       <Toaster position="top-right" toastOptions={{ style: { fontFamily: 'Inter, sans-serif', fontSize: '14px' } }} />
       <Navbar />
       <EngagementBanner />
+      <div className="flex-1">
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<HomePage />} />
@@ -187,6 +190,8 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AnimatePresence>
-    </>
+      </div>
+      {!hideFooter && <Footer />}
+    </div>
   );
 }

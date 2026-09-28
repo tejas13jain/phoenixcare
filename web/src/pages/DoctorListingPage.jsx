@@ -7,6 +7,8 @@ import { DoctorCard } from '../components/DoctorCard.jsx';
 import { DoctorCardSkeleton, Button } from '../components/ui/index.js';
 import { doctorApi } from '../api/doctorApi.js';
 import { extractErrorMessage } from '../api/client.js';
+import { getSpecialtyInfo } from '../constants/specialties.js';
+import { useTranslation } from 'react-i18next';
 
 const MODES = [
   { value: '', label: 'Any mode' },
@@ -32,6 +34,7 @@ const MIN_RATINGS = [
 ];
 
 export function DoctorListingPage() {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [doctors, setDoctors] = useState([]);
   const [specialties, setSpecialties] = useState([]);
@@ -150,7 +153,7 @@ export function DoctorListingPage() {
             <input
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              placeholder="Search by symptom, specialty, or doctor name"
+              placeholder='Search by symptom, specialty, or doctor name — e.g. "chest pain"'
               className="w-full py-2.5 text-sm outline-none bg-transparent"
               maxLength={100}
             />
@@ -179,11 +182,17 @@ export function DoctorListingPage() {
                 className="w-full rounded-xl border border-slate-600/20 px-3 py-2 text-sm bg-white"
               >
                 <option value="">All specialties</option>
-                {specialties.map((s) => (
-                  <option key={s} value={s}>
-                    {s}
-                  </option>
-                ))}
+                {specialties.map((s) => {
+                  const info = getSpecialtyInfo(s);
+                  const label = info ? t(`specialty.${info.i18nKey}.label`) : s;
+                  const tagline = info ? t(`specialty.${info.i18nKey}.tagline`) : null;
+                  return (
+                    <option key={s} value={s}>
+                      {label}
+                      {tagline ? ` — ${tagline}` : ''}
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
