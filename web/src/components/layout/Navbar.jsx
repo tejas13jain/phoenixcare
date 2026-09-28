@@ -29,6 +29,9 @@ export function Navbar() {
           <Link to="/doctors" className="hover:text-teal-600">
             Find Doctors
           </Link>
+          <Link to="/blog" className="hover:text-teal-600">
+            Health Blog
+          </Link>
           {user && (
             <Link to={DASHBOARD_PATH[user.role]} className="hover:text-teal-600">
               Dashboard
@@ -73,6 +76,9 @@ export function Navbar() {
         >
           <Link to="/doctors" onClick={() => setMenuOpen(false)}>
             Find Doctors
+          </Link>
+          <Link to="/blog" onClick={() => setMenuOpen(false)}>
+            Health Blog
           </Link>
           {user ? (
             <>

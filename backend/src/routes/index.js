@@ -13,6 +13,8 @@ import pushRoutes from './pushRoutes.js';
 import wellnessRoutes from './wellnessRoutes.js';
 import patientRoutes from './patientRoutes.js';
 import medicationRoutes from './medicationRoutes.js';
+import dietPlanRoutes from './dietPlanRoutes.js';
+import blogRoutes from './blogRoutes.js';
 
 const router = Router();
 
@@ -32,5 +34,7 @@ router.use('/push', pushRoutes);
 router.use('/wellness', wellnessRoutes);
 router.use('/patients', patientRoutes);
 router.use('/medications', medicationRoutes);
+router.use('/diet-plans', dietPlanRoutes);
+router.use('/blogs', blogRoutes);
 
 export default router;

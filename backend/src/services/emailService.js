@@ -1,6 +1,55 @@
 import nodemailer from 'nodemailer';
 import { env } from '../config/env.js';
 import { logger } from '../config/logger.js';
+import { HealthTip } from '../models/HealthTip.js';
+
+// Rotated daily so repeat emails on the same day show the same promo, and every feature gets
+// airtime across a week rather than always advertising the same one.
+const FEATURE_ADS = [
+  {
+    icon: '🥗',
+    title: 'New: Personalized diet plans',
+    text: 'Your doctor can now build a day-by-day meal plan tailored to your goals — right inside PhoenixCare.',
+    ctaLabel: 'View my diet plan',
+    path: '/patient/diet-plans',
+  },
+  {
+    icon: '📚',
+    title: 'PhoenixCare Health Blog',
+    text: 'Fresh, doctor-written articles on nutrition, sleep, and preventive care — a new read every week.',
+    ctaLabel: 'Read the blog',
+    path: '/blog',
+  },
+  {
+    icon: '🔍',
+    title: 'Find the right doctor faster',
+    text: 'Search verified doctors by city, fees, specialty, and rating to book the right fit in seconds.',
+    ctaLabel: 'Search doctors',
+    path: '/doctors',
+  },
+  {
+    icon: '💧',
+    title: 'Build a healthy streak',
+    text: 'Track water, sleep, and activity daily to earn XP and badges — small habits, tracked every day.',
+    ctaLabel: 'Open my dashboard',
+    path: '/patient/dashboard',
+  },
+];
+
+function pickFeatureAd() {
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  return FEATURE_ADS[dayOfYear % FEATURE_ADS.length];
+}
+
+async function pickRandomHealthTip() {
+  try {
+    const [tip] = await HealthTip.aggregate([{ $match: { isActive: true } }, { $sample: { size: 1 } }]);
+    return tip || null;
+  } catch (err) {
+    logger.error(`Could not load a health tip for email: ${err.message}`);
+    return null;
+  }
+}
 
 let transporter = null;
 function getTransporter() {
@@ -16,7 +65,7 @@ function getTransporter() {
   return transporter;
 }
 
-function wrapTemplate({ title, body, ctaLabel, ctaUrl, preheader }) {
+function wrapTemplate({ title, body, ctaLabel, ctaUrl, preheader, healthTip, featureAd }) {
   const year = new Date().getFullYear();
   // Full document + table-based layout for compatibility with Outlook/older clients, which
   // don't render CSS gradients or bare <div> emails reliably. bgcolor attributes are a
@@ -53,6 +102,40 @@ function wrapTemplate({ title, body, ctaLabel, ctaUrl, preheader }) {
                 }
               </td>
             </tr>
+            ${
+              healthTip
+                ? `<tr>
+              <td style="padding:0 32px 24px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F0F9F8;border:1px solid #D6EEEC;border-radius:14px;">
+                  <tr>
+                    <td style="padding:16px 20px;">
+                      <span style="font-family:Arial,Helvetica,sans-serif;font-weight:bold;font-size:12px;color:#0F6E6A;text-transform:uppercase;letter-spacing:0.4px;">💡 Health tip of the day</span>
+                      <div style="font-family:Arial,Helvetica,sans-serif;font-weight:bold;font-size:14px;color:#1E2A32;margin-top:6px;">${healthTip.title}</div>
+                      <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#445866;line-height:1.5;margin-top:4px;">${healthTip.body}</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>`
+                : ''
+            }
+            ${
+              featureAd
+                ? `<tr>
+              <td style="padding:0 32px 24px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FFF6F1;border:1px solid #FFE1CF;border-radius:14px;">
+                  <tr>
+                    <td style="padding:16px 20px;">
+                      <div style="font-family:Arial,Helvetica,sans-serif;font-weight:bold;font-size:14px;color:#1E2A32;">${featureAd.icon} ${featureAd.title}</div>
+                      <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#445866;line-height:1.5;margin-top:4px;">${featureAd.text}</div>
+                      <a href="${env.clientUrl}${featureAd.path}" style="display:inline-block;margin-top:10px;font-family:Arial,Helvetica,sans-serif;font-weight:bold;font-size:12px;color:#FF6B35;text-decoration:none;">${featureAd.ctaLabel} &rarr;</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>`
+                : ''
+            }
             <tr>
               <td style="padding:16px 32px 24px;border-top:1px solid #E2E8E8;color:#8a97a0;font-size:11px;line-height:1.6;">
                 You're receiving this because you have a PhoenixCare account. This is a transactional email about your care.<br/>
@@ -68,7 +151,9 @@ function wrapTemplate({ title, body, ctaLabel, ctaUrl, preheader }) {
 }
 
 export async function sendEmail({ to, subject, title, body, ctaLabel, ctaUrl, preheader }) {
-  const html = wrapTemplate({ title: title || subject, body, ctaLabel, ctaUrl, preheader });
+  const healthTip = await pickRandomHealthTip();
+  const featureAd = pickFeatureAd();
+  const html = wrapTemplate({ title: title || subject, body, ctaLabel, ctaUrl, preheader, healthTip, featureAd });
   const client = getTransporter();
 
   if (!client) {

@@ -9,7 +9,7 @@ const notificationSchema = new Schema(
     body: { type: String, required: true },
     type: {
       type: String,
-      enum: ['appointment', 'payment', 'prescription', 'system', 'promotion'],
+      enum: ['appointment', 'payment', 'prescription', 'system', 'promotion', 'diet_plan', 'blog'],
       default: 'system',
     },
     data: { type: Schema.Types.Mixed, default: {} },

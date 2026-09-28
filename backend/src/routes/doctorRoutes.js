@@ -17,8 +17,10 @@ const router = Router();
 router.get('/', validate(listDoctorsSchema), doctorController.listDoctors);
 router.get('/featured', doctorController.getFeaturedDoctors);
 router.get('/specialties', doctorController.getDoctorSpecialties);
+router.get('/cities', doctorController.getDoctorCities);
 
 router.get('/me/profile', requireAuth, requireRole('doctor'), doctorController.getMyDoctorProfile);
+router.get('/me/patients', requireAuth, requireRole('doctor'), doctorController.getMyPatients);
 router.patch(
   '/me/profile',
   requireAuth,

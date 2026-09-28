@@ -2,6 +2,7 @@ import { Doctor } from '../models/Doctor.js';
 import { Review } from '../models/Review.js';
 import { Appointment } from '../models/Appointment.js';
 import { Payment } from '../models/Payment.js';
+import { Patient } from '../models/Patient.js';
 import { ApiError } from '../utils/ApiError.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import { buildWorkbook, sendWorkbook } from '../services/excelService.js';
@@ -14,7 +15,8 @@ const SORT_MAP = {
 };
 
 export const listDoctors = catchAsync(async (req, res) => {
-  const { q, specialty, city, language, mode, minFee, maxFee, minRating, sort, page, limit } = req.validated.query;
+  const { q, specialty, city, language, mode, minFee, maxFee, minRating, minExperience, sort, page, limit } =
+    req.validated.query;
 
   const filter = { kycStatus: 'verified', isAcceptingNewPatients: true };
   if (specialty) filter.specialties = { $regex: specialty, $options: 'i' };
@@ -22,6 +24,7 @@ export const listDoctors = catchAsync(async (req, res) => {
   if (language) filter.languages = { $regex: language, $options: 'i' };
   if (mode) filter.consultationModes = mode;
   if (minRating) filter.rating = { $gte: minRating };
+  if (minExperience) filter.experienceYears = { $gte: minExperience };
   if (minFee !== undefined || maxFee !== undefined) {
     filter['fee.video'] = {};
     if (minFee !== undefined) filter['fee.video'].$gte = minFee;
@@ -71,6 +74,11 @@ export const getDoctorSpecialties = catchAsync(async (req, res) => {
   res.json({ success: true, data: { specialties: specialties.sort() } });
 });
 
+export const getDoctorCities = catchAsync(async (req, res) => {
+  const cities = await Doctor.distinct('city', { kycStatus: 'verified', city: { $nin: [null, ''] } });
+  res.json({ success: true, data: { cities: cities.sort() } });
+});
+
 export const getDoctorById = catchAsync(async (req, res) => {
   const doctor = await Doctor.findById(req.validated.params.id).populate('user', 'name avatarUrl').lean();
   if (!doctor) throw ApiError.notFound('Doctor not found');
@@ -97,6 +105,23 @@ export const getMyDoctorProfile = catchAsync(async (req, res) => {
   const doctor = await Doctor.findOne({ user: req.user._id }).populate('user', 'name email phone avatarUrl');
   if (!doctor) throw ApiError.notFound('Doctor profile not found');
   res.json({ success: true, data: { doctor } });
+});
+
+export const getMyPatients = catchAsync(async (req, res) => {
+  const doctor = await Doctor.findOne({ user: req.user._id });
+  if (!doctor) throw ApiError.notFound('Doctor profile not found');
+
+  const patientIds = await Appointment.distinct('patient', {
+    doctor: doctor._id,
+    status: { $in: ['confirmed', 'waiting_room', 'in_progress', 'completed'] },
+  });
+
+  const patients = await Patient.find({ _id: { $in: patientIds } })
+    .populate('user', 'name avatarUrl phone')
+    .sort({ 'user.name': 1 })
+    .lean();
+
+  res.json({ success: true, data: { patients } });
 });
 
 // ---- Doctor analytics & reports ----

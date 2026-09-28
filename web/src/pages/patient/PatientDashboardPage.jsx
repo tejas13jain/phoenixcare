@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { CalendarClock, FolderHeart, Search, LineChart } from 'lucide-react';
+import { CalendarClock, FolderHeart, Search, LineChart, Salad } from 'lucide-react';
 import { PageTransition } from '../../components/layout/PageTransition.jsx';
 import { Card, Button, Badge, Skeleton } from '../../components/ui/index.js';
 import { appointmentApi } from '../../api/appointmentApi.js';
@@ -51,11 +51,12 @@ export function PatientDashboardPage() {
           <p className="text-slate-600">Here's what's happening with your care.</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
           <QuickLink to="/doctors" icon={Search} label="Find a doctor" />
           <QuickLink to="/patient/appointments" icon={CalendarClock} label="My appointments" />
           <QuickLink to="/patient/health-vault" icon={FolderHeart} label="Health vault" />
           <QuickLink to="/patient/health-report" icon={LineChart} label="Health report" />
+          <QuickLink to="/patient/diet-plans" icon={Salad} label="My diet plans" />
         </div>
 
         <ProgressWidget refreshKey={progressRefreshKey} />

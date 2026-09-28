@@ -81,12 +81,18 @@ export function DoctorDashboardPage() {
               )}
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Link to="/doctor/analytics">
               <Button variant="outline">Analytics & reports</Button>
             </Link>
             <Link to="/doctor/availability">
               <Button variant="outline">Manage availability</Button>
+            </Link>
+            <Link to="/doctor/diet-plans">
+              <Button variant="outline">Diet plans</Button>
+            </Link>
+            <Link to="/doctor/blogs">
+              <Button variant="outline">Health blog</Button>
             </Link>
           </div>
         </div>

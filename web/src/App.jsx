@@ -12,6 +12,8 @@ import { DoctorProfilePage } from './pages/DoctorProfilePage.jsx';
 import { BookingFlowPage } from './pages/BookingFlowPage.jsx';
 import { ConsultationRoomPage } from './pages/ConsultationRoomPage.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
+import { BlogListPage } from './pages/BlogListPage.jsx';
+import { BlogPostPage } from './pages/BlogPostPage.jsx';
 
 import { LoginPage } from './pages/auth/LoginPage.jsx';
 import { SignupPage } from './pages/auth/SignupPage.jsx';
@@ -22,10 +24,13 @@ import { PatientAppointmentsPage } from './pages/patient/PatientAppointmentsPage
 import { HealthVaultPage } from './pages/patient/HealthVaultPage.jsx';
 import { PrescriptionViewerPage } from './pages/patient/PrescriptionViewerPage.jsx';
 import { HealthReportPage } from './pages/patient/HealthReportPage.jsx';
+import { MyDietPlansPage } from './pages/patient/MyDietPlansPage.jsx';
 
 import { DoctorDashboardPage } from './pages/doctor/DoctorDashboardPage.jsx';
 import { DoctorAvailabilityPage } from './pages/doctor/DoctorAvailabilityPage.jsx';
 import { DoctorAnalyticsPage } from './pages/doctor/DoctorAnalyticsPage.jsx';
+import { DoctorDietPlansPage } from './pages/doctor/DoctorDietPlansPage.jsx';
+import { DoctorBlogsPage } from './pages/doctor/DoctorBlogsPage.jsx';
 
 import { AdminLayout } from './pages/admin/AdminLayout.jsx';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage.jsx';
@@ -49,6 +54,8 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/doctors" element={<DoctorListingPage />} />
           <Route path="/doctors/:id" element={<DoctorProfilePage />} />
+          <Route path="/blog" element={<BlogListPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -111,6 +118,14 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/patient/diet-plans"
+            element={
+              <ProtectedRoute roles={['patient']}>
+                <MyDietPlansPage />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/doctor/dashboard"
@@ -133,6 +148,22 @@ export default function App() {
             element={
               <ProtectedRoute roles={['doctor']}>
                 <DoctorAnalyticsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/doctor/diet-plans"
+            element={
+              <ProtectedRoute roles={['doctor']}>
+                <DoctorDietPlansPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/doctor/blogs"
+            element={
+              <ProtectedRoute roles={['doctor']}>
+                <DoctorBlogsPage />
               </ProtectedRoute>
             }
           />
