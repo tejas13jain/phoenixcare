@@ -40,6 +40,7 @@ import { AdminUsersPage } from './pages/admin/AdminUsersPage.jsx';
 import { AdminPaymentsPage } from './pages/admin/AdminPaymentsPage.jsx';
 import { AdminReportsPage } from './pages/admin/AdminReportsPage.jsx';
 import { AdminModerationPage } from './pages/admin/AdminModerationPage.jsx';
+import { AdminFooterSettingsPage } from './pages/admin/AdminFooterSettingsPage.jsx';
 
 export default function App() {
   const location = useLocation();
@@ -185,6 +186,7 @@ export default function App() {
             <Route path="payments" element={<AdminPaymentsPage />} />
             <Route path="reports" element={<AdminReportsPage />} />
             <Route path="moderation" element={<AdminModerationPage />} />
+            <Route path="footer" element={<AdminFooterSettingsPage />} />
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />

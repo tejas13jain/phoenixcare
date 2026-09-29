@@ -8,6 +8,7 @@ const TABS = [
   { to: '/admin/payments', label: 'Payments & Payouts' },
   { to: '/admin/reports', label: 'Reports' },
   { to: '/admin/moderation', label: 'Moderation & Campaigns' },
+  { to: '/admin/footer', label: 'Footer settings' },
 ];
 
 export function AdminLayout() {

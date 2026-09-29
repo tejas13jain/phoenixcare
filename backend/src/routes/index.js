@@ -15,6 +15,7 @@ import patientRoutes from './patientRoutes.js';
 import medicationRoutes from './medicationRoutes.js';
 import dietPlanRoutes from './dietPlanRoutes.js';
 import blogRoutes from './blogRoutes.js';
+import settingsRoutes from './settingsRoutes.js';
 
 const router = Router();
 
@@ -36,5 +37,6 @@ router.use('/patients', patientRoutes);
 router.use('/medications', medicationRoutes);
 router.use('/diet-plans', dietPlanRoutes);
 router.use('/blogs', blogRoutes);
+router.use('/settings', settingsRoutes);
 
 export default router;
