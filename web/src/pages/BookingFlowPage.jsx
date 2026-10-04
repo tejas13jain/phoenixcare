@@ -52,7 +52,15 @@ export function BookingFlowPage() {
 
   useEffect(() => {
     if (!mode) return;
-    doctorApi.getSlots(doctorId, { mode }).then((res) => setSlots(res.data.slots));
+    doctorApi.getSlots(doctorId, { mode }).then((res) => {
+      setSlots(res.data.slots);
+      // Arriving from the AI assistant (or a link) with a chosen time: jump straight to it.
+      const wanted = searchParams.get('slot');
+      if (!wanted) return;
+      const match = res.data.slots.find((s) => s._id === wanted);
+      if (match) setSelectedSlot(match);
+      else toast('That time was just taken — please pick another.', { icon: '⏰' });
+    });
   }, [doctorId, mode]);
 
   const slotsByDate = useMemo(() => {

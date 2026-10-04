@@ -18,6 +18,7 @@ import blogRoutes from './blogRoutes.js';
 import settingsRoutes from './settingsRoutes.js';
 import surgeryRoutes from './surgeryRoutes.js';
 import labRoutes from './labRoutes.js';
+import assistantRoutes from './assistantRoutes.js';
 
 const router = Router();
 
@@ -42,5 +43,6 @@ router.use('/blogs', blogRoutes);
 router.use('/settings', settingsRoutes);
 router.use('/surgery', surgeryRoutes);
 router.use('/labs', labRoutes);
+router.use('/assistant', assistantRoutes);
 
 export default router;

@@ -1,3 +1,4 @@
+import { phoneVariants } from '../utils/phone.js';
 import bcrypt from 'bcryptjs';
 import { User } from '../models/User.js';
 import { Patient } from '../models/Patient.js';
@@ -28,7 +29,7 @@ async function issueTokenPair(user, deviceInfo) {
 export const signup = catchAsync(async (req, res) => {
   const { name, email, phone, password, role } = req.validated.body;
 
-  const existing = await User.findOne({ $or: [{ email }, { phone }] });
+  const existing = await User.findOne({ $or: [{ email }, { phone: { $in: phoneVariants(phone) } }] });
   if (existing) throw ApiError.conflict('An account with this email or phone already exists');
 
   const passwordHash = await bcrypt.hash(password, 12);
@@ -52,9 +53,9 @@ export const signup = catchAsync(async (req, res) => {
 export const login = catchAsync(async (req, res) => {
   const { identifier, password } = req.validated.body;
 
-  const user = await User.findOne({ $or: [{ email: identifier.toLowerCase() }, { phone: identifier }] }).select(
-    '+passwordHash'
-  );
+  const user = await User.findOne({
+    $or: [{ email: identifier.toLowerCase() }, { phone: { $in: phoneVariants(identifier) } }],
+  }).select('+passwordHash');
   if (!user || !(await user.comparePassword(password))) {
     throw ApiError.unauthorized('Invalid credentials');
   }
@@ -81,7 +82,9 @@ export const verifyOtpAndLogin = catchAsync(async (req, res) => {
   const result = await verifyOtp({ identifier, code, purpose });
   if (!result.valid) throw ApiError.badRequest(result.reason);
 
-  const user = await User.findOne({ $or: [{ email: identifier.toLowerCase() }, { phone: identifier }] });
+  const user = await User.findOne({
+    $or: [{ email: identifier.toLowerCase() }, { phone: { $in: phoneVariants(identifier) } }],
+  });
   if (!user) throw ApiError.notFound('No account found for this identifier');
 
   if (identifier.includes('@')) user.isEmailVerified = true;

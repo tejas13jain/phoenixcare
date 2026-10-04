@@ -1,9 +1,13 @@
 import { z } from 'zod';
+import { E164_PATTERN, normalizePhone } from '../utils/phone.js';
 
+// Accepts the usual ways of writing a number (spaces, dashes, leading 0, +91) and stores it
+// in one canonical form.
 const phoneSchema = z
   .string()
   .trim()
-  .regex(/^\+?[1-9]\d{7,14}$/, 'Enter a valid phone number with country code');
+  .transform(normalizePhone)
+  .pipe(z.string().regex(E164_PATTERN, 'Enter a valid mobile number, for example 98765 43210 or +91 98765 43210'));
 
 export const signupSchema = z.object({
   body: z.object({

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { E164_PATTERN, normalizePhone } from '../utils/phone.js';
 
 const objectId = z.string().regex(/^[a-f\d]{24}$/i, 'Invalid id');
 const modes = z.array(z.enum(['video', 'audio', 'chat', 'in_clinic'])).min(1, 'Choose at least one consultation mode');
@@ -36,8 +37,8 @@ export const createDoctorSchema = z.object({
     phone: z
       .string()
       .trim()
-      .transform((v) => v.replace(/[\s-]/g, ''))
-      .pipe(z.string().regex(/^\+?[1-9]\d{7,14}$/, 'Enter a valid phone number with country code')),
+      .transform(normalizePhone)
+      .pipe(z.string().regex(E164_PATTERN, 'Enter a valid mobile number, for example 98765 43210 or +91 98765 43210')),
     ...profileFields,
   }),
 });

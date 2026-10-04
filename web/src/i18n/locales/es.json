@@ -784,5 +784,103 @@
       "imaging": "Rayos X y escáneres",
       "other": "Otros"
     }
+  },
+  "assistant": {
+    "launcher": "Preguntar a la IA",
+    "launcherAria": "Abrir el asistente de IA de PhoenixCare",
+    "title": "Asistente PhoenixCare",
+    "badgeAi": "IA",
+    "badgeGuided": "Guiado",
+    "close": "Cerrar asistente",
+    "newChat": "Nuevo chat",
+    "intro": {
+      "title": "Hola, soy el asistente de IA de PhoenixCare",
+      "text": "Puedo ayudarte a encontrar el tipo de médico adecuado, comparar médicos y preparar tu cita.",
+      "points": [
+        "Soy una IA, no un médico. No puedo diagnosticar ni dar consejo médico.",
+        "En una emergencia llama al 112; no me esperes.",
+        "Un servicio de IA procesa tus mensajes para ayudarte. No compartas números de identificación, contraseñas ni datos de pago."
+      ],
+      "accept": "Entendido, empezar",
+      "decline": "Prefiero buscar médicos yo mismo"
+    },
+    "placeholder": "Cuéntame qué te preocupa…",
+    "send": "Enviar",
+    "thinking": "Buscando…",
+    "starters": [
+      "Tengo fiebre y tos desde hace 2 días",
+      "Busca un buen dermatólogo",
+      "¿Qué médico es mejor para el estrés y la ansiedad?",
+      "Reserva el primer médico general disponible"
+    ],
+    "error": "Lo siento, algo salió mal. Inténtalo de nuevo o busca médicos tú mismo.",
+    "guidedNotice": "La IA está ocupada, así que estos son resultados del mismo ranking de médicos, sin IA.",
+    "guidedMode": "Modo guiado: sin IA ahora, mismo ranking de médicos.",
+    "emergency": {
+      "title": "Esto podría ser una emergencia",
+      "general": "No esperes una cita en línea. Llama al 112 ahora o acude a urgencias del hospital más cercano. Si puedes, no vayas solo.",
+      "selfHarm": "No estás solo y hay ayuda disponible ahora. Si podrías actuar según estos pensamientos, llama al 112 ya. Para hablar con alguien, llama a Tele-MANAS al 14416 (gratis, 24×7).",
+      "call112": "Llamar al 112",
+      "callHelpline": "Llamar a Tele-MANAS 14416"
+    },
+    "caution": {
+      "title": "Por favor, no lo dejes pasar",
+      "heart": "El dolor de pecho a veces es grave. Si es intenso, empeora o viene con sudor, falta de aire o dolor que se extiende al brazo o la mandíbula, llama al 112. Si no, acude hoy a un médico.",
+      "fainting": "Un desmayo puede tener causas graves. Si se repite, o hay dolor de pecho, falta de aire o confusión, llama al 112. Si no, acude pronto a un médico.",
+      "seizure": "Si una convulsión ocurre ahora o dura más de 5 minutos, llama al 112. Si no, acude pronto a un médico.",
+      "other": "Lo que describes a veces es grave. Si empeora, llama al 112. Si no, acude hoy a un médico."
+    },
+    "cards": {
+      "bestMatches": "Mejores opciones para ti",
+      "whyThis": "¿Por qué este médico?",
+      "hide": "Ocultar",
+      "matchScore": "Puntuación",
+      "book": "Reservar",
+      "profile": "Ver perfil",
+      "reviewCount_one": "{{count}} opinión",
+      "reviewCount_other": "{{count}} opiniones",
+      "newDoctor": "Nuevo",
+      "years": "{{count}} años",
+      "next": "Próxima",
+      "noSlot": "Sin horarios libres pronto",
+      "budgetNote": "Nada entraba en tu presupuesto, así que estas son las opciones más cercanas.",
+      "pickTime": "Elige un horario con {{name}}",
+      "noSlotsFound": "No hay horarios libres.",
+      "bookingTitle": "Tu reserva, lista para revisar",
+      "reviewAndBook": "Revisar y reservar",
+      "confirmNote": "Confirmarás los datos y pagarás en la siguiente pantalla. Aún no se ha reservado nada.",
+      "compareTitle": "Cara a cara",
+      "overall": "Puntuación total",
+      "rating": "Valoración",
+      "experience": "Experiencia",
+      "fee": "Tarifa",
+      "nextAvailable": "Próxima disponible",
+      "languages": "Idiomas",
+      "scoreNote": "Las puntuaciones son una guía, no una garantía. Ser destacado o la tarifa nunca mejora la posición de un médico."
+    },
+    "badges": {
+      "best_overall": "Mejor en conjunto",
+      "earliest": "Disponible antes",
+      "top_rated": "Mejor valorado",
+      "most_experienced": "Más experiencia",
+      "lowest_fee": "Tarifa más baja"
+    },
+    "criteria": {
+      "relevance": "Encaja con tu problema",
+      "quality": "Valoración de pacientes",
+      "availability": "Disponible pronto",
+      "experience": "Experiencia",
+      "reliability": "Fiabilidad",
+      "fit": "Idioma y presupuesto"
+    },
+    "modes": {
+      "video": "Video",
+      "audio": "Audio",
+      "chat": "Chat",
+      "in_clinic": "En consulta"
+    },
+    "askAboutDoctors": "¿No sabes a quién elegir? Pregunta a nuestro asistente de IA",
+    "askFromCareMatch": "Que la IA elija el mejor {{specialty}} para mí",
+    "askFromCareMatchMessage": "Necesito un {{specialty}}. Ayúdame a elegir al mejor médico."
   }
 }

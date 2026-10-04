@@ -57,6 +57,22 @@ export const env = {
     from: required('EMAIL_FROM', 'PhoenixCare <no-reply@phoenixcare.demo>'),
   },
 
+  // AI booking assistant (see docs/ai-assistant.md). Without ANTHROPIC_API_KEY the assistant
+  // still works in "guided" mode (no AI, same doctor ranking), so this is optional.
+  ai: {
+    apiKey: required('ANTHROPIC_API_KEY'),
+    model: required('AI_ASSISTANT_MODEL', 'claude-opus-5-5'),
+    // low | medium | high — how hard the model thinks per reply (cost and latency).
+    effort: required('AI_ASSISTANT_EFFORT', 'low'),
+    // Server-side fallback if a safety classifier declines a request (Claude API only).
+    fallbacks: required('AI_ASSISTANT_FALLBACKS', 'true') !== 'false',
+    // Safety valve on spend: after this many AI replies in a day, switch to guided mode.
+    dailyReplyCap: Number(required('AI_ASSISTANT_DAILY_CAP', 1000)),
+    timeoutMs: Number(required('AI_ASSISTANT_TIMEOUT_MS', 45000)),
+  },
+
+  clinicTimeZone: required('CLINIC_TIME_ZONE', 'Asia/Kolkata'),
+
   webPush: {
     publicKey: required('VAPID_PUBLIC_KEY'),
     privateKey: required('VAPID_PRIVATE_KEY'),

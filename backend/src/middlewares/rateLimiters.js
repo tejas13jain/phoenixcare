@@ -40,3 +40,12 @@ export const documentUploadLimiter = rateLimit({
   legacyHeaders: false,
   message: { success: false, message: 'Too many uploads. Please try again later.' },
 });
+
+// The booking assistant can call a paid AI service, so it's limited per visitor.
+export const assistantLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,
+  limit: 40,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'You’re sending messages very quickly. Please wait a few minutes and try again.' },
+});

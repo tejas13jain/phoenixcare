@@ -3,6 +3,7 @@ import { OtpCode } from '../models/OtpCode.js';
 import { env } from '../config/env.js';
 import { sendSms, sendWhatsapp } from './notificationService.js';
 import { sendOtpEmail } from './emailService.js';
+import { normalizePhone } from '../utils/phone.js';
 
 function generateSixDigitCode() {
   return String(Math.floor(100000 + Math.random() * 900000));
@@ -17,8 +18,8 @@ export async function issueOtp({ identifier, channel, purpose }) {
 
   const message = `${code} is your PhoenixCare verification code. Valid for ${env.otpExpiresMinutes} minutes. Do not share this with anyone.`;
 
-  if (channel === 'sms') await sendSms(identifier, message);
-  else if (channel === 'whatsapp') await sendWhatsapp(identifier, message);
+  if (channel === 'sms') await sendSms(normalizePhone(identifier), message);
+  else if (channel === 'whatsapp') await sendWhatsapp(normalizePhone(identifier), message);
   else await sendOtpEmail(identifier, code, env.otpExpiresMinutes);
 
   // Never return the raw code from this function in production flows.

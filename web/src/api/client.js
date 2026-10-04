@@ -66,5 +66,12 @@ apiClient.interceptors.response.use(
 );
 
 export function extractErrorMessage(error) {
-  return error?.response?.data?.message || error?.message || 'Something went wrong. Please try again.';
+  const data = error?.response?.data;
+  // A validation failure arrives as "Validation failed" plus a list of what was actually wrong.
+  // Show the specifics — "Validation failed" alone tells the person nothing.
+  if (Array.isArray(data?.details) && data.details.length) {
+    const reasons = [...new Set(data.details.map((d) => d?.message).filter(Boolean))];
+    if (reasons.length) return reasons.join(' · ');
+  }
+  return data?.message || error?.message || 'Something went wrong. Please try again.';
 }

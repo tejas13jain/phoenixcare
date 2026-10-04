@@ -27,7 +27,8 @@ export function LoginPage() {
       const { data } = await authApi.login({ identifier, password });
       setSession(data);
       toast.success(`Welcome back, ${getFirstName(data.user.name)}!`);
-      const redirectTo = location.state?.from?.pathname || DASHBOARD_PATH[data.user.role] || '/';
+      const from = location.state?.from;
+      const redirectTo = from ? `${from.pathname}${from.search || ''}` : DASHBOARD_PATH[data.user.role] || '/';
       navigate(redirectTo, { replace: true });
     } catch (err) {
       toast.error(extractErrorMessage(err));
@@ -77,7 +78,7 @@ export function LoginPage() {
             </div>
             <div className="mt-2 text-center text-sm text-slate-600">
               New to PhoenixCare?{' '}
-              <Link to="/signup" className="text-teal-600 font-medium hover:underline">
+              <Link to="/signup" state={location.state} className="text-teal-600 font-medium hover:underline">
                 Create an account
               </Link>
             </div>

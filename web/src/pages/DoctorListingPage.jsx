@@ -9,6 +9,8 @@ import { doctorApi } from '../api/doctorApi.js';
 import { extractErrorMessage } from '../api/client.js';
 import { getSpecialtyInfo } from '../constants/specialties.js';
 import { useTranslation } from 'react-i18next';
+import { Sparkles } from 'lucide-react';
+import { openAssistant } from '../components/assistant/AssistantWidget.jsx';
 
 const MODES = [
   { value: '', label: 'Any mode' },
@@ -146,6 +148,13 @@ export function DoctorListingPage() {
             <SlidersHorizontal size={16} /> Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
           </button>
         </div>
+
+        <button
+          onClick={() => openAssistant()}
+          className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-cyan-200 bg-cyan-50 px-3.5 py-1.5 text-sm font-medium text-cyan-700 hover:bg-cyan-100"
+        >
+          <Sparkles size={15} /> {t('assistant.askAboutDoctors')}
+        </button>
 
         <form onSubmit={submitSearch} className="flex gap-2 mb-6 max-w-xl">
           <div className="flex-1 flex items-center gap-2 rounded-xl border border-slate-600/20 bg-white px-3">

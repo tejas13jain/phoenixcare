@@ -56,6 +56,11 @@ services:
         sync: false
       # Self-generated keypair (not a third-party account) — see backend/.env.example for how
       # to generate your own, or reuse the same one across environments.
+      # AI booking assistant. Optional: without a key the assistant runs in guided (non-AI) mode.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: AI_ASSISTANT_MODEL
+        value: claude-opus-5-5
       - key: VAPID_PUBLIC_KEY
         sync: false
       - key: VAPID_PRIVATE_KEY

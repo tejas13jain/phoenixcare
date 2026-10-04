@@ -6,6 +6,7 @@ import { Footer } from './components/layout/Footer.jsx';
 import { SplashScreen } from './components/layout/SplashScreen.jsx';
 import { ProtectedRoute } from './components/layout/ProtectedRoute.jsx';
 import { EngagementBanner } from './components/layout/EngagementBanner.jsx';
+import { AssistantWidget } from './components/assistant/AssistantWidget.jsx';
 
 import { HomePage } from './pages/HomePage.jsx';
 import { DoctorListingPage } from './pages/DoctorListingPage.jsx';
@@ -222,6 +223,7 @@ export default function App() {
       </AnimatePresence>
       </div>
       {!hideFooter && <Footer />}
+      <AssistantWidget />
     </div>
   );
 }

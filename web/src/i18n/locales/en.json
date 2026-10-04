@@ -784,5 +784,103 @@
       "imaging": "X-ray & scans",
       "other": "Other"
     }
+  },
+  "assistant": {
+    "launcher": "Ask AI",
+    "launcherAria": "Open the PhoenixCare AI assistant",
+    "title": "PhoenixCare Assistant",
+    "badgeAi": "AI",
+    "badgeGuided": "Guided",
+    "close": "Close assistant",
+    "newChat": "New chat",
+    "intro": {
+      "title": "Hi, I'm PhoenixCare's AI assistant",
+      "text": "I can help you find the right kind of doctor, compare doctors and get ready to book an appointment.",
+      "points": [
+        "I'm an AI, not a doctor. I can't diagnose or give medical advice.",
+        "In an emergency, call 112 — don't wait for me.",
+        "Your messages are processed by an AI service to help you. Please don’t share ID numbers, passwords or payment details."
+      ],
+      "accept": "Got it, start chatting",
+      "decline": "I'd rather browse doctors myself"
+    },
+    "placeholder": "Describe what's bothering you…",
+    "send": "Send",
+    "thinking": "Looking into it…",
+    "starters": [
+      "I have fever and cough for 2 days",
+      "Find me a good skin doctor",
+      "Which doctor is best for stress and anxiety?",
+      "Book the earliest available General Physician"
+    ],
+    "error": "Sorry, something went wrong. Please try again, or browse doctors yourself.",
+    "guidedNotice": "The AI is busy right now, so these are results from the same doctor ranking, without the AI.",
+    "guidedMode": "Guided mode — no AI right now, same doctor ranking.",
+    "emergency": {
+      "title": "This may be an emergency",
+      "general": "Please don't wait for an online appointment. Call 112 now or go to the nearest hospital emergency department. If you can, don't go alone.",
+      "selfHarm": "You're not alone, and help is available right now. If you might act on these thoughts, call 112 now. To talk to someone, call Tele-MANAS on 14416 (free, 24×7).",
+      "call112": "Call 112",
+      "callHelpline": "Call Tele-MANAS 14416"
+    },
+    "caution": {
+      "title": "Please don't wait on this",
+      "heart": "Chest pain can sometimes be serious. If it is severe, getting worse, or comes with sweating, breathlessness or pain spreading to the arm or jaw, call 112 now. Otherwise, please be seen by a doctor today.",
+      "fainting": "Fainting can have serious causes. If it happens again, or you have chest pain, breathlessness or confusion, call 112. Otherwise, please be seen by a doctor soon.",
+      "seizure": "If a seizure is happening now or lasts more than 5 minutes, call 112. Otherwise, please see a doctor soon.",
+      "other": "What you describe can sometimes be serious. If it gets worse, call 112. Otherwise, please be seen by a doctor today."
+    },
+    "cards": {
+      "bestMatches": "Best matches for you",
+      "whyThis": "Why this doctor?",
+      "hide": "Hide",
+      "matchScore": "Match score",
+      "book": "Book",
+      "profile": "View profile",
+      "reviewCount_one": "{{count}} review",
+      "reviewCount_other": "{{count}} reviews",
+      "newDoctor": "New",
+      "years": "{{count}} yrs",
+      "next": "Next",
+      "noSlot": "No open slots soon",
+      "budgetNote": "Nothing was within your budget, so these are the closest matches.",
+      "pickTime": "Pick a time with {{name}}",
+      "noSlotsFound": "No open times found.",
+      "bookingTitle": "Your booking, ready to review",
+      "reviewAndBook": "Review & book",
+      "confirmNote": "You'll confirm the details and pay on the next screen. Nothing is booked yet.",
+      "compareTitle": "Side by side",
+      "overall": "Overall score",
+      "rating": "Rating",
+      "experience": "Experience",
+      "fee": "Fee",
+      "nextAvailable": "Next available",
+      "languages": "Languages",
+      "scoreNote": "Scores are a guide, not a guarantee. Featured status and fees never raise a doctor's rank."
+    },
+    "badges": {
+      "best_overall": "Best overall",
+      "earliest": "Earliest available",
+      "top_rated": "Top rated",
+      "most_experienced": "Most experienced",
+      "lowest_fee": "Lowest fee"
+    },
+    "criteria": {
+      "relevance": "Fits your concern",
+      "quality": "Patient ratings",
+      "availability": "Available soon",
+      "experience": "Experience",
+      "reliability": "Reliability",
+      "fit": "Language & budget fit"
+    },
+    "modes": {
+      "video": "Video",
+      "audio": "Audio",
+      "chat": "Chat",
+      "in_clinic": "In clinic"
+    },
+    "askAboutDoctors": "Not sure who to pick? Ask our AI assistant",
+    "askFromCareMatch": "Let AI pick the best {{specialty}} for me",
+    "askFromCareMatchMessage": "I need a {{specialty}}. Please help me choose the best doctor."
   }
 }

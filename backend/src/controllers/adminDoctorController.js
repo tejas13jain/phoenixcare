@@ -1,3 +1,4 @@
+import { phoneVariants } from '../utils/phone.js';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { Doctor } from '../models/Doctor.js';
@@ -62,7 +63,7 @@ export const createDoctor = catchAsync(async (req, res) => {
     throw ApiError.badRequest('A doctor can be verified only after they upload their documents and you approve them. Create them as Pending.');
   }
 
-  if (await User.exists({ $or: [{ email }, { phone }] })) {
+  if (await User.exists({ $or: [{ email }, { phone: { $in: phoneVariants(phone) } }] })) {
     throw ApiError.conflict('An account with this email or phone already exists');
   }
   if (await Doctor.exists({ registrationNumber: profile.registrationNumber })) {

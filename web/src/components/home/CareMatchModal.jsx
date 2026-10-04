@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { AlertTriangle, ArrowRight, RotateCcw, Search } from 'lucide-react';
+import { AlertTriangle, ArrowRight, RotateCcw, Search, Sparkles } from 'lucide-react';
 import { Modal } from '../ui/index.js';
 import { SPECIALTIES, getSpecialtyInfo, matchSpecialties } from '../../constants/specialties.js';
+import { openAssistant } from '../assistant/AssistantWidget.jsx';
 
 const FALLBACK = getSpecialtyInfo('General Physician');
 
@@ -114,6 +115,17 @@ export function CareMatchModal({ isOpen, onClose }) {
               {t('careMatch.seeDoctors', { specialty: label(result.primary) })} <ArrowRight size={16} />
             </button>
           </div>
+
+          <button
+            onClick={() => {
+              const specialty = label(result.primary);
+              close();
+              openAssistant(t('assistant.askFromCareMatchMessage', { specialty }));
+            }}
+            className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-xl border-2 border-cyan-600 px-5 py-2.5 font-heading text-sm font-semibold text-cyan-700 hover:bg-cyan-50"
+          >
+            <Sparkles size={16} /> {t('assistant.askFromCareMatch', { specialty: label(result.primary) })}
+          </button>
 
           {result.others.length > 0 && (
             <div className="mt-4">
