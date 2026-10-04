@@ -160,8 +160,19 @@ export function DoctorDashboardPage() {
             ))}
           </div>
         </Card>
+        <TermsLink />
       </div>
     </PageTransition>
+  );
+}
+
+function TermsLink() {
+  return (
+    <p className="mt-6 text-center text-xs text-slate-600">
+      <Link to="/doctor/terms" className="underline hover:text-teal-600">
+        PhoenixCare Doctor Terms &amp; Conditions
+      </Link>
+    </p>
   );
 }
 

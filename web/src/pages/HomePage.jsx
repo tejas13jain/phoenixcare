@@ -9,6 +9,7 @@ import { DoctorCard } from '../components/DoctorCard.jsx';
 import { ServicesSection } from '../components/home/ServicesSection.jsx';
 import { WhyPhoenixCare } from '../components/home/WhyPhoenixCare.jsx';
 import { CareMatchModal } from '../components/home/CareMatchModal.jsx';
+import { SurgeryBanner } from '../components/home/SurgeryBanner.jsx';
 import { doctorApi } from '../api/doctorApi.js';
 import { blogApi } from '../api/blogApi.js';
 import { extractErrorMessage } from '../api/client.js';
@@ -202,26 +203,42 @@ export function HomePage() {
 
       <ServicesSection onOpenCareMatch={() => setCareMatchOpen(true)} />
 
+      <SurgeryBanner />
+
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
-        <h2 className="font-heading font-semibold text-2xl text-charcoal">{t('home.browseSpecialty')}</h2>
-        <p className="text-sm text-slate-600 mt-1 mb-6">{t('home.browseSpecialtySubtitle')}</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
+          <div>
+            <h2 className="font-heading font-semibold text-2xl text-charcoal">{t('home.browseSpecialty')}</h2>
+            <p className="text-sm text-slate-600 mt-1">{t('home.browseSpecialtySubtitle')}</p>
+          </div>
+          <button
+            onClick={() => setCareMatchOpen(true)}
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-cyan-700 hover:underline"
+          >
+            <Stethoscope size={16} /> {t('home.notSureCareMatch')}
+          </button>
+        </div>
+        {/* Lead with the patient's problem in their own words; the specialist is secondary. */}
+        <div className="grid grid-cols-1 min-[420px]:grid-cols-2 md:grid-cols-4 gap-4">
           {specialtyCards.map((s) => (
             <motion.button
               key={s.name}
               whileHover={{ y: -4 }}
               whileTap={{ scale: 0.96 }}
               onClick={() => navigate(`/doctors?specialty=${encodeURIComponent(s.name)}`)}
-              className="flex items-start gap-3 bg-white rounded-2xl shadow-soft p-4 text-left"
+              className="group flex items-start gap-3 bg-white rounded-2xl shadow-soft p-4 text-left border border-transparent hover:border-cyan-200 transition-colors"
             >
-              <span className="rounded-full bg-teal-50 p-3 text-teal-600 shrink-0">
+              <span className="rounded-full bg-cyan-50 p-3 text-cyan-600 shrink-0">
                 <s.icon size={20} />
               </span>
-              <span>
-                <span className="block text-sm font-semibold text-charcoal">
-                  {t(`specialty.${s.i18nKey}.label`)}
+              <span className="min-w-0">
+                <span className="block text-sm font-semibold text-charcoal leading-snug">
+                  {t(`specialty.${s.i18nKey}.concern`)}
                 </span>
-                <span className="block text-xs text-slate-600 mt-0.5">{t(`specialty.${s.i18nKey}.tagline`)}</span>
+                <span className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-cyan-700">
+                  {t('home.seeSpecialist', { specialist: t(`specialty.${s.i18nKey}.label`) })}
+                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
+                </span>
               </span>
             </motion.button>
           ))}

@@ -2,6 +2,8 @@
   "nav": {
     "findDoctors": "Find Doctors",
     "services": "Services",
+    "surgery": "Surgery Care",
+    "labTests": "Lab Tests",
     "healthBlog": "Health Blog",
     "dashboard": "Dashboard",
     "logout": "Logout",
@@ -15,7 +17,7 @@
     "searchPlaceholder": "Search by doctor name, specialty or symptom",
     "searchButton": "Search",
     "browseSpecialty": "Browse by what's bothering you",
-    "browseSpecialtySubtitle": "Not sure which doctor you need? Pick what you're feeling.",
+    "browseSpecialtySubtitle": "Tap what you're feeling — we'll show you the right doctor.",
     "topRated": "Top-rated doctors",
     "viewAll": "View all",
     "fromBlog": "From the Health Blog",
@@ -40,7 +42,13 @@
     "statConsultations": "Consultations",
     "statRating": "Patient Rating",
     "heroBadgeVideo": "Video consult in minutes",
-    "heroBadgePrescription": "Digital prescription sent"
+    "heroBadgePrescription": "Digital prescription sent",
+    "surgeryBannerEyebrow": "PhoenixCare Surgery Care",
+    "surgeryBannerTitle": "Planning a surgery? We'll be with you end to end.",
+    "surgeryBannerText": "A dedicated care coordinator, verified surgeons, a clear cost estimate up front and follow-up care after you go home.",
+    "surgeryBannerButton": "Explore Surgery Care",
+    "seeSpecialist": "See a {{specialist}}",
+    "notSureCareMatch": "Not sure? Let CareMatch help you choose"
   },
   "doctorCard": {
     "yearsExp": "yrs experience",
@@ -74,35 +82,43 @@
   "specialty": {
     "general_physician": {
       "label": "General Physician",
-      "tagline": "Fever, cold & general checkups"
+      "tagline": "Fever, cold & general checkups",
+      "concern": "Fever, cold or cough"
     },
     "pediatrician": {
       "label": "Pediatrician",
-      "tagline": "Child & infant health"
+      "tagline": "Child & infant health",
+      "concern": "My child is unwell"
     },
     "cardiologist": {
       "label": "Cardiologist",
-      "tagline": "Heart & blood pressure specialist"
+      "tagline": "Heart & blood pressure specialist",
+      "concern": "Chest pain or high BP"
     },
     "psychiatrist": {
       "label": "Psychiatrist",
-      "tagline": "Stress, anxiety & mental health"
+      "tagline": "Stress, anxiety & mental health",
+      "concern": "Stress, anxiety or low mood"
     },
     "dentist": {
       "label": "Dentist",
-      "tagline": "Teeth, gums & oral health"
+      "tagline": "Teeth, gums & oral health",
+      "concern": "Toothache or gum problems"
     },
     "nutritionist": {
       "label": "Nutritionist",
-      "tagline": "Diet, weight & nutrition"
+      "tagline": "Diet, weight & nutrition",
+      "concern": "Diet or weight concerns"
     },
     "dermatologist": {
       "label": "Dermatologist",
-      "tagline": "Skin, hair & acne specialist"
+      "tagline": "Skin, hair & acne specialist",
+      "concern": "Skin rash, acne or hair fall"
     },
     "gynecologist": {
       "label": "Gynecologist",
-      "tagline": "Women's health & pregnancy care"
+      "tagline": "Women's health & pregnancy care",
+      "concern": "Periods or pregnancy care"
     }
   },
   "careMatch": {
@@ -265,7 +281,7 @@
           "a": "Yes — book a consult and share the report. The doctor will explain the results and suggest next steps."
         }
       ],
-      "cta": "Talk to a doctor about tests"
+      "cta": "Find a lab test"
     },
     "weightManagement": {
       "title": "Weight Management",
@@ -564,5 +580,209 @@
       }
     ],
     "ctaButton": "Find your doctor"
+  },
+  "surgery": {
+    "eyebrow": "PhoenixCare Surgery Care",
+    "heroTitle": "Planned surgery, cared for end to end",
+    "heroSubtitle": "From choosing the right surgeon to recovering at home, a dedicated care coordinator handles the details so you can focus on getting better.",
+    "highlights": [
+      "Dedicated care coordinator",
+      "Cost estimate before you commit",
+      "Verified, experienced surgeons",
+      "Follow-up care after surgery"
+    ],
+    "form": {
+      "title": "Get a free callback",
+      "subtitle": "Share a few details and our care team will call you to plan the next steps.",
+      "name": "Full name",
+      "namePlaceholder": "Your name",
+      "phone": "Phone number",
+      "phonePlaceholder": "e.g. +91 98765 43210",
+      "procedure": "Procedure",
+      "procedurePlaceholder": "Choose a procedure",
+      "notSure": "Not sure — help me decide",
+      "city": "City",
+      "cityPlaceholder": "Your city",
+      "notes": "Anything we should know? (optional)",
+      "notesPlaceholder": "Symptoms, reports you have, preferred dates…",
+      "submit": "Request a Callback",
+      "consent": "By submitting, you agree to be contacted by the PhoenixCare care team about your request.",
+      "errors": {
+        "name": "Please enter your name",
+        "phone": "Please enter a valid phone number",
+        "procedure": "Please choose a procedure",
+        "city": "Please enter your city"
+      }
+    },
+    "success": {
+      "title": "Request received!",
+      "text": "Thank you, {{name}}. Here's what happens next:",
+      "steps": [
+        "A PhoenixCare care coordinator will call you shortly.",
+        "They'll understand your condition and explain the expected cost.",
+        "We'll arrange a consultation with a suitable surgeon at a time that works for you."
+      ],
+      "button": "Done"
+    },
+    "whyTitle": "Why choose PhoenixCare Surgery Care",
+    "whySubtitle": "Surgery is a big decision. We make every step clearer, calmer and better supported.",
+    "why": [
+      {
+        "title": "One coordinator, start to finish",
+        "desc": "A single point of contact who answers your questions, books appointments and keeps your family informed."
+      },
+      {
+        "title": "Clear cost estimate",
+        "desc": "Understand the expected cost of your procedure before you decide — no surprises on the day of discharge."
+      },
+      {
+        "title": "Verified surgeons",
+        "desc": "Every surgeon's registration and experience is checked, so you're in qualified hands."
+      },
+      {
+        "title": "Online second opinion",
+        "desc": "Not sure surgery is right for you? Talk to a specialist over video before you commit."
+      },
+      {
+        "title": "Help with paperwork",
+        "desc": "Guidance on admission formalities and insurance documents, so nothing holds up your treatment."
+      },
+      {
+        "title": "Recovery support",
+        "desc": "Online follow-ups after discharge, with your prescriptions and reports saved in your Health Vault."
+      }
+    ],
+    "popularTitle": "Popular procedures",
+    "popularSubtitle": "Tap a procedure to request a callback for it.",
+    "specialtiesTitle": "Surgical specialties",
+    "specialtiesSubtitle": "Care across the most common planned surgeries.",
+    "howTitle": "How Surgery Care works",
+    "steps": [
+      {
+        "title": "Share your details",
+        "desc": "Fill the short form or tap a procedure."
+      },
+      {
+        "title": "Talk to your coordinator",
+        "desc": "Get a call, a cost estimate and answers to your questions."
+      },
+      {
+        "title": "Consult the surgeon",
+        "desc": "Meet a verified surgeon online or in person."
+      },
+      {
+        "title": "Surgery & recovery",
+        "desc": "We stay with you through surgery and follow-ups."
+      }
+    ],
+    "faqTitle": "Frequently asked questions",
+    "faqs": [
+      {
+        "q": "Does requesting a callback cost anything?",
+        "a": "No. The callback and the cost estimate are free, and you're under no obligation to go ahead."
+      },
+      {
+        "q": "How soon will someone call me?",
+        "a": "Our care team works through requests in the order they arrive and will call you on the number you shared."
+      },
+      {
+        "q": "I'm not sure which procedure I need. Can I still ask?",
+        "a": "Yes. Choose \"Not sure — help me decide\" and describe your symptoms. We'll help you speak to the right specialist first."
+      },
+      {
+        "q": "Can I get a second opinion before deciding?",
+        "a": "Absolutely. You can book an online consultation with a specialist on PhoenixCare to discuss whether surgery is the right option."
+      },
+      {
+        "q": "Will I get support after the surgery?",
+        "a": "Yes. Follow-up consultations happen online, and your discharge summary, prescriptions and reports can be stored in your Health Vault."
+      }
+    ],
+    "ctaTitle": "Ready to talk to our care team?",
+    "ctaText": "Request a free callback — it takes less than a minute.",
+    "ctaButton": "Request a Callback",
+    "specialties": {
+      "generalSurgery": "General Surgery",
+      "proctology": "Proctology",
+      "ophthalmology": "Eye Surgery",
+      "urology": "Urology",
+      "orthopedics": "Orthopedics",
+      "gynaecology": "Gynaecology",
+      "ent": "ENT",
+      "cosmetic": "Cosmetic Surgery"
+    },
+    "procedures": {
+      "hernia": "Hernia",
+      "gallstones": "Gallstones",
+      "appendix": "Appendix removal",
+      "varicoseVeins": "Varicose veins",
+      "lipoma": "Lipoma removal",
+      "sebaceousCyst": "Sebaceous cyst",
+      "pilonidalSinus": "Pilonidal sinus",
+      "piles": "Piles",
+      "analFistula": "Anal fistula",
+      "analFissure": "Anal fissure",
+      "cataract": "Cataract",
+      "lasik": "LASIK",
+      "kidneyStone": "Kidney stone",
+      "prostate": "Prostate (TURP)",
+      "hydrocele": "Hydrocele",
+      "circumcision": "Circumcision",
+      "kneeReplacement": "Knee replacement",
+      "hipReplacement": "Hip replacement",
+      "aclRepair": "ACL repair",
+      "arthroscopy": "Arthroscopy",
+      "hysterectomy": "Hysterectomy",
+      "ovarianCyst": "Ovarian cyst",
+      "breastLump": "Breast lump",
+      "tonsillectomy": "Tonsil removal",
+      "septoplasty": "Deviated septum",
+      "sinusSurgery": "Sinus surgery",
+      "hairTransplant": "Hair transplant",
+      "gynecomastia": "Gynecomastia",
+      "liposuction": "Liposuction"
+    }
+  },
+  "labTests": {
+    "eyebrow": "Lab tests",
+    "title": "Book lab tests from trusted labs",
+    "subtitle": "Compare prices, report times and home sample collection across labs verified by PhoenixCare.",
+    "searchPlaceholder": "Search a test or lab — e.g. \"CBC\", \"thyroid\", \"HbA1c\"",
+    "search": "Search",
+    "allCities": "All cities",
+    "homeOnly": "Home collection only",
+    "allCategories": "All tests",
+    "resultsCount_one": "{{count}} lab found",
+    "resultsCount_other": "{{count}} labs found",
+    "noResults": "No labs match your search yet.",
+    "noResultsHint": "Try another test name or city — or ask a doctor which test you need.",
+    "askDoctor": "Ask a doctor",
+    "matchingTests": "Matching tests",
+    "popularTests": "Tests at this lab",
+    "moreTests_one": "+{{count}} more test",
+    "moreTests_other": "+{{count}} more tests",
+    "showLess": "Show less",
+    "homeCollectionFree": "Free home collection",
+    "homeCollectionFee": "Home collection ₹{{fee}}",
+    "walkInOnly": "Visit the lab",
+    "reportIn": "Report in {{hours}} hrs",
+    "preparation": "Prep: {{text}}",
+    "callToBook": "Call to book",
+    "timings": "Timings: {{text}}",
+    "disclaimer": "Prices are set by each lab and may change. Please confirm the price and preparation when you call.",
+    "categories": {
+      "full_body": "Full body checkup",
+      "blood": "Blood tests",
+      "diabetes": "Diabetes",
+      "thyroid": "Thyroid",
+      "heart": "Heart",
+      "liver": "Liver",
+      "kidney": "Kidney",
+      "vitamins": "Vitamins",
+      "hormones": "Hormones",
+      "infection": "Infections",
+      "imaging": "X-ray & scans",
+      "other": "Other"
+    }
   }
 }

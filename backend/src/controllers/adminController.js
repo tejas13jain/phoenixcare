@@ -8,6 +8,7 @@ import { ApiError } from '../utils/ApiError.js';
 import { catchAsync } from '../utils/catchAsync.js';
 import { notifyUser } from '../services/notificationService.js';
 import { buildWorkbook, sendWorkbook } from '../services/excelService.js';
+import { sendStandardsEmailOnce } from '../services/doctorComplianceService.js';
 
 // ---- Doctor KYC onboarding ----
 
@@ -44,6 +45,8 @@ export const reviewDoctorKyc = catchAsync(async (req, res) => {
     email: doctor.user.email,
     recipientName: doctor.user.name,
   });
+
+  if (status === 'verified') sendStandardsEmailOnce(doctor, doctor.user);
 
   res.json({ success: true, message: 'KYC status updated', data: { doctor } });
 });

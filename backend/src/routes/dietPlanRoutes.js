@@ -1,3 +1,4 @@
+import { requireDoctorTerms } from '../middlewares/requireDoctorTerms.js';
 import { Router } from 'express';
 import * as dietPlanController from '../controllers/dietPlanController.js';
 import { requireAuth, requireRole } from '../middlewares/auth.js';
@@ -9,11 +10,12 @@ const router = Router();
 router.get('/mine', requireAuth, requireRole('doctor'), dietPlanController.listMyDietPlansAsDoctor);
 router.get('/patient/mine', requireAuth, requireRole('patient'), dietPlanController.listMyDietPlansAsPatient);
 
-router.post('/', requireAuth, requireRole('doctor'), validate(createDietPlanSchema), dietPlanController.createDietPlan);
+router.post('/', requireAuth, requireRole('doctor'), requireDoctorTerms, validate(createDietPlanSchema), dietPlanController.createDietPlan);
 router.patch(
   '/:id',
   requireAuth,
   requireRole('doctor'),
+  requireDoctorTerms,
   validate(updateDietPlanSchema),
   dietPlanController.updateDietPlan
 );

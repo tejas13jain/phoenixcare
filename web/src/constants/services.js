@@ -17,7 +17,7 @@ export const SERVICES = [
     i18nKey: 'labTest',
     icon: FlaskConical,
     accent: { bg: 'bg-violet-50', text: 'text-violet-600', ring: 'ring-violet-100' },
-    primary: { to: '/doctors?specialty=General%20Physician' },
+    primary: { to: '/lab-tests' },
   },
   {
     slug: 'weight-management',

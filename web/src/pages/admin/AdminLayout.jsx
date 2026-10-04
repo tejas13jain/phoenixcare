@@ -3,11 +3,13 @@ import { PageTransition } from '../../components/layout/PageTransition.jsx';
 
 const TABS = [
   { to: '/admin', label: 'Overview', end: true },
-  { to: '/admin/doctors', label: 'Doctors & KYC' },
+  { to: '/admin/doctors', label: 'Doctors' },
+  { to: '/admin/labs', label: 'Test labs' },
   { to: '/admin/users', label: 'Users' },
   { to: '/admin/payments', label: 'Payments & Payouts' },
   { to: '/admin/reports', label: 'Reports' },
   { to: '/admin/moderation', label: 'Moderation & Campaigns' },
+  { to: '/admin/surgery', label: 'Surgery enquiries' },
   { to: '/admin/footer', label: 'Footer settings' },
 ];
 

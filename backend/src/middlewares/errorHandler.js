@@ -16,6 +16,7 @@ export function errorHandler(err, req, res, _next) {
   res.status(statusCode).json({
     success: false,
     message,
+    code: err.code,
     details: err.details,
     stack: env.isProd ? undefined : err.stack,
   });

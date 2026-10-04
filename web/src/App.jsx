@@ -16,6 +16,8 @@ import { NotFoundPage } from './pages/NotFoundPage.jsx';
 import { BlogListPage } from './pages/BlogListPage.jsx';
 import { BlogPostPage } from './pages/BlogPostPage.jsx';
 import { ServiceDetailPage } from './pages/ServiceDetailPage.jsx';
+import { SurgeryCarePage } from './pages/SurgeryCarePage.jsx';
+import { LabTestsPage } from './pages/LabTestsPage.jsx';
 
 import { LoginPage } from './pages/auth/LoginPage.jsx';
 import { SignupPage } from './pages/auth/SignupPage.jsx';
@@ -33,6 +35,7 @@ import { DoctorAvailabilityPage } from './pages/doctor/DoctorAvailabilityPage.js
 import { DoctorAnalyticsPage } from './pages/doctor/DoctorAnalyticsPage.jsx';
 import { DoctorDietPlansPage } from './pages/doctor/DoctorDietPlansPage.jsx';
 import { DoctorBlogsPage } from './pages/doctor/DoctorBlogsPage.jsx';
+import { DoctorTermsPage } from './pages/doctor/DoctorTermsPage.jsx';
 
 import { AdminLayout } from './pages/admin/AdminLayout.jsx';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage.jsx';
@@ -42,6 +45,8 @@ import { AdminPaymentsPage } from './pages/admin/AdminPaymentsPage.jsx';
 import { AdminReportsPage } from './pages/admin/AdminReportsPage.jsx';
 import { AdminModerationPage } from './pages/admin/AdminModerationPage.jsx';
 import { AdminFooterSettingsPage } from './pages/admin/AdminFooterSettingsPage.jsx';
+import { AdminSurgeryEnquiriesPage } from './pages/admin/AdminSurgeryEnquiriesPage.jsx';
+import { AdminLabsPage } from './pages/admin/AdminLabsPage.jsx';
 
 export default function App() {
   const location = useLocation();
@@ -62,6 +67,8 @@ export default function App() {
           <Route path="/blog" element={<BlogListPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
           <Route path="/services/:slug" element={<ServiceDetailPage />} />
+          <Route path="/surgery" element={<SurgeryCarePage />} />
+          <Route path="/lab-tests" element={<LabTestsPage />} />
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -134,6 +141,14 @@ export default function App() {
           />
 
           <Route
+            path="/doctor/terms"
+            element={
+              <ProtectedRoute roles={['doctor']}>
+                <DoctorTermsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/doctor/dashboard"
             element={
               <ProtectedRoute roles={['doctor']}>
@@ -189,6 +204,8 @@ export default function App() {
             <Route path="reports" element={<AdminReportsPage />} />
             <Route path="moderation" element={<AdminModerationPage />} />
             <Route path="footer" element={<AdminFooterSettingsPage />} />
+            <Route path="surgery" element={<AdminSurgeryEnquiriesPage />} />
+            <Route path="labs" element={<AdminLabsPage />} />
           </Route>
 
           <Route path="*" element={<NotFoundPage />} />

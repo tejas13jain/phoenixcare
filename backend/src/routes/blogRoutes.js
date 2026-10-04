@@ -1,3 +1,4 @@
+import { requireDoctorTerms } from '../middlewares/requireDoctorTerms.js';
 import { Router } from 'express';
 import * as blogController from '../controllers/blogController.js';
 import { requireAuth, requireRole } from '../middlewares/auth.js';
@@ -11,13 +12,14 @@ router.get('/featured', blogController.getFeaturedBlogPosts);
 router.get('/mine', requireAuth, requireRole('doctor'), blogController.listMyBlogPosts);
 router.get('/slug/:slug', validate(blogSlugSchema), blogController.getBlogPostBySlug);
 
-router.post('/', requireAuth, requireRole('doctor'), validate(createBlogSchema), blogController.createBlogPost);
-router.patch('/:id', requireAuth, requireRole('doctor'), validate(updateBlogSchema), blogController.updateBlogPost);
+router.post('/', requireAuth, requireRole('doctor'), requireDoctorTerms, validate(createBlogSchema), blogController.createBlogPost);
+router.patch('/:id', requireAuth, requireRole('doctor'), requireDoctorTerms, validate(updateBlogSchema), blogController.updateBlogPost);
 router.delete('/:id', requireAuth, requireRole('doctor'), validate(blogIdSchema), blogController.deleteBlogPost);
 router.patch(
   '/:id/:action(publish|unpublish)',
   requireAuth,
   requireRole('doctor'),
+  requireDoctorTerms,
   validate(blogIdSchema),
   blogController.setBlogPostStatus
 );

@@ -2,6 +2,8 @@
   "nav": {
     "findDoctors": "Buscar médicos",
     "services": "Servicios",
+    "surgery": "Cirugías",
+    "labTests": "Análisis",
     "healthBlog": "Blog de salud",
     "dashboard": "Panel",
     "logout": "Cerrar sesión",
@@ -15,7 +17,7 @@
     "searchPlaceholder": "Busca por nombre del médico, especialidad o síntoma",
     "searchButton": "Buscar",
     "browseSpecialty": "Busca por lo que sientes",
-    "browseSpecialtySubtitle": "¿No sabes qué médico necesitas? Elige tu síntoma.",
+    "browseSpecialtySubtitle": "Toca lo que sientes y te mostraremos al médico adecuado.",
     "topRated": "Médicos mejor calificados",
     "viewAll": "Ver todos",
     "fromBlog": "Del blog de salud",
@@ -40,7 +42,13 @@
     "statConsultations": "Consultas",
     "statRating": "Valoración de pacientes",
     "heroBadgeVideo": "Videoconsulta en minutos",
-    "heroBadgePrescription": "Receta digital enviada"
+    "heroBadgePrescription": "Receta digital enviada",
+    "surgeryBannerEyebrow": "PhoenixCare Cirugías",
+    "surgeryBannerTitle": "¿Planeas una cirugía? Te acompañamos de principio a fin.",
+    "surgeryBannerText": "Un coordinador de atención dedicado, cirujanos verificados, un presupuesto claro por adelantado y seguimiento cuando vuelves a casa.",
+    "surgeryBannerButton": "Conocer Cirugías",
+    "seeSpecialist": "Consultar: {{specialist}}",
+    "notSureCareMatch": "¿No estás seguro? CareMatch te ayuda a elegir"
   },
   "doctorCard": {
     "yearsExp": "años de experiencia",
@@ -74,35 +82,43 @@
   "specialty": {
     "general_physician": {
       "label": "Médico general",
-      "tagline": "Fiebre, resfriado y chequeos generales"
+      "tagline": "Fiebre, resfriado y chequeos generales",
+      "concern": "Fiebre, resfriado o tos"
     },
     "pediatrician": {
       "label": "Pediatra",
-      "tagline": "Salud infantil y del bebé"
+      "tagline": "Salud infantil y del bebé",
+      "concern": "Mi hijo está enfermo"
     },
     "cardiologist": {
       "label": "Cardiólogo",
-      "tagline": "Especialista en corazón y presión arterial"
+      "tagline": "Especialista en corazón y presión arterial",
+      "concern": "Dolor de pecho o presión alta"
     },
     "psychiatrist": {
       "label": "Psiquiatra",
-      "tagline": "Estrés, ansiedad y salud mental"
+      "tagline": "Estrés, ansiedad y salud mental",
+      "concern": "Estrés, ansiedad o ánimo bajo"
     },
     "dentist": {
       "label": "Dentista",
-      "tagline": "Dientes, encías y salud bucal"
+      "tagline": "Dientes, encías y salud bucal",
+      "concern": "Dolor de muelas o encías"
     },
     "nutritionist": {
       "label": "Nutricionista",
-      "tagline": "Dieta, peso y nutrición"
+      "tagline": "Dieta, peso y nutrición",
+      "concern": "Dieta o peso"
     },
     "dermatologist": {
       "label": "Dermatólogo",
-      "tagline": "Especialista en piel, cabello y acné"
+      "tagline": "Especialista en piel, cabello y acné",
+      "concern": "Sarpullido, acné o caída del cabello"
     },
     "gynecologist": {
       "label": "Ginecólogo",
-      "tagline": "Salud femenina y cuidado del embarazo"
+      "tagline": "Salud femenina y cuidado del embarazo",
+      "concern": "Menstruación o embarazo"
     }
   },
   "careMatch": {
@@ -265,7 +281,7 @@
           "a": "Sí: reserva una consulta y comparte el informe. El médico te explicará los resultados y los siguientes pasos."
         }
       ],
-      "cta": "Habla con un médico sobre pruebas"
+      "cta": "Buscar un análisis"
     },
     "weightManagement": {
       "title": "Control de peso",
@@ -564,5 +580,209 @@
       }
     ],
     "ctaButton": "Encuentra a tu médico"
+  },
+  "surgery": {
+    "eyebrow": "PhoenixCare Cirugías",
+    "heroTitle": "Cirugía programada, con atención de principio a fin",
+    "heroSubtitle": "Desde elegir al cirujano adecuado hasta recuperarte en casa, un coordinador de atención dedicado se ocupa de los detalles para que tú te centres en mejorar.",
+    "highlights": [
+      "Coordinador de atención dedicado",
+      "Presupuesto antes de decidir",
+      "Cirujanos verificados y con experiencia",
+      "Seguimiento después de la cirugía"
+    ],
+    "form": {
+      "title": "Solicita una llamada gratuita",
+      "subtitle": "Comparte algunos datos y nuestro equipo te llamará para planificar los siguientes pasos.",
+      "name": "Nombre completo",
+      "namePlaceholder": "Tu nombre",
+      "phone": "Teléfono",
+      "phonePlaceholder": "p. ej. +34 612 345 678",
+      "procedure": "Procedimiento",
+      "procedurePlaceholder": "Elige un procedimiento",
+      "notSure": "No estoy seguro: ayúdame a decidir",
+      "city": "Ciudad",
+      "cityPlaceholder": "Tu ciudad",
+      "notes": "¿Algo que debamos saber? (opcional)",
+      "notesPlaceholder": "Síntomas, informes que tengas, fechas preferidas…",
+      "submit": "Solicitar llamada",
+      "consent": "Al enviar, aceptas que el equipo de PhoenixCare se ponga en contacto contigo sobre tu solicitud.",
+      "errors": {
+        "name": "Introduce tu nombre",
+        "phone": "Introduce un teléfono válido",
+        "procedure": "Elige un procedimiento",
+        "city": "Introduce tu ciudad"
+      }
+    },
+    "success": {
+      "title": "¡Solicitud recibida!",
+      "text": "Gracias, {{name}}. Esto es lo que sigue:",
+      "steps": [
+        "Un coordinador de PhoenixCare te llamará en breve.",
+        "Entenderá tu caso y te explicará el coste estimado.",
+        "Organizaremos una consulta con un cirujano adecuado en el horario que te convenga."
+      ],
+      "button": "Listo"
+    },
+    "whyTitle": "Por qué elegir PhoenixCare Cirugías",
+    "whySubtitle": "Una cirugía es una gran decisión. Hacemos cada paso más claro, tranquilo y acompañado.",
+    "why": [
+      {
+        "title": "Un coordinador de principio a fin",
+        "desc": "Una sola persona de contacto que responde tus dudas, reserva citas y mantiene informada a tu familia."
+      },
+      {
+        "title": "Presupuesto claro",
+        "desc": "Conoce el coste estimado del procedimiento antes de decidir, sin sorpresas el día del alta."
+      },
+      {
+        "title": "Cirujanos verificados",
+        "desc": "Comprobamos el registro y la experiencia de cada cirujano para que estés en manos cualificadas."
+      },
+      {
+        "title": "Segunda opinión en línea",
+        "desc": "¿No sabes si la cirugía es para ti? Habla con un especialista por video antes de decidir."
+      },
+      {
+        "title": "Ayuda con los trámites",
+        "desc": "Orientación con el ingreso y los documentos del seguro, para que nada retrase tu tratamiento."
+      },
+      {
+        "title": "Apoyo en la recuperación",
+        "desc": "Seguimientos en línea tras el alta, con tus recetas e informes guardados en tu Bóveda de Salud."
+      }
+    ],
+    "popularTitle": "Procedimientos populares",
+    "popularSubtitle": "Toca un procedimiento para solicitar una llamada.",
+    "specialtiesTitle": "Especialidades quirúrgicas",
+    "specialtiesSubtitle": "Atención en las cirugías programadas más comunes.",
+    "howTitle": "Cómo funciona Cirugías",
+    "steps": [
+      {
+        "title": "Comparte tus datos",
+        "desc": "Rellena el formulario o toca un procedimiento."
+      },
+      {
+        "title": "Habla con tu coordinador",
+        "desc": "Recibe una llamada, un presupuesto y respuestas a tus dudas."
+      },
+      {
+        "title": "Consulta al cirujano",
+        "desc": "Reúnete con un cirujano verificado en línea o en persona."
+      },
+      {
+        "title": "Cirugía y recuperación",
+        "desc": "Te acompañamos durante la cirugía y los seguimientos."
+      }
+    ],
+    "faqTitle": "Preguntas frecuentes",
+    "faqs": [
+      {
+        "q": "¿Solicitar una llamada tiene algún coste?",
+        "a": "No. La llamada y el presupuesto son gratuitos y no te obligan a nada."
+      },
+      {
+        "q": "¿Cuándo me llamarán?",
+        "a": "Nuestro equipo atiende las solicitudes por orden de llegada y te llamará al número que nos diste."
+      },
+      {
+        "q": "No sé qué procedimiento necesito. ¿Puedo preguntar igualmente?",
+        "a": "Sí. Elige \"No estoy seguro: ayúdame a decidir\" y describe tus síntomas. Te ayudaremos a hablar primero con el especialista adecuado."
+      },
+      {
+        "q": "¿Puedo pedir una segunda opinión antes de decidir?",
+        "a": "Por supuesto. Puedes reservar una consulta en línea con un especialista en PhoenixCare para valorar si la cirugía es la mejor opción."
+      },
+      {
+        "q": "¿Tendré apoyo después de la cirugía?",
+        "a": "Sí. Las consultas de seguimiento son en línea, y tu informe de alta, recetas e informes pueden guardarse en tu Bóveda de Salud."
+      }
+    ],
+    "ctaTitle": "¿Listo para hablar con nuestro equipo?",
+    "ctaText": "Solicita una llamada gratuita: tardas menos de un minuto.",
+    "ctaButton": "Solicitar llamada",
+    "specialties": {
+      "generalSurgery": "Cirugía general",
+      "proctology": "Proctología",
+      "ophthalmology": "Cirugía ocular",
+      "urology": "Urología",
+      "orthopedics": "Traumatología",
+      "gynaecology": "Ginecología",
+      "ent": "Otorrinolaringología",
+      "cosmetic": "Cirugía estética"
+    },
+    "procedures": {
+      "hernia": "Hernia",
+      "gallstones": "Cálculos biliares",
+      "appendix": "Extirpación del apéndice",
+      "varicoseVeins": "Varices",
+      "lipoma": "Extirpación de lipoma",
+      "sebaceousCyst": "Quiste sebáceo",
+      "pilonidalSinus": "Quiste pilonidal",
+      "piles": "Hemorroides",
+      "analFistula": "Fístula anal",
+      "analFissure": "Fisura anal",
+      "cataract": "Cataratas",
+      "lasik": "LASIK",
+      "kidneyStone": "Cálculos renales",
+      "prostate": "Próstata (RTU)",
+      "hydrocele": "Hidrocele",
+      "circumcision": "Circuncisión",
+      "kneeReplacement": "Prótesis de rodilla",
+      "hipReplacement": "Prótesis de cadera",
+      "aclRepair": "Reparación de LCA",
+      "arthroscopy": "Artroscopia",
+      "hysterectomy": "Histerectomía",
+      "ovarianCyst": "Quiste de ovario",
+      "breastLump": "Bulto en el pecho",
+      "tonsillectomy": "Extirpación de amígdalas",
+      "septoplasty": "Tabique desviado",
+      "sinusSurgery": "Cirugía de senos nasales",
+      "hairTransplant": "Trasplante capilar",
+      "gynecomastia": "Ginecomastia",
+      "liposuction": "Liposucción"
+    }
+  },
+  "labTests": {
+    "eyebrow": "Análisis de laboratorio",
+    "title": "Reserva análisis en laboratorios de confianza",
+    "subtitle": "Compara precios, plazos de resultados y toma de muestras a domicilio en laboratorios verificados por PhoenixCare.",
+    "searchPlaceholder": "Busca un análisis o laboratorio, p. ej. \"hemograma\", \"tiroides\", \"HbA1c\"",
+    "search": "Buscar",
+    "allCities": "Todas las ciudades",
+    "homeOnly": "Solo a domicilio",
+    "allCategories": "Todos",
+    "resultsCount_one": "{{count}} laboratorio encontrado",
+    "resultsCount_other": "{{count}} laboratorios encontrados",
+    "noResults": "Aún no hay laboratorios para tu búsqueda.",
+    "noResultsHint": "Prueba con otro análisis o ciudad, o pregunta a un médico qué análisis necesitas.",
+    "askDoctor": "Preguntar a un médico",
+    "matchingTests": "Análisis que coinciden",
+    "popularTests": "Análisis de este laboratorio",
+    "moreTests_one": "+{{count}} análisis más",
+    "moreTests_other": "+{{count}} análisis más",
+    "showLess": "Ver menos",
+    "homeCollectionFree": "Toma a domicilio gratis",
+    "homeCollectionFee": "Toma a domicilio ₹{{fee}}",
+    "walkInOnly": "Acudir al laboratorio",
+    "reportIn": "Resultados en {{hours}} h",
+    "preparation": "Preparación: {{text}}",
+    "callToBook": "Llamar para reservar",
+    "timings": "Horario: {{text}}",
+    "disclaimer": "Cada laboratorio fija sus precios y pueden cambiar. Confirma el precio y la preparación al llamar.",
+    "categories": {
+      "full_body": "Chequeo completo",
+      "blood": "Sangre",
+      "diabetes": "Diabetes",
+      "thyroid": "Tiroides",
+      "heart": "Corazón",
+      "liver": "Hígado",
+      "kidney": "Riñón",
+      "vitamins": "Vitaminas",
+      "hormones": "Hormonas",
+      "infection": "Infecciones",
+      "imaging": "Rayos X y escáneres",
+      "other": "Otros"
+    }
   }
 }

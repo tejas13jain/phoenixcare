@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/slices/authStore.js';
+import { clearTermsAccepted } from '../components/layout/doctorTermsGate.js';
 
 // In dev, '/api/v1' is proxied to the backend by vite.config.js. In production there is no
 // dev-server proxy, so a deployed build needs VITE_API_BASE_URL pointing at the real backend
@@ -24,6 +25,11 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const status = error.response?.status;
+
+    if (status === 403 && error.response?.data?.code === 'TERMS_REQUIRED') {
+      clearTermsAccepted();
+      if (window.location.pathname !== '/doctor/terms') window.location.assign('/doctor/terms');
+    }
 
     if (status === 401 && !originalRequest._retry && !originalRequest.url.includes('/auth/')) {
       originalRequest._retry = true;

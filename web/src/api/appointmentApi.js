@@ -47,6 +47,10 @@ export const healthRecordApi = {
 export const adminApi = {
   pendingDoctors: () => apiClient.get('/admin/doctors/pending').then((r) => r.data),
   reviewKyc: (id, payload) => apiClient.patch(`/admin/doctors/${id}/kyc`, payload).then((r) => r.data),
+  searchDoctors: (params) => apiClient.get('/admin/doctors', { params }).then((r) => r.data),
+  createDoctor: (payload) => apiClient.post('/admin/doctors', payload).then((r) => r.data),
+  resendStandardsEmail: (id) => apiClient.post(`/admin/doctors/${id}/standards-email`).then((r) => r.data),
+  updateDoctor: (id, payload) => apiClient.patch(`/admin/doctors/${id}`, payload).then((r) => r.data),
   listUsers: (params) => apiClient.get('/admin/users', { params }).then((r) => r.data),
   setUserActive: (id, isActive) => apiClient.patch(`/admin/users/${id}/status`, { isActive }).then((r) => r.data),
   analyticsOverview: () => apiClient.get('/admin/analytics/overview').then((r) => r.data),

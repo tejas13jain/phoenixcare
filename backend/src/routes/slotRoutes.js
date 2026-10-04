@@ -1,3 +1,4 @@
+import { requireDoctorTerms } from '../middlewares/requireDoctorTerms.js';
 import { Router } from 'express';
 import * as slotController from '../controllers/slotController.js';
 import { validate } from '../middlewares/validate.js';
@@ -22,6 +23,7 @@ router.post(
   '/generate',
   requireAuth,
   requireRole('doctor', 'admin'),
+  requireDoctorTerms,
   requireDoctorOwnership,
   validate(generateSlotsSchema),
   slotController.generateSlots
@@ -31,6 +33,7 @@ router.patch(
   '/:slotId',
   requireAuth,
   requireRole('doctor', 'admin'),
+  requireDoctorTerms,
   requireDoctorOwnership,
   validate(slotIdParamSchema),
   slotController.updateSlotStatus
@@ -40,6 +43,7 @@ router.delete(
   '/:slotId',
   requireAuth,
   requireRole('doctor', 'admin'),
+  requireDoctorTerms,
   requireDoctorOwnership,
   validate(slotIdParamSchema),
   slotController.deleteSlot

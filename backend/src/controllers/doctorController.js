@@ -1,4 +1,5 @@
 import { Doctor } from '../models/Doctor.js';
+import { User } from '../models/User.js';
 import { Review } from '../models/Review.js';
 import { Appointment } from '../models/Appointment.js';
 import { Payment } from '../models/Payment.js';
@@ -6,6 +7,7 @@ import { Patient } from '../models/Patient.js';
 import { matchSpecialtiesFromKeywords } from '../constants/specialtyKeywords.js';
 import { ApiError } from '../utils/ApiError.js';
 import { catchAsync } from '../utils/catchAsync.js';
+import { escapeRegex } from '../utils/escapeRegex.js';
 import { buildWorkbook, sendWorkbook } from '../services/excelService.js';
 
 const SORT_MAP = {
@@ -20,9 +22,9 @@ export const listDoctors = catchAsync(async (req, res) => {
     req.validated.query;
 
   const filter = { kycStatus: 'verified', isAcceptingNewPatients: true };
-  if (specialty) filter.specialties = { $regex: specialty, $options: 'i' };
-  if (city) filter.city = { $regex: `^${city}$`, $options: 'i' };
-  if (language) filter.languages = { $regex: language, $options: 'i' };
+  if (specialty) filter.specialties = { $regex: escapeRegex(specialty), $options: 'i' };
+  if (city) filter.city = { $regex: `^${escapeRegex(city)}$`, $options: 'i' };
+  if (language) filter.languages = { $regex: escapeRegex(language), $options: 'i' };
   if (mode) filter.consultationModes = mode;
   if (minRating) filter.rating = { $gte: minRating };
   if (minExperience) filter.experienceYears = { $gte: minExperience };
@@ -35,10 +37,13 @@ export const listDoctors = catchAsync(async (req, res) => {
     // A patient searching "chest pain" or "skin rash" doesn't know that's a Cardiologist or
     // Dermatologist — expand the free-text query with any specialty their symptom maps to.
     const keywordSpecialties = matchSpecialtiesFromKeywords(q);
+    const rx = { $regex: escapeRegex(q.replace(/^dr\.?\s+/i, '')), $options: 'i' };
+    const namedDoctorUserIds = await User.find({ role: 'doctor', name: rx }).distinct('_id');
     filter.$or = [
-      { specialties: { $regex: q, $options: 'i' } },
-      { bio: { $regex: q, $options: 'i' } },
-      { qualifications: { $regex: q, $options: 'i' } },
+      { user: { $in: namedDoctorUserIds } },
+      { specialties: rx },
+      { bio: rx },
+      { qualifications: rx },
       ...(keywordSpecialties.length ? [{ specialties: { $in: keywordSpecialties } }] : []),
     ];
   }

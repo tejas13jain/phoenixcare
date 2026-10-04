@@ -9,7 +9,7 @@ const VARIANTS = {
   neutral: 'bg-slate-600/10 text-slate-600',
 };
 
-export function Badge({ children, variant = 'neutral', className = '' }) {
+export function Badge({ children, variant = 'neutral', className = '', ...props }) {
   return (
     <span
       className={clsx(
@@ -17,6 +17,7 @@ export function Badge({ children, variant = 'neutral', className = '' }) {
         VARIANTS[variant],
         className
       )}
+      {...props}
     >
       {children}
     </span>

@@ -40,6 +40,16 @@ const doctorSchema = new Schema(
       },
     ],
     kycRejectionReason: { type: String },
+    // Latest Doctor Terms & Conditions the doctor accepted (see constants/doctorTerms.js).
+    // Doctors must re-accept when TERMS_VERSION changes.
+    termsAcceptance: {
+      version: { type: String },
+      acceptedAt: { type: Date },
+      ip: { type: String },
+      userAgent: { type: String },
+    },
+    // Set once the "standards you agree to follow" email has gone out, so it is sent once.
+    standardsEmailSentAt: { type: Date },
     isAcceptingNewPatients: { type: Boolean, default: true },
     isFeatured: { type: Boolean, default: false },
     payoutDetails: {

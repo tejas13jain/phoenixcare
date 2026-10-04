@@ -1,8 +1,11 @@
 export class ApiError extends Error {
-  constructor(statusCode, message, details = undefined) {
+  constructor(statusCode, message, details = undefined, code = undefined) {
     super(message);
     this.statusCode = statusCode;
     this.details = details;
+    // Machine-readable reason (e.g. 'TERMS_REQUIRED') so the web app can react without
+    // matching on the message text.
+    this.code = code;
     this.isOperational = true;
     Error.captureStackTrace(this, this.constructor);
   }
@@ -15,8 +18,8 @@ export class ApiError extends Error {
     return new ApiError(401, message);
   }
 
-  static forbidden(message = 'Forbidden') {
-    return new ApiError(403, message);
+  static forbidden(message = 'Forbidden', code = undefined) {
+    return new ApiError(403, message, undefined, code);
   }
 
   static notFound(message = 'Resource not found') {
