@@ -15,6 +15,7 @@ import { ConsultationRoomPage } from './pages/ConsultationRoomPage.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 import { BlogListPage } from './pages/BlogListPage.jsx';
 import { BlogPostPage } from './pages/BlogPostPage.jsx';
+import { ServiceDetailPage } from './pages/ServiceDetailPage.jsx';
 
 import { LoginPage } from './pages/auth/LoginPage.jsx';
 import { SignupPage } from './pages/auth/SignupPage.jsx';
@@ -60,6 +61,7 @@ export default function App() {
           <Route path="/doctors/:id" element={<DoctorProfilePage />} />
           <Route path="/blog" element={<BlogListPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
+          <Route path="/services/:slug" element={<ServiceDetailPage />} />
 
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />

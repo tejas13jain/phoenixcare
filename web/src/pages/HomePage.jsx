@@ -1,23 +1,40 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Search, ChevronRight, Clock, ShieldCheck, Users, Star, Lock } from 'lucide-react';
+import { Search, ChevronRight, Clock, ArrowRight, BadgeCheck, Stethoscope, Video, FileCheck2 } from 'lucide-react';
 import { PageTransition } from '../components/layout/PageTransition.jsx';
 import { Button, Card, DoctorCardSkeleton, Badge, Skeleton } from '../components/ui/index.js';
 import { DoctorCard } from '../components/DoctorCard.jsx';
+import { ServicesSection } from '../components/home/ServicesSection.jsx';
+import { WhyPhoenixCare } from '../components/home/WhyPhoenixCare.jsx';
+import { CareMatchModal } from '../components/home/CareMatchModal.jsx';
 import { doctorApi } from '../api/doctorApi.js';
 import { blogApi } from '../api/blogApi.js';
 import { extractErrorMessage } from '../api/client.js';
 import { SPECIALTIES } from '../constants/specialties.js';
 import toast from 'react-hot-toast';
 
-const TRUST_STATS = [
-  { icon: ShieldCheck, key: 'trustDoctors', value: '500+' },
-  { icon: Users, key: 'trustConsultations', value: '50,000+' },
-  { icon: Star, key: 'trustRating', value: '4.8★' },
-  { icon: Lock, key: 'trustSecure', value: '' },
+// The query sent for each chip is the English keyword the backend's symptom search
+// understands; only the chip label is translated.
+const POPULAR_SEARCHES = [
+  { key: 'fever', query: 'fever' },
+  { key: 'cough', query: 'cough' },
+  { key: 'skinRash', query: 'skin rash' },
+  { key: 'pregnancy', query: 'pregnancy' },
 ];
+
+const HERO_STATS = [
+  { key: 'statDoctors', value: '500+' },
+  { key: 'statConsultations', value: '50,000+' },
+  { key: 'statRating', value: '4.8★' },
+];
+
+const fadeUp = (delay) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5, delay },
+});
 
 export function HomePage() {
   const { t } = useTranslation();
@@ -26,7 +43,14 @@ export function HomePage() {
   const [blogPosts, setBlogPosts] = useState(undefined);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState('');
+  const [careMatchOpen, setCareMatchOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // "All services" links elsewhere point to /#services; the router doesn't scroll to hashes.
+  useEffect(() => {
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  }, [location.hash]);
 
   useEffect(() => {
     Promise.all([doctorApi.featured(), doctorApi.specialties()])
@@ -45,81 +69,138 @@ export function HomePage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(query ? `/doctors?q=${encodeURIComponent(query)}` : '/doctors');
+    const q = query.trim();
+    navigate(q ? `/doctors?q=${encodeURIComponent(q)}` : '/doctors');
   };
 
   const specialtyCards = SPECIALTIES.filter((s) => availableSpecialties.includes(s.name));
 
   return (
     <PageTransition>
-      <section className="bg-phoenix-gradient text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 grid md:grid-cols-2 gap-10 items-center">
-          <div>
+      <section className="relative overflow-hidden bg-gradient-to-br from-cyan-50 via-sky-50 to-cyan-100/70">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-24 -right-24 h-96 w-96 rounded-full bg-cyan-200/40 blur-3xl"
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 grid lg:grid-cols-[1.1fr_1fr] gap-10 items-center">
+          <div className="max-w-2xl">
+            <motion.span
+              {...fadeUp(0)}
+              className="inline-flex items-center gap-1.5 rounded-full border border-cyan-200 bg-white/80 px-3 py-1 text-xs font-semibold text-cyan-700"
+            >
+              <BadgeCheck size={14} /> {t('home.heroEyebrow')}
+            </motion.span>
             <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="font-heading font-extrabold text-3xl sm:text-5xl leading-tight"
+              {...fadeUp(0.05)}
+              className="mt-4 font-heading font-extrabold text-3xl sm:text-5xl leading-tight text-charcoal"
             >
               {t('home.heroTitle')}
             </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="mt-4 text-white/90 text-lg"
-            >
+            <motion.p {...fadeUp(0.1)} className="mt-3 text-slate-600 text-base sm:text-lg">
               {t('home.heroSubtitle')}
             </motion.p>
 
-            <motion.form
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              onSubmit={handleSearch}
-              className="mt-8 flex bg-white rounded-2xl p-2 shadow-soft-lg max-w-md"
-            >
-              <div className="flex items-center flex-1 px-3">
-                <Search size={18} className="text-slate-600 shrink-0" />
+            <motion.form {...fadeUp(0.15)} onSubmit={handleSearch} role="search" className="mt-7">
+              <label className="flex items-center gap-3 rounded-xl bg-white px-4 py-3.5 shadow-soft focus-within:ring-2 focus-within:ring-cyan-300">
+                <Search size={20} className="text-slate-600 shrink-0" />
                 <input
+                  type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder={t('home.searchPlaceholder')}
-                  className="w-full px-2 py-2 text-charcoal text-sm outline-none"
+                  aria-label={t('home.searchPlaceholder')}
+                  className="w-full bg-transparent text-charcoal placeholder:text-slate-600/70 outline-none"
                 />
-              </div>
-              <Button type="submit">{t('home.searchButton')}</Button>
+                <button type="submit" className="sr-only">
+                  {t('home.searchButton')}
+                </button>
+              </label>
             </motion.form>
+
+            <motion.div {...fadeUp(0.2)} className="mt-4 flex flex-wrap items-center gap-2">
+              <span className="text-sm text-charcoal mr-1">{t('home.popularSearches')}</span>
+              {POPULAR_SEARCHES.map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => navigate(`/doctors?q=${encodeURIComponent(item.query)}`)}
+                  className="rounded-full border border-cyan-200 bg-white px-4 py-1.5 text-sm text-cyan-600 hover:border-cyan-400 hover:bg-cyan-50 transition-colors"
+                >
+                  {t(`home.popular.${item.key}`)}
+                </button>
+              ))}
+            </motion.div>
+
+            <hr className="my-6 border-cyan-200/70" />
+
+            <motion.div
+              {...fadeUp(0.25)}
+              className="flex flex-col sm:flex-row sm:items-center gap-4 rounded-2xl border-2 border-cyan-400 bg-white p-5"
+            >
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cyan-50 text-cyan-600">
+                <Stethoscope size={24} />
+              </span>
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-cyan-600">{t('home.careMatchLabel')}</p>
+                <p className="font-heading font-bold text-charcoal text-base sm:text-lg leading-snug">
+                  {t('home.careMatchTitle')}
+                </p>
+                <p className="text-sm text-slate-600">{t('home.careMatchSubtitle')}</p>
+              </div>
+              <button
+                onClick={() => setCareMatchOpen(true)}
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-cyan-600 px-5 py-2.5 font-heading font-semibold text-white hover:bg-cyan-700 transition-colors"
+              >
+                {t('home.careMatchButton')} <ArrowRight size={16} />
+              </button>
+            </motion.div>
+
+            <motion.button
+              {...fadeUp(0.3)}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => navigate('/doctors')}
+              className="mt-6 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-orange-500 px-7 py-3.5 font-heading text-lg font-semibold text-white shadow-soft hover:bg-orange-600 transition-colors"
+            >
+              {t('home.bookAppointment')} <ArrowRight size={18} />
+            </motion.button>
+
+            <motion.dl {...fadeUp(0.35)} className="mt-8 flex flex-wrap gap-x-10 gap-y-4">
+              {HERO_STATS.map((stat) => (
+                <div key={stat.key} className="flex flex-col-reverse">
+                  <dt className="text-sm text-charcoal">{t(`home.${stat.key}`)}</dt>
+                  <dd className="font-heading text-2xl font-extrabold text-orange-500">{stat.value}</dd>
+                </div>
+              ))}
+            </motion.dl>
           </div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="hidden md:block"
+            className="relative hidden lg:block"
           >
             <img
               src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?auto=format&fit=crop&w=900&q=80"
               alt="Doctor consulting with a patient over video call"
-              className="rounded-3xl shadow-soft-lg object-cover w-full h-80"
+              className="rounded-3xl shadow-soft-lg object-cover w-full h-[520px]"
             />
+            <div className="absolute -left-6 top-10 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-soft-lg">
+              <span className="rounded-full bg-cyan-50 p-2 text-cyan-600">
+                <Video size={18} />
+              </span>
+              <span className="text-sm font-semibold text-charcoal">{t('home.heroBadgeVideo')}</span>
+            </div>
+            <div className="absolute -right-4 bottom-12 flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-soft-lg">
+              <span className="rounded-full bg-orange-50 p-2 text-orange-500">
+                <FileCheck2 size={18} />
+              </span>
+              <span className="text-sm font-semibold text-charcoal">{t('home.heroBadgePrescription')}</span>
+            </div>
           </motion.div>
         </div>
-
-        <div className="border-t border-white/15">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {TRUST_STATS.map((stat) => (
-              <div key={stat.key} className="flex items-center gap-2.5">
-                <stat.icon size={18} className="text-white/85 shrink-0" />
-                <div className="leading-tight">
-                  {stat.value && <p className="font-heading font-bold text-sm">{stat.value}</p>}
-                  <p className="text-white/75 text-xs">{t(`home.${stat.key}`)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
+
+      <ServicesSection onOpenCareMatch={() => setCareMatchOpen(true)} />
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <h2 className="font-heading font-semibold text-2xl text-charcoal">{t('home.browseSpecialty')}</h2>
@@ -163,6 +244,8 @@ export function HomePage() {
             : featured.map((doctor) => <DoctorCard key={doctor._id} doctor={doctor} />)}
         </div>
       </section>
+
+      <WhyPhoenixCare />
 
       {blogPosts === undefined || blogPosts.length > 0 ? (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
@@ -208,6 +291,8 @@ export function HomePage() {
           </Button>
         </Card>
       </section>
+
+      <CareMatchModal isOpen={careMatchOpen} onClose={() => setCareMatchOpen(false)} />
     </PageTransition>
   );
 }

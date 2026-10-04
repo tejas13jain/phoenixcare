@@ -1,6 +1,7 @@
 {
   "nav": {
     "findDoctors": "Find Doctors",
+    "services": "Services",
     "healthBlog": "Health Blog",
     "dashboard": "Dashboard",
     "logout": "Logout",
@@ -11,12 +12,8 @@
   "home": {
     "heroTitle": "Talk to trusted doctors, anytime, anywhere.",
     "heroSubtitle": "Video, audio, or chat consultations with verified specialists. Rise stronger, every day.",
-    "searchPlaceholder": "Describe your symptom — e.g. \"chest pain\" or \"skin rash\"",
+    "searchPlaceholder": "Search by doctor name, specialty or symptom",
     "searchButton": "Search",
-    "trustDoctors": "Verified doctors",
-    "trustConsultations": "Consultations completed",
-    "trustRating": "Average rating",
-    "trustSecure": "Secure & confidential",
     "browseSpecialty": "Browse by what's bothering you",
     "browseSpecialtySubtitle": "Not sure which doctor you need? Pick what you're feeling.",
     "topRated": "Top-rated doctors",
@@ -25,7 +22,25 @@
     "readMore": "Read more",
     "ctaTitle": "New here? Book your first consultation today.",
     "ctaSubtitle": "Verified doctors. Transparent fees. Digital prescriptions.",
-    "ctaButton": "Get started"
+    "ctaButton": "Get started",
+    "heroEyebrow": "Online consultations with verified doctors",
+    "popularSearches": "Popular searches:",
+    "popular": {
+      "fever": "Fever",
+      "cough": "Cough",
+      "skinRash": "Skin Rash",
+      "pregnancy": "Pregnancy"
+    },
+    "careMatchLabel": "CareMatch",
+    "careMatchTitle": "Not sure which specialist you need?",
+    "careMatchSubtitle": "Get help choosing the right specialty.",
+    "careMatchButton": "Help Me Choose",
+    "bookAppointment": "Book an Appointment",
+    "statDoctors": "Top Doctors",
+    "statConsultations": "Consultations",
+    "statRating": "Patient Rating",
+    "heroBadgeVideo": "Video consult in minutes",
+    "heroBadgePrescription": "Digital prescription sent"
   },
   "doctorCard": {
     "yearsExp": "yrs experience",
@@ -57,13 +72,497 @@
     "copyright": "PhoenixCare. All rights reserved."
   },
   "specialty": {
-    "general_physician": { "label": "General Physician", "tagline": "Fever, cold & general checkups" },
-    "pediatrician": { "label": "Pediatrician", "tagline": "Child & infant health" },
-    "cardiologist": { "label": "Cardiologist", "tagline": "Heart & blood pressure specialist" },
-    "psychiatrist": { "label": "Psychiatrist", "tagline": "Stress, anxiety & mental health" },
-    "dentist": { "label": "Dentist", "tagline": "Teeth, gums & oral health" },
-    "nutritionist": { "label": "Nutritionist", "tagline": "Diet, weight & nutrition" },
-    "dermatologist": { "label": "Dermatologist", "tagline": "Skin, hair & acne specialist" },
-    "gynecologist": { "label": "Gynecologist", "tagline": "Women's health & pregnancy care" }
+    "general_physician": {
+      "label": "General Physician",
+      "tagline": "Fever, cold & general checkups"
+    },
+    "pediatrician": {
+      "label": "Pediatrician",
+      "tagline": "Child & infant health"
+    },
+    "cardiologist": {
+      "label": "Cardiologist",
+      "tagline": "Heart & blood pressure specialist"
+    },
+    "psychiatrist": {
+      "label": "Psychiatrist",
+      "tagline": "Stress, anxiety & mental health"
+    },
+    "dentist": {
+      "label": "Dentist",
+      "tagline": "Teeth, gums & oral health"
+    },
+    "nutritionist": {
+      "label": "Nutritionist",
+      "tagline": "Diet, weight & nutrition"
+    },
+    "dermatologist": {
+      "label": "Dermatologist",
+      "tagline": "Skin, hair & acne specialist"
+    },
+    "gynecologist": {
+      "label": "Gynecologist",
+      "tagline": "Women's health & pregnancy care"
+    }
+  },
+  "careMatch": {
+    "title": "CareMatch — find the right specialist",
+    "intro": "Tell us what's bothering you in your own words, or pick the closest option below.",
+    "inputLabel": "Describe your concern",
+    "inputPlaceholder": "e.g. \"headache and fever since 2 days\" or \"hair fall\"",
+    "orPick": "Or pick what feels closest",
+    "noMatch": "We couldn't match that to a specialty. A General Physician is the best first step — they can examine you and refer you if needed.",
+    "recommended": "We recommend",
+    "alsoConsider": "Also worth considering",
+    "seeDoctors": "See {{specialty}} doctors",
+    "startOver": "Start over",
+    "emergency": "Severe chest pain, trouble breathing, heavy bleeding or fainting? Call your local emergency number right away — don't wait for an online consult."
+  },
+  "services": {
+    "sectionEyebrow": "What we offer",
+    "sectionTitle": "Our Services",
+    "sectionSubtitle": "Everything you need to look after your health — from a quick consult to long-term care — in one place.",
+    "learnMore": "Learn More",
+    "helpCardTitle": "Not sure where to start?",
+    "helpCardText": "Answer one quick question and CareMatch will point you to the right specialist.",
+    "backToServices": "All services",
+    "included": "What's included",
+    "howItWorks": "How it works",
+    "idealFor": "Who it's for",
+    "faqTitle": "Frequently asked questions",
+    "otherServices": "Explore other services",
+    "notFound": "We couldn't find that service.",
+    "consultation": {
+      "title": "Online Doctor Consultation",
+      "subtitle": "for your health issues",
+      "points": [
+        "Video consultations",
+        "Instant prescriptions",
+        "Follow-up care"
+      ],
+      "overview": "Speak to a verified doctor from home over video, audio or chat. No travel, no waiting room — just a focused conversation with a specialist who has your history in front of them. Most patients find a doctor and are in a consultation the same day.",
+      "features": [
+        {
+          "title": "Video, audio or chat",
+          "desc": "Pick the mode that suits you. Video for a face-to-face exam, audio on a weak connection, chat when you need privacy."
+        },
+        {
+          "title": "Instant digital prescriptions",
+          "desc": "Your doctor writes your prescription during the consult. Download it as a PDF straight away and show it at any pharmacy."
+        },
+        {
+          "title": "Follow-up care",
+          "desc": "Book a follow-up with the same doctor in a couple of taps. Your past notes and prescriptions are already there."
+        },
+        {
+          "title": "Verified specialists",
+          "desc": "Every doctor's registration and credentials are reviewed by our team before they can take appointments."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Search",
+          "desc": "Type a symptom, specialty or doctor name — or let CareMatch suggest one."
+        },
+        {
+          "title": "Book a slot",
+          "desc": "See the fee and open slots up front, then pay securely."
+        },
+        {
+          "title": "Consult",
+          "desc": "Join from your phone or laptop at your slot time."
+        },
+        {
+          "title": "Get your prescription",
+          "desc": "Download it instantly; it's saved in your Health Vault too."
+        }
+      ],
+      "idealFor": [
+        "Fever, cold, cough and everyday illness",
+        "Skin, hair and allergy concerns",
+        "Stress, anxiety and sleep problems",
+        "Second opinions and report reviews",
+        "Repeat prescriptions for ongoing conditions"
+      ],
+      "faqs": [
+        {
+          "q": "Is an online consultation as good as an in-person visit?",
+          "a": "For most common, non-emergency problems, yes. If your doctor feels you need a physical exam or tests, they'll tell you during the consult."
+        },
+        {
+          "q": "Is my prescription valid at a pharmacy?",
+          "a": "Yes. Prescriptions are issued by registered doctors and include their details and signature."
+        },
+        {
+          "q": "What if I need to talk to the doctor again?",
+          "a": "Book a follow-up from your appointments page. The doctor will see your earlier notes and prescription."
+        }
+      ],
+      "cta": "Find a doctor"
+    },
+    "labTest": {
+      "title": "Lab Test",
+      "subtitle": "in the comfort of your home",
+      "points": [
+        "Home sample collection",
+        "Digital reports",
+        "Expert analysis"
+      ],
+      "overview": "Get blood and routine tests done without stepping out. A trained professional collects your sample at home, your report arrives digitally, and a doctor can walk you through what the numbers actually mean.",
+      "features": [
+        {
+          "title": "Home sample collection",
+          "desc": "Choose a time slot and a trained phlebotomist visits your home with sealed, single-use kits."
+        },
+        {
+          "title": "Digital reports",
+          "desc": "Reports are delivered online and stored in your Health Vault, so you never lose a paper copy again."
+        },
+        {
+          "title": "Expert analysis",
+          "desc": "Share your report with a doctor in a consult and get a clear explanation and next steps."
+        },
+        {
+          "title": "Track over time",
+          "desc": "Keep every report in one place and compare results across months."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Choose your test",
+          "desc": "Pick a test yourself or get one recommended by your doctor."
+        },
+        {
+          "title": "Sample at home",
+          "desc": "A professional collects your sample at the time you chose."
+        },
+        {
+          "title": "Report online",
+          "desc": "Your digital report is ready to view and download."
+        },
+        {
+          "title": "Review with a doctor",
+          "desc": "Book a consult to understand your results."
+        }
+      ],
+      "idealFor": [
+        "Routine annual health checks",
+        "Monitoring diabetes, thyroid or cholesterol",
+        "Elderly family members who find travel difficult",
+        "Tests your doctor has asked for after a consult"
+      ],
+      "faqs": [
+        {
+          "q": "Do I need a prescription for a lab test?",
+          "a": "Not for routine tests. For specialised tests, a doctor's recommendation helps make sure you take the right one."
+        },
+        {
+          "q": "Where are my reports stored?",
+          "a": "In your Health Vault, alongside your prescriptions and other records."
+        },
+        {
+          "q": "Can a doctor explain my report?",
+          "a": "Yes — book a consult and share the report. The doctor will explain the results and suggest next steps."
+        }
+      ],
+      "cta": "Talk to a doctor about tests"
+    },
+    "weightManagement": {
+      "title": "Weight Management",
+      "subtitle": "personalized care for you",
+      "points": [
+        "Custom Weight Management plans",
+        "Monitoring tools",
+        "Multi-specialty care package"
+      ],
+      "overview": "Lasting weight change comes from a plan built around you, not a generic diet chart. Work with nutritionists and doctors who look at your health, lifestyle and goals, then track your progress week by week.",
+      "features": [
+        {
+          "title": "Custom plans",
+          "desc": "Your nutritionist builds a diet plan around your routine, food preferences and medical history. It appears right in your dashboard."
+        },
+        {
+          "title": "Monitoring tools",
+          "desc": "Log weight, BMI, water, sleep and activity. Charts show your trend so you can spot changes early and discuss them at your follow-up."
+        },
+        {
+          "title": "Multi-specialty care",
+          "desc": "Bring in a general physician, gynecologist or psychiatrist when weight is linked to thyroid, PCOS, stress or sleep."
+        },
+        {
+          "title": "Goals and streaks",
+          "desc": "Set realistic weekly goals and keep momentum with streaks and progress milestones."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Consult a nutritionist",
+          "desc": "Share your goals, routine and any health conditions."
+        },
+        {
+          "title": "Get your plan",
+          "desc": "Receive a personalised diet plan in your dashboard."
+        },
+        {
+          "title": "Track daily",
+          "desc": "Log weight, meals, water and activity in a few seconds."
+        },
+        {
+          "title": "Review and adjust",
+          "desc": "Follow up regularly to fine-tune your plan."
+        }
+      ],
+      "idealFor": [
+        "Healthy, sustainable weight loss or gain",
+        "Weight linked to PCOS, thyroid or diabetes",
+        "Post-pregnancy weight goals",
+        "Anyone who's tried generic diets without results"
+      ],
+      "faqs": [
+        {
+          "q": "Will I get a fixed diet chart?",
+          "a": "No. Your plan is written for you and updated as your progress and needs change."
+        },
+        {
+          "q": "How do I track my progress?",
+          "a": "Use the weight, water, sleep and activity trackers in your patient dashboard, and review the trends with your nutritionist at each follow-up."
+        },
+        {
+          "q": "What if my weight is linked to a medical condition?",
+          "a": "Your nutritionist can recommend a specialist, so diet and treatment work together."
+        }
+      ],
+      "cta": "Consult a nutritionist"
+    },
+    "healthcarePlans": {
+      "title": "Healthcare Plans",
+      "subtitle": "for holistic care",
+      "points": [
+        "Monthly packages",
+        "Preventive care",
+        "Health monitoring"
+      ],
+      "overview": "Healthcare Plans turn one-off visits into continuous care. With a monthly package you and your family get regular consultations, preventive check-ins and ongoing monitoring — so small problems are caught before they become big ones.",
+      "features": [
+        {
+          "title": "Monthly packages",
+          "desc": "A predictable monthly plan that covers regular consultations, so cost never stops you from asking a doctor."
+        },
+        {
+          "title": "Preventive care",
+          "desc": "Scheduled check-ins and screening reminders based on your age, history and risk factors."
+        },
+        {
+          "title": "Health monitoring",
+          "desc": "Your vitals, medications and wellness logs in one place, reviewed by your doctor over time."
+        },
+        {
+          "title": "One health record",
+          "desc": "Prescriptions, reports and notes stay together in your Health Vault, ready for every consult."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Create your account",
+          "desc": "Sign up and complete your health profile."
+        },
+        {
+          "title": "Choose a plan",
+          "desc": "Pick the package that fits you or your family."
+        },
+        {
+          "title": "Stay on track",
+          "desc": "Get reminders for check-ins, medicines and screenings."
+        },
+        {
+          "title": "Consult anytime",
+          "desc": "Reach a doctor whenever something comes up."
+        }
+      ],
+      "idealFor": [
+        "Families who want one place for everyone's health",
+        "People managing long-term conditions",
+        "Adults focused on prevention and annual check-ups",
+        "Caregivers looking after elderly parents"
+      ],
+      "faqs": [
+        {
+          "q": "What does preventive care include?",
+          "a": "Regular check-ins with a doctor, reminders for age-appropriate screenings, and monitoring of your vitals and medications."
+        },
+        {
+          "q": "Can I cover my family?",
+          "a": "Plans are designed for individuals and families. Get in touch with our team for family options."
+        },
+        {
+          "q": "Do I still keep my records if I stop?",
+          "a": "Yes. Your Health Vault and history stay with your account."
+        }
+      ],
+      "cta": "Get started"
+    },
+    "selfDiagnostic": {
+      "title": "Self Diagnostic Tools",
+      "subtitle": "for self assessment",
+      "points": [
+        "Symptom checker",
+        "Health assessments",
+        "Wellness tracking"
+      ],
+      "overview": "Understand your body better between consultations. Check your symptoms to find the right specialist, keep an eye on your vitals, and track wellness habits — all free, all in your dashboard. These tools guide you; they don't replace a doctor's diagnosis.",
+      "features": [
+        {
+          "title": "Symptom checker",
+          "desc": "Describe how you feel in plain words and CareMatch suggests which specialist to see."
+        },
+        {
+          "title": "Health assessments",
+          "desc": "Record blood pressure, sugar, pulse, SpO2 and temperature, and see your history at a glance."
+        },
+        {
+          "title": "Wellness tracking",
+          "desc": "Log mood, sleep, water and activity daily, and watch your habits improve over time."
+        },
+        {
+          "title": "Health reports",
+          "desc": "See your logs summarised into a clear health report you can go through with your doctor."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Check symptoms",
+          "desc": "Tell CareMatch what's bothering you."
+        },
+        {
+          "title": "Log your vitals",
+          "desc": "Add readings in seconds from your dashboard."
+        },
+        {
+          "title": "Spot patterns",
+          "desc": "Charts show how your health trends over time."
+        },
+        {
+          "title": "Consult when needed",
+          "desc": "Bring your readings to a consult with a verified doctor."
+        }
+      ],
+      "idealFor": [
+        "Deciding which specialist to see",
+        "Tracking blood pressure or sugar at home",
+        "Building healthier sleep, water and activity habits",
+        "Preparing for a consultation with real data"
+      ],
+      "faqs": [
+        {
+          "q": "Is the symptom checker a diagnosis?",
+          "a": "No. It points you to the right kind of doctor. Only a doctor can diagnose you."
+        },
+        {
+          "q": "Are these tools free?",
+          "a": "Yes. They're available to every patient with a PhoenixCare account."
+        },
+        {
+          "q": "How do these tools help my consultation?",
+          "a": "Walking in with real readings and trends — instead of guesses — helps your doctor understand what's happening faster."
+        }
+      ],
+      "cta": "Try the symptom checker"
+    }
+  },
+  "why": {
+    "eyebrow": "Why PhoenixCare",
+    "title": "Care that rises with you",
+    "subtitle": "PhoenixCare isn't just a video call with a doctor. It's a complete, connected health companion — before, during and long after your consultation.",
+    "promiseTitle": "Our promise",
+    "promiseText": "Like the phoenix, we believe everyone deserves the chance to rise stronger. That means doctors you can trust, prices you can see, and records you control.",
+    "promisePoints": [
+      "No hidden fees",
+      "Doctors verified by our team",
+      "Your data stays private"
+    ],
+    "reasons": [
+      {
+        "title": "Verified doctors only",
+        "desc": "Every doctor's medical registration, qualifications and experience are checked by our team before they can see a single patient."
+      },
+      {
+        "title": "Consult your way",
+        "desc": "Choose video, audio or chat — whatever suits your comfort, connection and privacy. Join from your phone or laptop."
+      },
+      {
+        "title": "Instant digital prescriptions",
+        "desc": "Get a clear, signed PDF prescription the moment your consult ends — easy to read and accepted at pharmacies."
+      },
+      {
+        "title": "Your Health Vault",
+        "desc": "Prescriptions, lab reports and records live in one secure place, so every doctor you see has the full picture."
+      },
+      {
+        "title": "Transparent fees",
+        "desc": "See each doctor's consultation fee before you book. Pay securely online, with no surprise charges."
+      },
+      {
+        "title": "Care beyond the visit",
+        "desc": "Track vitals, mood, sleep, water and medications, follow diet plans from your doctor, and get reminders that keep you on track."
+      },
+      {
+        "title": "Plain-language search",
+        "desc": "No medical jargon needed. Search \"skin rash\" or \"chest pain\" and we'll show you the right specialist."
+      },
+      {
+        "title": "In your language",
+        "desc": "Use PhoenixCare in English, Hindi or Spanish, so nothing about your health gets lost in translation."
+      }
+    ],
+    "howTitle": "Healthcare in 4 simple steps",
+    "steps": [
+      {
+        "title": "Tell us what's wrong",
+        "desc": "Search a symptom or use CareMatch."
+      },
+      {
+        "title": "Pick a verified doctor",
+        "desc": "Compare experience, ratings and fees."
+      },
+      {
+        "title": "Consult from home",
+        "desc": "Video, audio or chat at your slot."
+      },
+      {
+        "title": "Recover and follow up",
+        "desc": "Prescription, reminders and follow-ups."
+      }
+    ],
+    "compareTitle": "PhoenixCare vs. a typical clinic visit",
+    "compareUs": "PhoenixCare",
+    "compareThem": "Clinic visit",
+    "compareRows": [
+      {
+        "label": "Time to see a doctor",
+        "us": "Same day, from home",
+        "them": "Travel + waiting room"
+      },
+      {
+        "label": "Fees",
+        "us": "Shown before you book",
+        "them": "Often unclear until you pay"
+      },
+      {
+        "label": "Prescription",
+        "us": "Instant, readable PDF",
+        "them": "Handwritten slip"
+      },
+      {
+        "label": "Medical records",
+        "us": "Saved in your Health Vault",
+        "them": "Paper files you carry"
+      },
+      {
+        "label": "Between visits",
+        "us": "Trackers, reminders and diet plans",
+        "them": "Nothing until next visit"
+      }
+    ],
+    "ctaButton": "Find your doctor"
   }
 }

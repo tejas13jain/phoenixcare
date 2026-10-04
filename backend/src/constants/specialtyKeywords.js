@@ -4,6 +4,7 @@
 export const SPECIALTY_KEYWORDS = {
   'General Physician': [
     'fever', 'cold', 'cough', 'flu', 'body pain', 'weakness', 'checkup', 'general checkup', 'viral',
+    'headache',
   ],
   Pediatrician: ['child', 'children', 'baby', 'infant', 'kid', 'kids', 'vaccination', 'newborn'],
   Cardiologist: [

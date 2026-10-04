@@ -1,6 +1,7 @@
 {
   "nav": {
     "findDoctors": "Buscar médicos",
+    "services": "Servicios",
     "healthBlog": "Blog de salud",
     "dashboard": "Panel",
     "logout": "Cerrar sesión",
@@ -11,12 +12,8 @@
   "home": {
     "heroTitle": "Habla con médicos de confianza, en cualquier momento y lugar.",
     "heroSubtitle": "Consultas por video, audio o chat con especialistas verificados. Levántate más fuerte, cada día.",
-    "searchPlaceholder": "Describe tu síntoma — p. ej. \"dolor de pecho\" o \"sarpullido\"",
+    "searchPlaceholder": "Busca por nombre del médico, especialidad o síntoma",
     "searchButton": "Buscar",
-    "trustDoctors": "Médicos verificados",
-    "trustConsultations": "Consultas realizadas",
-    "trustRating": "Calificación promedio",
-    "trustSecure": "Seguro y confidencial",
     "browseSpecialty": "Busca por lo que sientes",
     "browseSpecialtySubtitle": "¿No sabes qué médico necesitas? Elige tu síntoma.",
     "topRated": "Médicos mejor calificados",
@@ -25,7 +22,25 @@
     "readMore": "Leer más",
     "ctaTitle": "¿Nuevo aquí? Reserva tu primera consulta hoy.",
     "ctaSubtitle": "Médicos verificados. Tarifas transparentes. Recetas digitales.",
-    "ctaButton": "Comenzar"
+    "ctaButton": "Comenzar",
+    "heroEyebrow": "Consultas en línea con médicos verificados",
+    "popularSearches": "Búsquedas populares:",
+    "popular": {
+      "fever": "Fiebre",
+      "cough": "Tos",
+      "skinRash": "Sarpullido",
+      "pregnancy": "Embarazo"
+    },
+    "careMatchLabel": "CareMatch",
+    "careMatchTitle": "¿No sabes qué especialista necesitas?",
+    "careMatchSubtitle": "Te ayudamos a elegir la especialidad correcta.",
+    "careMatchButton": "Ayúdame a elegir",
+    "bookAppointment": "Reservar una cita",
+    "statDoctors": "Médicos destacados",
+    "statConsultations": "Consultas",
+    "statRating": "Valoración de pacientes",
+    "heroBadgeVideo": "Videoconsulta en minutos",
+    "heroBadgePrescription": "Receta digital enviada"
   },
   "doctorCard": {
     "yearsExp": "años de experiencia",
@@ -57,13 +72,497 @@
     "copyright": "PhoenixCare. Todos los derechos reservados."
   },
   "specialty": {
-    "general_physician": { "label": "Médico general", "tagline": "Fiebre, resfriado y chequeos generales" },
-    "pediatrician": { "label": "Pediatra", "tagline": "Salud infantil y del bebé" },
-    "cardiologist": { "label": "Cardiólogo", "tagline": "Especialista en corazón y presión arterial" },
-    "psychiatrist": { "label": "Psiquiatra", "tagline": "Estrés, ansiedad y salud mental" },
-    "dentist": { "label": "Dentista", "tagline": "Dientes, encías y salud bucal" },
-    "nutritionist": { "label": "Nutricionista", "tagline": "Dieta, peso y nutrición" },
-    "dermatologist": { "label": "Dermatólogo", "tagline": "Especialista en piel, cabello y acné" },
-    "gynecologist": { "label": "Ginecólogo", "tagline": "Salud femenina y cuidado del embarazo" }
+    "general_physician": {
+      "label": "Médico general",
+      "tagline": "Fiebre, resfriado y chequeos generales"
+    },
+    "pediatrician": {
+      "label": "Pediatra",
+      "tagline": "Salud infantil y del bebé"
+    },
+    "cardiologist": {
+      "label": "Cardiólogo",
+      "tagline": "Especialista en corazón y presión arterial"
+    },
+    "psychiatrist": {
+      "label": "Psiquiatra",
+      "tagline": "Estrés, ansiedad y salud mental"
+    },
+    "dentist": {
+      "label": "Dentista",
+      "tagline": "Dientes, encías y salud bucal"
+    },
+    "nutritionist": {
+      "label": "Nutricionista",
+      "tagline": "Dieta, peso y nutrición"
+    },
+    "dermatologist": {
+      "label": "Dermatólogo",
+      "tagline": "Especialista en piel, cabello y acné"
+    },
+    "gynecologist": {
+      "label": "Ginecólogo",
+      "tagline": "Salud femenina y cuidado del embarazo"
+    }
+  },
+  "careMatch": {
+    "title": "CareMatch: encuentra al especialista adecuado",
+    "intro": "Cuéntanos con tus palabras qué te pasa, o elige la opción más parecida.",
+    "inputLabel": "Describe tu problema",
+    "inputPlaceholder": "p. ej. \"dolor de cabeza y fiebre desde hace 2 días\" o \"caída del cabello\"",
+    "orPick": "O elige lo que más se parezca",
+    "noMatch": "No pudimos asociarlo a una especialidad. Un médico general es el mejor primer paso: puede examinarte y derivarte si hace falta.",
+    "recommended": "Te recomendamos",
+    "alsoConsider": "También puedes considerar",
+    "seeDoctors": "Ver médicos de {{specialty}}",
+    "startOver": "Empezar de nuevo",
+    "emergency": "¿Dolor fuerte en el pecho, dificultad para respirar, sangrado abundante o desmayo? Llama de inmediato a tu número local de emergencias; no esperes una consulta en línea."
+  },
+  "services": {
+    "sectionEyebrow": "Lo que ofrecemos",
+    "sectionTitle": "Nuestros servicios",
+    "sectionSubtitle": "Todo lo que necesitas para cuidar tu salud, desde una consulta rápida hasta el cuidado a largo plazo, en un solo lugar.",
+    "learnMore": "Saber más",
+    "helpCardTitle": "¿No sabes por dónde empezar?",
+    "helpCardText": "Responde una pregunta rápida y CareMatch te indicará el especialista adecuado.",
+    "backToServices": "Todos los servicios",
+    "included": "Qué incluye",
+    "howItWorks": "Cómo funciona",
+    "idealFor": "Para quién es",
+    "faqTitle": "Preguntas frecuentes",
+    "otherServices": "Explora otros servicios",
+    "notFound": "No encontramos ese servicio.",
+    "consultation": {
+      "title": "Consulta médica en línea",
+      "subtitle": "para tus problemas de salud",
+      "points": [
+        "Videoconsultas",
+        "Recetas al instante",
+        "Seguimiento"
+      ],
+      "overview": "Habla con un médico verificado desde casa por video, audio o chat. Sin desplazamientos ni salas de espera: solo una conversación con un especialista que tiene tu historial delante. La mayoría de los pacientes encuentran médico y tienen su consulta el mismo día.",
+      "features": [
+        {
+          "title": "Video, audio o chat",
+          "desc": "Elige lo que te convenga: video para una revisión cara a cara, audio si la conexión es débil y chat cuando necesitas privacidad."
+        },
+        {
+          "title": "Recetas digitales al instante",
+          "desc": "Tu médico escribe la receta durante la consulta. Descárgala en PDF al momento y preséntala en cualquier farmacia."
+        },
+        {
+          "title": "Seguimiento",
+          "desc": "Reserva una consulta de seguimiento con el mismo médico en un par de toques. Tus notas y recetas anteriores ya están ahí."
+        },
+        {
+          "title": "Especialistas verificados",
+          "desc": "Nuestro equipo revisa el registro y las credenciales de cada médico antes de que pueda atender citas."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Busca",
+          "desc": "Escribe un síntoma, especialidad o nombre, o deja que CareMatch te sugiera uno."
+        },
+        {
+          "title": "Reserva un horario",
+          "desc": "Consulta la tarifa y los horarios libres, y paga de forma segura."
+        },
+        {
+          "title": "Consulta",
+          "desc": "Conéctate desde tu móvil o portátil a la hora reservada."
+        },
+        {
+          "title": "Recibe tu receta",
+          "desc": "Descárgala al instante; también se guarda en tu Bóveda de Salud."
+        }
+      ],
+      "idealFor": [
+        "Fiebre, resfriado, tos y enfermedades comunes",
+        "Problemas de piel, cabello y alergias",
+        "Estrés, ansiedad y problemas de sueño",
+        "Segundas opiniones y revisión de informes",
+        "Recetas repetidas para enfermedades crónicas"
+      ],
+      "faqs": [
+        {
+          "q": "¿Una consulta en línea es tan buena como una presencial?",
+          "a": "Para la mayoría de los problemas comunes y no urgentes, sí. Si tu médico cree que necesitas una exploración física o pruebas, te lo dirá durante la consulta."
+        },
+        {
+          "q": "¿Mi receta es válida en la farmacia?",
+          "a": "Sí. Las recetas las emiten médicos colegiados e incluyen sus datos y firma."
+        },
+        {
+          "q": "¿Y si necesito volver a hablar con el médico?",
+          "a": "Reserva un seguimiento desde tu página de citas. El médico verá tus notas y recetas anteriores."
+        }
+      ],
+      "cta": "Buscar un médico"
+    },
+    "labTest": {
+      "title": "Análisis de laboratorio",
+      "subtitle": "desde la comodidad de tu casa",
+      "points": [
+        "Toma de muestras a domicilio",
+        "Informes digitales",
+        "Análisis experto"
+      ],
+      "overview": "Hazte análisis de sangre y pruebas de rutina sin salir de casa. Un profesional capacitado recoge la muestra en tu domicilio, el informe llega en formato digital y un médico puede explicarte qué significan realmente los resultados.",
+      "features": [
+        {
+          "title": "Toma de muestras a domicilio",
+          "desc": "Elige un horario y un flebotomista capacitado visitará tu casa con kits sellados de un solo uso."
+        },
+        {
+          "title": "Informes digitales",
+          "desc": "Los informes llegan en línea y se guardan en tu Bóveda de Salud, para que nunca pierdas una copia en papel."
+        },
+        {
+          "title": "Análisis experto",
+          "desc": "Comparte tu informe con un médico en una consulta y obtén una explicación clara y los siguientes pasos."
+        },
+        {
+          "title": "Seguimiento en el tiempo",
+          "desc": "Guarda todos tus informes en un solo lugar y compara resultados entre meses."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Elige tu prueba",
+          "desc": "Elígela tú o pide a tu médico que te recomiende una."
+        },
+        {
+          "title": "Muestra en casa",
+          "desc": "Un profesional recoge la muestra a la hora elegida."
+        },
+        {
+          "title": "Informe en línea",
+          "desc": "Tu informe digital está listo para ver y descargar."
+        },
+        {
+          "title": "Revísalo con un médico",
+          "desc": "Reserva una consulta para entender tus resultados."
+        }
+      ],
+      "idealFor": [
+        "Chequeos anuales de rutina",
+        "Control de diabetes, tiroides o colesterol",
+        "Familiares mayores a quienes les cuesta desplazarse",
+        "Pruebas que tu médico pidió tras una consulta"
+      ],
+      "faqs": [
+        {
+          "q": "¿Necesito receta para un análisis?",
+          "a": "No para pruebas de rutina. Para pruebas especializadas, la recomendación de un médico ayuda a elegir la correcta."
+        },
+        {
+          "q": "¿Dónde se guardan mis informes?",
+          "a": "En tu Bóveda de Salud, junto con tus recetas y otros registros."
+        },
+        {
+          "q": "¿Un médico puede explicarme el informe?",
+          "a": "Sí: reserva una consulta y comparte el informe. El médico te explicará los resultados y los siguientes pasos."
+        }
+      ],
+      "cta": "Habla con un médico sobre pruebas"
+    },
+    "weightManagement": {
+      "title": "Control de peso",
+      "subtitle": "atención personalizada para ti",
+      "points": [
+        "Planes de control de peso a medida",
+        "Herramientas de seguimiento",
+        "Paquete de atención multiespecialidad"
+      ],
+      "overview": "Un cambio duradero llega con un plan hecho para ti, no con una dieta genérica. Trabaja con nutricionistas y médicos que tienen en cuenta tu salud, tu estilo de vida y tus objetivos, y sigue tu progreso semana a semana.",
+      "features": [
+        {
+          "title": "Planes a medida",
+          "desc": "Tu nutricionista crea un plan de alimentación según tu rutina, tus gustos y tu historial médico. Aparece directamente en tu panel."
+        },
+        {
+          "title": "Herramientas de seguimiento",
+          "desc": "Registra peso, IMC, agua, sueño y actividad. Los gráficos muestran tu tendencia para detectar cambios pronto y comentarlos en el seguimiento."
+        },
+        {
+          "title": "Atención multiespecialidad",
+          "desc": "Suma a un médico general, ginecólogo o psiquiatra cuando el peso está ligado a tiroides, SOP, estrés o sueño."
+        },
+        {
+          "title": "Metas y rachas",
+          "desc": "Fija metas semanales realistas y mantén el ritmo con rachas e hitos de progreso."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Consulta a un nutricionista",
+          "desc": "Comparte tus metas, rutina y condiciones de salud."
+        },
+        {
+          "title": "Recibe tu plan",
+          "desc": "Obtén un plan de alimentación personalizado en tu panel."
+        },
+        {
+          "title": "Registra a diario",
+          "desc": "Anota peso, comidas, agua y actividad en segundos."
+        },
+        {
+          "title": "Revisa y ajusta",
+          "desc": "Haz seguimientos periódicos para afinar tu plan."
+        }
+      ],
+      "idealFor": [
+        "Bajar o subir de peso de forma sana y sostenible",
+        "Peso relacionado con SOP, tiroides o diabetes",
+        "Objetivos de peso tras el embarazo",
+        "Quien ha probado dietas genéricas sin resultados"
+      ],
+      "faqs": [
+        {
+          "q": "¿Recibiré una dieta fija?",
+          "a": "No. Tu plan se escribe para ti y se actualiza según tu progreso y necesidades."
+        },
+        {
+          "q": "¿Cómo sigo mi progreso?",
+          "a": "Usa los registros de peso, agua, sueño y actividad de tu panel y revisa las tendencias con tu nutricionista en cada seguimiento."
+        },
+        {
+          "q": "¿Y si mi peso está ligado a una enfermedad?",
+          "a": "Tu nutricionista puede recomendarte un especialista para que dieta y tratamiento vayan de la mano."
+        }
+      ],
+      "cta": "Consultar a un nutricionista"
+    },
+    "healthcarePlans": {
+      "title": "Planes de salud",
+      "subtitle": "para una atención integral",
+      "points": [
+        "Paquetes mensuales",
+        "Atención preventiva",
+        "Seguimiento de la salud"
+      ],
+      "overview": "Los Planes de salud convierten visitas sueltas en atención continua. Con un paquete mensual, tú y tu familia tenéis consultas regulares, revisiones preventivas y seguimiento constante, para detectar los pequeños problemas antes de que crezcan.",
+      "features": [
+        {
+          "title": "Paquetes mensuales",
+          "desc": "Un plan mensual previsible que cubre consultas regulares, para que el coste nunca te impida consultar a un médico."
+        },
+        {
+          "title": "Atención preventiva",
+          "desc": "Revisiones programadas y recordatorios de cribados según tu edad, historial y factores de riesgo."
+        },
+        {
+          "title": "Seguimiento de la salud",
+          "desc": "Tus constantes, medicamentos y registros de bienestar en un solo lugar, revisados por tu médico con el tiempo."
+        },
+        {
+          "title": "Un único historial",
+          "desc": "Recetas, informes y notas juntos en tu Bóveda de Salud, listos para cada consulta."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Crea tu cuenta",
+          "desc": "Regístrate y completa tu perfil de salud."
+        },
+        {
+          "title": "Elige un plan",
+          "desc": "Escoge el paquete para ti o tu familia."
+        },
+        {
+          "title": "Mantente al día",
+          "desc": "Recibe recordatorios de revisiones, medicamentos y cribados."
+        },
+        {
+          "title": "Consulta cuando quieras",
+          "desc": "Contacta con un médico siempre que lo necesites."
+        }
+      ],
+      "idealFor": [
+        "Familias que quieren la salud de todos en un solo lugar",
+        "Personas con enfermedades crónicas",
+        "Adultos centrados en la prevención y los chequeos anuales",
+        "Cuidadores de padres mayores"
+      ],
+      "faqs": [
+        {
+          "q": "¿Qué incluye la atención preventiva?",
+          "a": "Revisiones periódicas con un médico, recordatorios de cribados según tu edad y seguimiento de tus constantes y medicamentos."
+        },
+        {
+          "q": "¿Puedo incluir a mi familia?",
+          "a": "Los planes están pensados para personas y familias. Contacta con nuestro equipo para opciones familiares."
+        },
+        {
+          "q": "¿Conservo mis registros si lo cancelo?",
+          "a": "Sí. Tu Bóveda de Salud y tu historial permanecen en tu cuenta."
+        }
+      ],
+      "cta": "Empezar"
+    },
+    "selfDiagnostic": {
+      "title": "Herramientas de autodiagnóstico",
+      "subtitle": "para autoevaluarte",
+      "points": [
+        "Verificador de síntomas",
+        "Evaluaciones de salud",
+        "Seguimiento del bienestar"
+      ],
+      "overview": "Conoce mejor tu cuerpo entre consultas. Revisa tus síntomas para encontrar el especialista adecuado, vigila tus constantes y sigue tus hábitos de bienestar, todo gratis y en tu panel. Estas herramientas orientan; no sustituyen el diagnóstico de un médico.",
+      "features": [
+        {
+          "title": "Verificador de síntomas",
+          "desc": "Describe cómo te sientes con palabras sencillas y CareMatch te sugiere qué especialista consultar."
+        },
+        {
+          "title": "Evaluaciones de salud",
+          "desc": "Registra presión arterial, azúcar, pulso, SpO2 y temperatura, y consulta tu historial de un vistazo."
+        },
+        {
+          "title": "Seguimiento del bienestar",
+          "desc": "Anota cada día tu ánimo, sueño, agua y actividad, y observa cómo mejoran tus hábitos."
+        },
+        {
+          "title": "Informes de salud",
+          "desc": "Ve tus registros resumidos en un informe claro para revisarlo con tu médico."
+        }
+      ],
+      "steps": [
+        {
+          "title": "Revisa síntomas",
+          "desc": "Cuéntale a CareMatch qué te pasa."
+        },
+        {
+          "title": "Registra constantes",
+          "desc": "Añade mediciones en segundos desde tu panel."
+        },
+        {
+          "title": "Detecta patrones",
+          "desc": "Los gráficos muestran cómo evoluciona tu salud."
+        },
+        {
+          "title": "Consulta si lo necesitas",
+          "desc": "Lleva tus datos a una consulta con un médico verificado."
+        }
+      ],
+      "idealFor": [
+        "Decidir qué especialista consultar",
+        "Controlar la presión o el azúcar en casa",
+        "Crear mejores hábitos de sueño, hidratación y actividad",
+        "Preparar una consulta con datos reales"
+      ],
+      "faqs": [
+        {
+          "q": "¿El verificador de síntomas es un diagnóstico?",
+          "a": "No. Te orienta hacia el tipo de médico adecuado. Solo un médico puede diagnosticarte."
+        },
+        {
+          "q": "¿Estas herramientas son gratuitas?",
+          "a": "Sí. Están disponibles para todos los pacientes con cuenta en PhoenixCare."
+        },
+        {
+          "q": "¿Cómo ayudan a mi consulta?",
+          "a": "Llegar con mediciones y tendencias reales, en lugar de suposiciones, ayuda a tu médico a entender antes lo que ocurre."
+        }
+      ],
+      "cta": "Probar el verificador de síntomas"
+    }
+  },
+  "why": {
+    "eyebrow": "Por qué PhoenixCare",
+    "title": "Una atención que se eleva contigo",
+    "subtitle": "PhoenixCare no es solo una videollamada con un médico. Es un compañero de salud completo y conectado: antes, durante y mucho después de tu consulta.",
+    "promiseTitle": "Nuestra promesa",
+    "promiseText": "Como el fénix, creemos que todos merecen la oportunidad de levantarse más fuertes. Eso significa médicos de confianza, precios visibles y registros que tú controlas.",
+    "promisePoints": [
+      "Sin tarifas ocultas",
+      "Médicos verificados por nuestro equipo",
+      "Tus datos siguen siendo privados"
+    ],
+    "reasons": [
+      {
+        "title": "Solo médicos verificados",
+        "desc": "Nuestro equipo comprueba el registro médico, la formación y la experiencia de cada médico antes de que atienda a un solo paciente."
+      },
+      {
+        "title": "Consulta a tu manera",
+        "desc": "Elige video, audio o chat, según tu comodidad, conexión y privacidad. Conéctate desde el móvil o el portátil."
+      },
+      {
+        "title": "Recetas digitales al instante",
+        "desc": "Recibe una receta en PDF clara y firmada en cuanto termina la consulta, fácil de leer y aceptada en farmacias."
+      },
+      {
+        "title": "Tu Bóveda de Salud",
+        "desc": "Recetas, análisis y registros en un lugar seguro, para que cada médico tenga el panorama completo."
+      },
+      {
+        "title": "Tarifas transparentes",
+        "desc": "Consulta la tarifa de cada médico antes de reservar. Paga en línea de forma segura, sin cargos sorpresa."
+      },
+      {
+        "title": "Atención más allá de la consulta",
+        "desc": "Sigue tus constantes, ánimo, sueño, agua y medicamentos, sigue los planes de alimentación de tu médico y recibe recordatorios."
+      },
+      {
+        "title": "Búsqueda en lenguaje sencillo",
+        "desc": "Sin jerga médica. Busca \"sarpullido\" o \"dolor de pecho\" y te mostraremos al especialista adecuado."
+      },
+      {
+        "title": "En tu idioma",
+        "desc": "Usa PhoenixCare en inglés, hindi o español, para que nada sobre tu salud se pierda en la traducción."
+      }
+    ],
+    "howTitle": "Atención médica en 4 sencillos pasos",
+    "steps": [
+      {
+        "title": "Cuéntanos qué te pasa",
+        "desc": "Busca un síntoma o usa CareMatch."
+      },
+      {
+        "title": "Elige un médico verificado",
+        "desc": "Compara experiencia, valoraciones y tarifas."
+      },
+      {
+        "title": "Consulta desde casa",
+        "desc": "Video, audio o chat en tu horario."
+      },
+      {
+        "title": "Recupérate y haz seguimiento",
+        "desc": "Receta, recordatorios y seguimientos."
+      }
+    ],
+    "compareTitle": "PhoenixCare frente a una visita típica a la clínica",
+    "compareUs": "PhoenixCare",
+    "compareThem": "Visita a la clínica",
+    "compareRows": [
+      {
+        "label": "Tiempo para ver a un médico",
+        "us": "El mismo día, desde casa",
+        "them": "Desplazamiento + sala de espera"
+      },
+      {
+        "label": "Tarifas",
+        "us": "Visibles antes de reservar",
+        "them": "A menudo poco claras hasta pagar"
+      },
+      {
+        "label": "Receta",
+        "us": "PDF legible al instante",
+        "them": "Papel escrito a mano"
+      },
+      {
+        "label": "Historial médico",
+        "us": "Guardado en tu Bóveda de Salud",
+        "them": "Carpetas de papel que debes llevar"
+      },
+      {
+        "label": "Entre visitas",
+        "us": "Registros, recordatorios y planes de alimentación",
+        "them": "Nada hasta la próxima visita"
+      }
+    ],
+    "ctaButton": "Encuentra a tu médico"
   }
 }

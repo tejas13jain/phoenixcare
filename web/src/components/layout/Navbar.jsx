@@ -32,6 +32,9 @@ export function Navbar() {
           <Link to="/doctors" className="hover:text-teal-600">
             {t('nav.findDoctors')}
           </Link>
+          <Link to="/#services" className="hover:text-teal-600">
+            {t('nav.services')}
+          </Link>
           <Link to="/blog" className="hover:text-teal-600">
             {t('nav.healthBlog')}
           </Link>
@@ -80,6 +83,9 @@ export function Navbar() {
         >
           <Link to="/doctors" onClick={() => setMenuOpen(false)}>
             {t('nav.findDoctors')}
+          </Link>
+          <Link to="/#services" onClick={() => setMenuOpen(false)}>
+            {t('nav.services')}
           </Link>
           <Link to="/blog" onClick={() => setMenuOpen(false)}>
             {t('nav.healthBlog')}
