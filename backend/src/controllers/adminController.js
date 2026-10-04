@@ -9,6 +9,7 @@ import { catchAsync } from '../utils/catchAsync.js';
 import { notifyUser } from '../services/notificationService.js';
 import { buildWorkbook, sendWorkbook } from '../services/excelService.js';
 import { sendStandardsEmailOnce } from '../services/doctorComplianceService.js';
+import { assertCanVerify } from '../services/kycDocumentService.js';
 
 // ---- Doctor KYC onboarding ----
 
@@ -27,6 +28,9 @@ export const reviewDoctorKyc = catchAsync(async (req, res) => {
 
   const doctor = await Doctor.findById(req.params.id).populate('user', 'name email');
   if (!doctor) throw ApiError.notFound('Doctor not found');
+
+  // Going live needs every required document uploaded and approved first.
+  if (status === 'verified' && doctor.kycStatus !== 'verified') assertCanVerify(doctor);
 
   doctor.kycStatus = status;
   doctor.kycRejectionReason = status === 'rejected' ? reason || '' : '';

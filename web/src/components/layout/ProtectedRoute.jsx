@@ -3,9 +3,15 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/slices/authStore.js';
 import { doctorApi } from '../../api/doctorApi.js';
 import { Skeleton } from '../ui/index.js';
-import { hasAcceptedTerms, rememberTermsAccepted } from './doctorTermsGate.js';
+import {
+  hasAcceptedTerms,
+  hasDocumentsOk,
+  rememberDocumentsOk,
+  rememberTermsAccepted,
+} from './doctorTermsGate.js';
 
 export const DOCTOR_TERMS_PATH = '/doctor/terms';
+export const DOCTOR_DOCUMENTS_PATH = '/doctor/documents';
 
 export function ProtectedRoute({ children, roles }) {
   const { user, accessToken } = useAuthStore();
@@ -17,36 +23,50 @@ export function ProtectedRoute({ children, roles }) {
   if (roles && !roles.includes(user.role)) {
     return <Navigate to="/" replace />;
   }
-  // Doctors must accept the Doctor Terms & Conditions before using any doctor-facing page.
+  // Doctors finish onboarding before using any doctor-facing page: accept the Doctor Terms &
+  // Conditions, then upload verification documents (unless they're already verified).
   if (user.role === 'doctor' && location.pathname !== DOCTOR_TERMS_PATH) {
-    return <DoctorTermsGuard user={user}>{children}</DoctorTermsGuard>;
+    return <DoctorOnboardingGuard user={user}>{children}</DoctorOnboardingGuard>;
   }
   return children;
 }
 
-function DoctorTermsGuard({ user, children }) {
+function DoctorOnboardingGuard({ user, children }) {
   const location = useLocation();
-  const [state, setState] = useState(hasAcceptedTerms(user._id) ? 'accepted' : 'checking');
+  const onDocumentsPage = location.pathname === DOCTOR_DOCUMENTS_PATH;
+  const settled = hasAcceptedTerms(user._id) && (onDocumentsPage || hasDocumentsOk(user._id));
+  const [state, setState] = useState(settled ? 'ok' : 'checking');
 
   useEffect(() => {
-    if (hasAcceptedTerms(user._id)) {
-      setState('accepted');
+    if (hasAcceptedTerms(user._id) && (onDocumentsPage || hasDocumentsOk(user._id))) {
+      setState('ok');
       return undefined;
     }
     let cancelled = false;
-    doctorApi
-      .getMyTerms()
-      .then((res) => {
-        if (cancelled) return;
-        if (res.data.status.accepted) rememberTermsAccepted(user._id);
-        setState(res.data.status.accepted ? 'accepted' : 'required');
-      })
-      // If the check itself fails (e.g. offline) let the page load; the server still enforces it.
-      .catch(() => !cancelled && setState('accepted'));
+
+    async function check() {
+      if (!hasAcceptedTerms(user._id)) {
+        const terms = await doctorApi.getMyTerms();
+        if (!terms.data.status.accepted) return 'terms';
+        rememberTermsAccepted(user._id);
+      }
+      if (!onDocumentsPage && !hasDocumentsOk(user._id)) {
+        const docs = await doctorApi.getMyDocuments();
+        const { kycStatus, needsAction } = docs.data;
+        if (kycStatus !== 'verified' && needsAction) return 'documents';
+        rememberDocumentsOk(user._id);
+      }
+      return 'ok';
+    }
+
+    check()
+      .then((next) => !cancelled && setState(next))
+      // If a check itself fails (e.g. offline) let the page load; the server still enforces the rules that matter.
+      .catch(() => !cancelled && setState('ok'));
     return () => {
       cancelled = true;
     };
-  }, [user._id, location.pathname]);
+  }, [user._id, location.pathname, onDocumentsPage]);
 
   if (state === 'checking') {
     return (
@@ -55,8 +75,7 @@ function DoctorTermsGuard({ user, children }) {
       </div>
     );
   }
-  if (state === 'required') {
-    return <Navigate to={DOCTOR_TERMS_PATH} state={{ from: location }} replace />;
-  }
+  if (state === 'terms') return <Navigate to={DOCTOR_TERMS_PATH} state={{ from: location }} replace />;
+  if (state === 'documents') return <Navigate to={DOCTOR_DOCUMENTS_PATH} state={{ from: location }} replace />;
   return children;
 }

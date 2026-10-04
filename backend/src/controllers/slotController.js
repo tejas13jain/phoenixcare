@@ -17,7 +17,11 @@ export const listSlots = catchAsync(async (req, res) => {
   const isOwner =
     req.user?.role === 'admin' ||
     (req.user?.role === 'doctor' && req.targetDoctor.user.toString() === req.user._id.toString());
-  if (!isOwner) filter.status = 'available';
+  if (!isOwner) {
+    // Patients only ever see open slots, and none at all for a doctor who isn't verified yet.
+    if (req.targetDoctor.kycStatus !== 'verified') return res.json({ success: true, data: { slots: [] } });
+    filter.status = 'available';
+  }
 
   if (date) filter.date = date;
   else if (from && to) filter.date = { $gte: from, $lte: to };

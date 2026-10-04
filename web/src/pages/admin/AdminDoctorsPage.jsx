@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Copy, Mail, Pencil, Plus, Search, Star, UserCheck } from 'lucide-react';
+import { Copy, FileText, Mail, Pencil, Plus, Search, Star, UserCheck } from 'lucide-react';
 import { Card, Button, Badge, Skeleton, Modal } from '../../components/ui/index.js';
 import { DoctorForm } from '../../components/admin/DoctorForm.jsx';
+import { DoctorDocumentsReview } from '../../components/admin/DoctorDocumentsReview.jsx';
+import { documentProgress } from '../../constants/kycDocuments.js';
 import { adminApi } from '../../api/appointmentApi.js';
 import { extractErrorMessage } from '../../api/client.js';
 import { SPECIALTIES } from '../../constants/specialties.js';
@@ -14,6 +16,7 @@ export function AdminDoctorsPage() {
   const [tab, setTab] = useState('all');
   const [formDoctor, setFormDoctor] = useState(null); // null = closed, {} = new, doctor = edit
   const [credentials, setCredentials] = useState(null);
+  const [reviewDoctor, setReviewDoctor] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const handleSaved = (data) => {
@@ -54,9 +57,9 @@ export function AdminDoctorsPage() {
       </div>
 
       {tab === 'all' ? (
-        <AllDoctors refreshKey={refreshKey} onEdit={setFormDoctor} />
+        <AllDoctors refreshKey={refreshKey} onEdit={setFormDoctor} onReview={setReviewDoctor} />
       ) : (
-        <PendingKyc refreshKey={refreshKey} onEdit={setFormDoctor} />
+        <PendingKyc refreshKey={refreshKey} onEdit={setFormDoctor} onReview={setReviewDoctor} />
       )}
 
       <Modal
@@ -66,6 +69,21 @@ export function AdminDoctorsPage() {
         className="!max-w-3xl max-h-[92vh] overflow-y-auto"
       >
         {formDoctor && <DoctorForm doctor={formDoctor._id ? formDoctor : null} onSaved={handleSaved} onCancel={() => setFormDoctor(null)} />}
+      </Modal>
+
+      <Modal
+        isOpen={!!reviewDoctor}
+        onClose={() => setReviewDoctor(null)}
+        title={reviewDoctor ? `Documents — ${reviewDoctor.user?.name}` : 'Documents'}
+        className="!max-w-3xl max-h-[92vh] overflow-y-auto"
+      >
+        {reviewDoctor && (
+          <DoctorDocumentsReview
+            doctorId={reviewDoctor._id}
+            onChanged={() => setRefreshKey((k) => k + 1)}
+            onClose={() => setReviewDoctor(null)}
+          />
+        )}
       </Modal>
 
       <Modal isOpen={!!credentials} onClose={() => setCredentials(null)} title="Doctor onboarded">
@@ -103,6 +121,7 @@ function CredentialsNotice({ name, email, tempPassword, emailSent, standardsEmai
         {standardsEmailSent
           ? 'We’ve also emailed them every standard that applies to practising on an Indian online portal.'
           : 'The standards email could not be sent — use “Email terms” on their row once email is working.'}
+        {' '}They’ll then upload their verification documents; they stay hidden from patients until you approve them under “Documents”.
       </p>
       <div className="flex justify-end gap-2">
         <Button variant="secondary" onClick={copy}>
@@ -114,7 +133,7 @@ function CredentialsNotice({ name, email, tempPassword, emailSent, standardsEmai
   );
 }
 
-function AllDoctors({ refreshKey, onEdit }) {
+function AllDoctors({ refreshKey, onEdit, onReview }) {
   const [filters, setFilters] = useState({ q: '', specialty: '', city: '', kycStatus: '' });
   const [query, setQuery] = useState(filters);
   const [page, setPage] = useState(1);
@@ -220,6 +239,7 @@ function AllDoctors({ refreshKey, onEdit }) {
                     ) : (
                       <Badge variant="warning">Terms pending</Badge>
                     )}
+                    <DocsBadge docs={d.kycDocuments} />
                     {!d.isAcceptingNewPatients && <Badge>Not accepting patients</Badge>}
                     {d.user && !d.user.isActive && <Badge variant="error">Account deactivated</Badge>}
                   </div>
@@ -241,6 +261,9 @@ function AllDoctors({ refreshKey, onEdit }) {
                   </Button>
                   <Button size="sm" variant="ghost" onClick={() => quickUpdate(d, { isFeatured: !d.isFeatured })}>
                     <Star size={14} /> {d.isFeatured ? 'Unfeature' : 'Feature'}
+                  </Button>
+                  <Button size="sm" variant="secondary" onClick={() => onReview(d)}>
+                    <FileText size={14} /> Documents
                   </Button>
                   <Button size="sm" variant="outline" onClick={() => onEdit(d)}>
                     <Pencil size={14} /> Edit
@@ -268,7 +291,7 @@ function AllDoctors({ refreshKey, onEdit }) {
   );
 }
 
-function PendingKyc({ refreshKey, onEdit }) {
+function PendingKyc({ refreshKey, onEdit, onReview }) {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -311,11 +334,15 @@ function PendingKyc({ refreshKey, onEdit }) {
             <p className="text-xs text-slate-600 mt-1">
               Reg. No: {doctor.registrationNumber} · Specialties: {doctor.specialties?.join(', ') || '—'}
             </p>
-            <Badge variant="warning" className="mt-1">
-              {doctor.kycStatus.replace('_', ' ')}
-            </Badge>
+            <div className="mt-1 flex flex-wrap items-center gap-2">
+              <Badge variant="warning">{doctor.kycStatus.replace('_', ' ')}</Badge>
+              <DocsBadge docs={doctor.kycDocuments} />
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
+            <Button size="sm" variant="secondary" onClick={() => onReview(doctor)}>
+              <FileText size={14} /> Documents
+            </Button>
             <Button size="sm" variant="outline" onClick={() => onEdit(doctor)}>
               <Pencil size={14} /> Edit
             </Button>
@@ -329,5 +356,18 @@ function PendingKyc({ refreshKey, onEdit }) {
         </Card>
       ))}
     </div>
+  );
+}
+
+// Small progress badge for the required verification documents.
+function DocsBadge({ docs }) {
+  const { uploaded, approved, rejected, total } = documentProgress(docs);
+  if (approved === total) return <Badge variant="success">Documents approved</Badge>;
+  if (rejected > 0) return <Badge variant="error">Documents: {rejected} rejected</Badge>;
+  if (uploaded === 0) return <Badge variant="neutral">No documents yet</Badge>;
+  return (
+    <Badge variant={uploaded === total ? 'sunrise' : 'warning'}>
+      {uploaded === total ? 'Ready to review' : `Documents ${uploaded}/${total}`}
+    </Badge>
   );
 }

@@ -9,6 +9,19 @@ export const doctorApi = {
   getSlots: (doctorId, params) => apiClient.get(`/doctors/${doctorId}/slots`, { params }).then((r) => r.data),
   getMyTerms: () => apiClient.get('/doctors/me/terms').then((r) => r.data),
   acceptTerms: (payload) => apiClient.post('/doctors/me/terms/accept', payload).then((r) => r.data),
+  getMyDocuments: () => apiClient.get('/doctors/me/documents').then((r) => r.data),
+  uploadDocument: (docType, file, onProgress) => {
+    const form = new FormData();
+    form.append('file', file);
+    return apiClient
+      .post(`/doctors/me/documents/${docType}`, form, {
+        timeout: 90000,
+        onUploadProgress: (e) => e.total && onProgress?.(Math.round((e.loaded / e.total) * 100)),
+      })
+      .then((r) => r.data);
+  },
+  getMyDocumentBlob: (docType) =>
+    apiClient.get(`/doctors/me/documents/${docType}/file`, { responseType: 'blob' }).then((r) => r.data),
   getMyProfile: () => apiClient.get('/doctors/me/profile').then((r) => r.data),
   getMyPatients: () => apiClient.get('/doctors/me/patients').then((r) => r.data),
   updateMyProfile: (payload) => apiClient.patch('/doctors/me/profile', payload).then((r) => r.data),

@@ -49,6 +49,11 @@ export const adminApi = {
   reviewKyc: (id, payload) => apiClient.patch(`/admin/doctors/${id}/kyc`, payload).then((r) => r.data),
   searchDoctors: (params) => apiClient.get('/admin/doctors', { params }).then((r) => r.data),
   createDoctor: (payload) => apiClient.post('/admin/doctors', payload).then((r) => r.data),
+  getDoctorDocuments: (id) => apiClient.get(`/admin/doctors/${id}/documents`).then((r) => r.data),
+  getDoctorDocumentBlob: (id, docType) =>
+    apiClient.get(`/admin/doctors/${id}/documents/${docType}/file`, { responseType: 'blob' }).then((r) => r.data),
+  reviewDocument: (id, docType, payload) =>
+    apiClient.patch(`/admin/doctors/${id}/documents/${docType}`, payload).then((r) => r.data),
   resendStandardsEmail: (id) => apiClient.post(`/admin/doctors/${id}/standards-email`).then((r) => r.data),
   updateDoctor: (id, payload) => apiClient.patch(`/admin/doctors/${id}`, payload).then((r) => r.data),
   listUsers: (params) => apiClient.get('/admin/users', { params }).then((r) => r.data),

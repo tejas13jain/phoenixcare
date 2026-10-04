@@ -10,6 +10,10 @@ import { catchAsync } from '../utils/catchAsync.js';
 import { escapeRegex } from '../utils/escapeRegex.js';
 import { buildWorkbook, sendWorkbook } from '../services/excelService.js';
 
+// Fields that must never leave the server on public endpoints: bank/UPI details, verification
+// documents and review notes, and the terms-acceptance audit trail.
+const PUBLIC_EXCLUDE = '-payoutDetails -kycDocuments -kycRejectionReason -termsAcceptance -standardsEmailSentAt';
+
 const SORT_MAP = {
   rating: { rating: -1 },
   fee_low: { 'fee.video': 1 },
@@ -53,6 +57,7 @@ export const listDoctors = catchAsync(async (req, res) => {
 
   const [doctors, total] = await Promise.all([
     Doctor.find(filter)
+      .select(PUBLIC_EXCLUDE)
       .populate('user', 'name avatarUrl')
       .sort(sortBy)
       .skip(skip)
@@ -72,6 +77,7 @@ export const listDoctors = catchAsync(async (req, res) => {
 
 export const getFeaturedDoctors = catchAsync(async (req, res) => {
   const doctors = await Doctor.find({ kycStatus: 'verified', isFeatured: true })
+    .select(PUBLIC_EXCLUDE)
     .populate('user', 'name avatarUrl')
     .sort({ rating: -1 })
     .limit(10)
@@ -90,7 +96,10 @@ export const getDoctorCities = catchAsync(async (req, res) => {
 });
 
 export const getDoctorById = catchAsync(async (req, res) => {
-  const doctor = await Doctor.findById(req.validated.params.id).populate('user', 'name avatarUrl').lean();
+  const doctor = await Doctor.findOne({ _id: req.validated.params.id, kycStatus: 'verified' })
+    .select(PUBLIC_EXCLUDE)
+    .populate('user', 'name avatarUrl')
+    .lean();
   if (!doctor) throw ApiError.notFound('Doctor not found');
 
   const reviews = await Review.find({ doctor: doctor._id, isHidden: false })
@@ -103,7 +112,7 @@ export const getDoctorById = catchAsync(async (req, res) => {
 });
 
 export const updateMyDoctorProfile = catchAsync(async (req, res) => {
-  const doctor = await Doctor.findOneAndUpdate({ user: req.user._id }, req.body, {
+  const doctor = await Doctor.findOneAndUpdate({ user: req.user._id }, req.validated.body, {
     new: true,
     runValidators: true,
   });

@@ -16,7 +16,7 @@ const MODES = [
 const KYC_OPTIONS = [
   { value: 'verified', label: 'Verified — visible to patients now' },
   { value: 'under_review', label: 'Under review — hidden until verified' },
-  { value: 'pending', label: 'Pending — hidden until documents are checked' },
+  { value: 'pending', label: 'Pending — hidden until documents are uploaded and approved' },
   { value: 'rejected', label: 'Rejected' },
 ];
 
@@ -41,7 +41,7 @@ function initialState(doctor) {
     city: doctor?.city || '',
     clinicAddress: doctor?.clinicAddress || '',
     bio: doctor?.bio || '',
-    kycStatus: doctor?.kycStatus || 'verified',
+    kycStatus: doctor?.kycStatus || 'pending',
     isFeatured: doctor?.isFeatured ?? false,
     isAcceptingNewPatients: doctor?.isAcceptingNewPatients ?? true,
   };
@@ -140,7 +140,8 @@ export function DoctorForm({ doctor, onSaved, onCancel }) {
         </div>
         {!isEdit && (
           <p className="text-xs text-slate-600">
-            A temporary password is created automatically and emailed to the doctor. You’ll also see it once after saving.
+            A temporary password is created automatically and emailed to the doctor. After signing in, they accept the terms and upload their
+            verification documents; you review them under Documents, then verify.
           </p>
         )}
       </FormSection>
@@ -189,8 +190,13 @@ export function DoctorForm({ doctor, onSaved, onCancel }) {
             error={errors.experienceYears}
           />
         </div>
-        <Select id="kycStatus" label="Verification status" value={form.kycStatus} onChange={(e) => set('kycStatus', e.target.value)}>
-          {KYC_OPTIONS.map((o) => (
+        <Select
+          id="kycStatus"
+          label="Verification status"
+          value={form.kycStatus}
+          onChange={(e) => set('kycStatus', e.target.value)}
+        >
+          {KYC_OPTIONS.filter((o) => isEdit || o.value !== 'verified').map((o) => (
             <option key={o.value} value={o.value}>
               {o.label}
             </option>

@@ -36,6 +36,7 @@ import { DoctorAnalyticsPage } from './pages/doctor/DoctorAnalyticsPage.jsx';
 import { DoctorDietPlansPage } from './pages/doctor/DoctorDietPlansPage.jsx';
 import { DoctorBlogsPage } from './pages/doctor/DoctorBlogsPage.jsx';
 import { DoctorTermsPage } from './pages/doctor/DoctorTermsPage.jsx';
+import { DoctorDocumentsPage } from './pages/doctor/DoctorDocumentsPage.jsx';
 
 import { AdminLayout } from './pages/admin/AdminLayout.jsx';
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage.jsx';
@@ -145,6 +146,14 @@ export default function App() {
             element={
               <ProtectedRoute roles={['doctor']}>
                 <DoctorTermsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/doctor/documents"
+            element={
+              <ProtectedRoute roles={['doctor']}>
+                <DoctorDocumentsPage />
               </ProtectedRoute>
             }
           />

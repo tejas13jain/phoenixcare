@@ -5,6 +5,9 @@ import * as labController from '../controllers/labController.js';
 import { requireAuth, requireRole } from '../middlewares/auth.js';
 import { validate } from '../middlewares/validate.js';
 import { createDoctorSchema, doctorIdParamSchema, searchDoctorsSchema, updateDoctorByAdminSchema } from '../validators/adminDoctorValidators.js';
+import * as kycDocumentController from '../controllers/kycDocumentController.js';
+import { auditLog } from '../middlewares/auditLog.js';
+import { doctorDocumentSchema, doctorDocumentsSchema, reviewDocumentSchema } from '../validators/kycDocumentValidators.js';
 import { adminListLabsSchema, createLabSchema, labIdSchema, updateLabSchema } from '../validators/labValidators.js';
 
 const router = Router();
@@ -17,6 +20,15 @@ router.get('/doctors', validate(searchDoctorsSchema), adminDoctorController.sear
 router.post('/doctors', validate(createDoctorSchema), adminDoctorController.createDoctor);
 router.patch('/doctors/:id', validate(updateDoctorByAdminSchema), adminDoctorController.updateDoctorByAdmin);
 router.post('/doctors/:id/standards-email', validate(doctorIdParamSchema), adminDoctorController.resendStandardsEmail);
+
+router.get('/doctors/:id/documents', validate(doctorDocumentsSchema), kycDocumentController.getDoctorDocuments);
+router.get(
+  '/doctors/:id/documents/:docType/file',
+  validate(doctorDocumentSchema),
+  auditLog('view_kyc_document', 'Doctor'),
+  kycDocumentController.getDoctorDocumentFile
+);
+router.patch('/doctors/:id/documents/:docType', validate(reviewDocumentSchema), kycDocumentController.reviewDoctorDocument);
 
 router.get('/labs', validate(adminListLabsSchema), labController.adminListLabs);
 router.post('/labs', validate(createLabSchema), labController.adminCreateLab);

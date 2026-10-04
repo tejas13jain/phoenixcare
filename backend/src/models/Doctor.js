@@ -32,11 +32,20 @@ const doctorSchema = new Schema(
       default: 'pending',
       index: true,
     },
+    // One entry per document type (see constants/kycDocuments.js). The file bytes live in the
+    // KycFile collection and are only served through authenticated endpoints.
     kycDocuments: [
       {
-        label: String,
-        url: String,
+        docType: { type: String, required: true },
+        originalName: { type: String },
+        mimeType: { type: String },
+        size: { type: Number },
+        file: { type: Schema.Types.ObjectId, ref: 'KycFile' },
+        status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+        rejectionReason: { type: String },
         uploadedAt: { type: Date, default: Date.now },
+        reviewedAt: { type: Date },
+        reviewedBy: { type: Schema.Types.ObjectId, ref: 'User' },
       },
     ],
     kycRejectionReason: { type: String },

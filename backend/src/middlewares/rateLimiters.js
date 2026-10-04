@@ -31,3 +31,12 @@ export const enquiryLimiter = rateLimit({
   legacyHeaders: false,
   message: { success: false, message: 'Too many requests. Please try again later.' },
 });
+
+// Verification document uploads — plenty for a doctor fixing a few rejected files.
+export const documentUploadLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many uploads. Please try again later.' },
+});

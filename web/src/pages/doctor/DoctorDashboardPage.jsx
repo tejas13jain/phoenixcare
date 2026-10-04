@@ -70,6 +70,20 @@ export function DoctorDashboardPage() {
   return (
     <PageTransition>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        {profile && profile.kycStatus !== 'verified' && (
+          <Link
+            to="/doctor/documents"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border-2 border-orange-300 bg-orange-50 px-5 py-4 hover:bg-orange-100/70"
+          >
+            <span className="text-sm text-charcoal">
+              <strong>Finish your verification.</strong>{' '}
+              {profile.kycStatus === 'under_review'
+                ? 'Our team is reviewing your documents. You can check their status here.'
+                : 'Upload your documents so patients can find and book you.'}
+            </span>
+            <span className="text-sm font-semibold text-orange-600">Verification documents →</span>
+          </Link>
+        )}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-heading font-bold text-2xl">Welcome back, {profile?.user?.name}</h1>

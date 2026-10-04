@@ -16,6 +16,7 @@ export const createAppointment = catchAsync(async (req, res) => {
 
   const doctor = await Doctor.findById(doctorId).populate('user', 'name email');
   if (!doctor) throw ApiError.notFound('Doctor not found');
+  if (doctor.kycStatus !== 'verified') throw ApiError.badRequest('This doctor is not available for booking yet');
   if (!doctor.consultationModes.includes(mode)) {
     throw ApiError.badRequest(`This doctor does not offer ${mode} consultations`);
   }

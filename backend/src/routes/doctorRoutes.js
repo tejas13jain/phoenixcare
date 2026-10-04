@@ -6,6 +6,10 @@ import { listDoctorsSchema, doctorIdSchema, updateDoctorProfileSchema } from '..
 import { requireDoctorTerms } from '../middlewares/requireDoctorTerms.js';
 import * as doctorTermsController from '../controllers/doctorTermsController.js';
 import { acceptTermsSchema } from '../validators/doctorTermsValidators.js';
+import * as kycDocumentController from '../controllers/kycDocumentController.js';
+import { myDocumentSchema } from '../validators/kycDocumentValidators.js';
+import { uploadKycFile } from '../middlewares/uploadKycFile.js';
+import { documentUploadLimiter } from '../middlewares/rateLimiters.js';
 import slotRoutes from './slotRoutes.js';
 
 const router = Router();
@@ -29,6 +33,25 @@ router.post(
   requireRole('doctor'),
   validate(acceptTermsSchema),
   doctorTermsController.acceptMyTerms
+);
+
+router.get('/me/documents', requireAuth, requireRole('doctor'), kycDocumentController.getMyDocuments);
+router.post(
+  '/me/documents/:docType',
+  requireAuth,
+  requireRole('doctor'),
+  requireDoctorTerms,
+  documentUploadLimiter,
+  validate(myDocumentSchema),
+  uploadKycFile,
+  kycDocumentController.uploadMyDocument
+);
+router.get(
+  '/me/documents/:docType/file',
+  requireAuth,
+  requireRole('doctor'),
+  validate(myDocumentSchema),
+  kycDocumentController.getMyDocumentFile
 );
 
 router.get('/me/profile', requireAuth, requireRole('doctor'), doctorController.getMyDoctorProfile);

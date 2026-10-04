@@ -7,6 +7,8 @@ import { catchAsync } from '../utils/catchAsync.js';
 import { escapeRegex } from '../utils/escapeRegex.js';
 import { sendEmail } from '../services/emailService.js';
 import { sendStandardsEmail, sendStandardsEmailOnce } from '../services/doctorComplianceService.js';
+import { assertCanVerify } from '../services/kycDocumentService.js';
+import { KYC_DOCUMENT_TYPES } from '../constants/kycDocuments.js';
 import { env } from '../config/env.js';
 import { logger } from '../config/logger.js';
 
@@ -54,6 +56,12 @@ export const searchDoctors = catchAsync(async (req, res) => {
 export const createDoctor = catchAsync(async (req, res) => {
   const { name, email, phone, kycStatus, ...profile } = req.validated.body;
 
+  // A doctor can only go live after uploading verification documents that an admin has approved,
+  // so new doctors always start as pending.
+  if (kycStatus === 'verified') {
+    throw ApiError.badRequest('A doctor can be verified only after they upload their documents and you approve them. Create them as Pending.');
+  }
+
   if (await User.exists({ $or: [{ email }, { phone }] })) {
     throw ApiError.conflict('An account with this email or phone already exists');
   }
@@ -72,9 +80,7 @@ export const createDoctor = catchAsync(async (req, res) => {
 
   let doctor;
   try {
-    // Admin-onboarded doctors have had their credentials checked by the admin, so they go
-    // live as verified unless the admin chose otherwise.
-    doctor = await Doctor.create({ ...profile, user: user._id, kycStatus: kycStatus || 'verified' });
+    doctor = await Doctor.create({ ...profile, user: user._id, kycStatus: kycStatus || 'pending' });
   } catch (err) {
     await User.deleteOne({ _id: user._id });
     throw err;
@@ -91,8 +97,11 @@ export const createDoctor = catchAsync(async (req, res) => {
         <strong>Temporary password:</strong> <code style="font-size:16px;">${tempPassword}</code><br/><br/>
         You can also sign in any time with a one-time code sent to your email or phone.<br/><br/>
         The first time you sign in you will be asked to read and accept the PhoenixCare Doctor Terms &amp; Conditions —
-        we are sending them to you in a separate email. After that, set your availability so patients can start booking.`,
-      ctaLabel: 'Sign in to PhoenixCare',
+        we are sending them to you in a separate email.<br/><br/>
+        <strong>Next, upload your verification documents.</strong> You will not appear to patients until our team has checked them:<br/>
+        ${KYC_DOCUMENT_TYPES.filter((d) => d.required).map((d) => `&bull; ${d.label}`).join('<br/>')}<br/>
+        PDF, JPG or PNG, up to 4 MB each. After they are approved, set your availability so patients can start booking.`,
+      ctaLabel: 'Sign in and upload documents',
       ctaUrl: `${env.clientUrl}/login`,
     });
     emailSent = !!result.sent;
@@ -101,11 +110,7 @@ export const createDoctor = catchAsync(async (req, res) => {
   }
 
   // Separate email with every standard that applies to practising on an Indian online portal.
-  // Only doctors who are live need it now; others get it when they are verified.
-  let standardsEmailSent = false;
-  if (doctor.kycStatus === 'verified') {
-    standardsEmailSent = !!(await sendStandardsEmailOnce(doctor, user)).sent;
-  }
+  const standardsEmailSent = !!(await sendStandardsEmailOnce(doctor, user)).sent;
 
   const populated = await doctor.populate('user', 'name email phone isActive');
   res.status(201).json({
@@ -129,6 +134,8 @@ export const updateDoctorByAdmin = catchAsync(async (req, res) => {
   ) {
     throw ApiError.conflict('Another doctor already uses this registration number');
   }
+
+  if (profile.kycStatus === 'verified' && doctor.kycStatus !== 'verified') assertCanVerify(doctor);
 
   if (name) await User.updateOne({ _id: doctor.user }, { name });
   if (profile.kycStatus && profile.kycStatus !== 'rejected') profile.kycRejectionReason = '';
